@@ -126,7 +126,9 @@ const Mapping = () => {
     <>
       <CustomGrid rows={8} cols={7} className={"Overview-100"}>
         <GridElement cols={2} rows={8}>
-          <h4>Datasources</h4>
+          <GridElement cols={1} ns>
+            <h4>Datasources</h4>
+          </GridElement>
           <div className="list">
             {datasources.map((ds) => (
               <Datasource datasource={ds} />

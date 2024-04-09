@@ -13,7 +13,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
       show={show}
       onHide={() => setShow(false)}
       backdrop="static"
-      keyboard={false}
+      keyboard={true}
     >
       <Modal.Header closeButton>
         <Modal.Title>Add a datasource</Modal.Title>
@@ -22,12 +22,12 @@ function AddDatasource({ show, setShow, saveDatasource }) {
         <div className="grid-container2">
           Name:
           <input value={name} onChange={(e) => setName(e.target.value)}></input>
+          IP:<input value={ip} onChange={(e) => setIp(e.target.value)}></input>
           type:
           <select id="dropdown">
             <option value="Logix">Logix</option>
             <option value="OPC UA">OPC UA</option>
           </select>
-          IP:<input value={ip} onChange={(e) => setIp(e.target.value)}></input>
         </div>
       </Modal.Body>
       <Modal.Footer>

@@ -123,7 +123,7 @@ const AppConfiguration = () => {
     <form onSubmit={handleSubmit} className="fullSize">
       <CustomGrid
         cols={5}
-        rows={11}
+        rows={12}
         className={"Overview-100"}
         style={{ justifyContent: "space-between" }}
       >
