@@ -227,12 +227,12 @@ const AppConfiguration = () => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Position: Latitude:</span>
+          <span>Meter Serial:</span>
           <input
             type="text"
-            name="latitude"
-            placeholder=""
-            value={formData.latitude}
+            name="transmitterSerial"
+            placeholder="Ej: A-00000"
+            value={formData.transmitterSerial}
             onChange={handleChange}
           />
         </GridElement>
@@ -245,18 +245,14 @@ const AppConfiguration = () => {
           >
             <option value="Balance">Coriolis</option>
             <option value="Ultrasonico">Ultrasonico</option>
+            <option value="Balance">Daniel's</option>
+            <option value="Ultrasonico">Thermal dispersion</option>
+            <option value="Balance">Orifice plate</option>
+            <option value="Ultrasonico">Vortex</option>
+            <option value="Ultrasonico">
+              Single Point Insertion Flowmeter
+            </option>
           </select>
-        </GridElement>
-
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Meter Serial:</span>
-          <input
-            type="text"
-            name="transmitterSerial"
-            placeholder="Ej: A-00000"
-            value={formData.transmitterSerial}
-            onChange={handleChange}
-          />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Wind Speed (m/s): </span>
@@ -267,6 +263,17 @@ const AppConfiguration = () => {
             value={formData.wind}
             onChange={handleChange}
           />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Operating frequency :</span>
+          <select
+            name="Operating Frequency"
+            value={formData.OperatingFrequency}
+            onChange={handleChange}
+          >
+            <option value="Balance">Continuous</option>
+            <option value="Medidor">Intermittent</option>
+          </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Tea Diameter (ft):</span>
@@ -288,7 +295,17 @@ const AppConfiguration = () => {
             onChange={handleChange}
           />
         </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={4}>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Position: Latitude:</span>
+          <input
+            type="text"
+            name="latitude"
+            placeholder=""
+            value={formData.latitude}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Estimated Operative Hours in one Year:</span>
           <input
             type="text"

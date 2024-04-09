@@ -5,6 +5,7 @@ import ConfigView from "./TeaViews/ConfigView";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import TeaCreation from "./TeaCreation";
+import Mapping from "./Mapping";
 
 const TeaMananger = () => {
   const [viewDate, setViewDate] = useState(true);
@@ -18,7 +19,7 @@ const TeaMananger = () => {
       </AppTab>
 
       <AppTab label="Mapping Tea">
-        <h1>Mapeo</h1>
+        <Mapping />
       </AppTab>
     </TabbedAppLayout>
   );

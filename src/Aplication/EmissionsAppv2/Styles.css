@@ -158,7 +158,148 @@
 .SimResult p{
     margin-bottom: 0;
 }
+.SimparametersContainer {
+    display: flex;
+    flex-direction: column;
+}
 
+.SimparametersContainer h5 h6 {
+    text-align: 'center';
+}
+
+.SimparametersContainer h5 h6 {
+    text-align: 'center';
+}
+
+.ConfigContainer {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 100%;
+    gap: 10px;
+}
+
+.Characteristics {
+    width: 100%;
+}
+
+.Characteristics b {
+    text-align: right;
+}
+
+.Characteristics span {
+    text-align: left;
+    margin-left: 1rem;
+}
+
+.result {
+    font-weight: 550;
+    margin-right: 1rem;
+}
+
+.SimResult {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.Simparameter {
+    display: flex;
+    border: 1px solid rgb(196, 196, 196);
+    align-items: center;
+    flex: 1;
+    width: 95%;
+    padding: 6px 1px 6px 1px;
+}
+
+.CompParameter {
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    padding: 6px 1px 6px 1px;
+    gap: 4px;
+}
+
+.CompParameter span {
+    font-weight: 550;
+    padding-right: 1rem;
+}
+
+.CompParameter input[type="number"] {
+    width: 6em;
+    height: 2em;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    text-align: center;
+    padding-left: 0px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    border: 1px solid black;
+    background-color: rgb(240, 240, 240);
+    border-radius: 4px;
+    margin: 4px;
+    text-align: start;
+}
+
+.Simparameter span {
+    font-weight: 500;
+    font-size: 0.8Em;
+    margin-bottom: 0px;
+    flex: 1;
+    text-align: right;
+    margin: 2px;
+}
+
+span.unit {
+    font-weight: 600;
+    font-size: 0.7Em;
+    text-align: left;
+}
+
+.button-container {
+    position: relative;
+    height: auto;
+}
+
+.list {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.Simparameter input[type="number"] {
+    width: 6em;
+    height: 2em;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 0px;
+}
+
+.Datapoint {
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.grid-container2 {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(3, 1fr);
+    border: 1px solid black;
+    background-color: rgb(248, 248, 248);
+    border-radius: 4px;
+    margin: 4px;
+    text-align: end;
+}
 :root {
     --arrow-bg: rgba(255, 255, 255, 0.3);
     --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/f/fd/Arrows_down_animated.gif);
