@@ -1,0 +1,80 @@
+.App-Container {
+    height: calc(100vh - 44px);
+    width: 100%;
+    overflow-y: hidden;
+    display: flex;
+
+    border: 2px solid #8080F0;
+}
+
+.Sidebar-Container {
+    width: 18vw;
+    height: 100%;
+
+    border: 2px solid #F060F0;
+}
+
+.Content-Container {
+    width: 14vw;
+    height: 100%;
+    width: 100%;
+
+    border: 2px solid #26b675;
+}
+
+.App-Header {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: right;
+
+    border: 2px solid #c18548;
+}
+
+.Header-Labels {
+    width: 40%;
+    padding-left: 2rem;
+
+    border: 2px solid #eeff00;
+}
+
+.Header-Labels h3 {
+    margin: 0px;
+    font-size: 1.8rem;
+    border: 1px solid #2c2c2a;
+}
+
+.Header-Labels span {
+    font-size: 1rem;
+    margin: 0px;
+    border: 1px solid #2c2c2a;
+}
+
+.Header-Tabs {
+    width: 60%;
+    display: flex;
+
+    border: 2px solid #ff0000;
+}
+
+.Main-Content {
+    width: 100%;
+    height: calc(100% - 4rem);
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    
+    border: 2px solid #ff0000;
+}
+
+.grid-cell {
+    text-align: center;
+    background-color: lightgray;
+    border: 1px dashed #3128ad;
+}
+
+.Tab.selected {
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid #716da6;
+}

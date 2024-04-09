@@ -1,0 +1,116 @@
+.App-Container {
+    height: 100vh;
+    width: 100%;
+    overflow-y: hidden;
+    display: flex;
+}
+
+.Content-Container {
+    height: 100%;
+    width: 100%;
+}
+
+.App-Header {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: right;
+}
+
+.Header-Labels {
+    width: 39%;
+    padding-left: 2rem;
+}
+
+.Header-Labels h3 {
+    margin: 0px;
+    font-size: 1.8rem;
+}
+
+.Header-Labels span {
+    font-size: 1rem;
+    margin: 0px;
+}
+
+.Header-Tabs {
+    width: 60%;
+    display: flex;
+    margin-right: 10px;
+}
+
+
+.Tab {
+    color: rgba(173, 181, 189);
+    border: 2px solid rgba(20, 20, 20, 0.1);
+    border-radius: 15px;
+    margin-right: -2px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    height: 2.75rem;
+    margin-top: auto;
+    margin-bottom: -2px;
+
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 16px;
+    font-weight: 550;
+    line-height: 24px;
+    align-content: center;
+    text-align: center;
+    overflow-wrap: break-word;
+    text-decoration: none;
+    flex-grow: 1;
+    display: flex;
+    justify-Content: center;
+    align-Items: center;
+    color: black;
+    background-color: whitesmoke;
+}
+
+.Tab.selected {
+    text-align: center;
+    border-bottom: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+.Main-Content {
+    width: 100%;
+    height: calc(100% - 4rem);
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    border-top: 2px solid rgba(20, 20, 20, 0.1);
+    padding: 10px;
+}
+
+.grid-cell {
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.152);
+    border-radius: 5px;
+    margin: 1px;
+    background-color: whitesmoke;
+}
+
+.grid-cell-ns {
+    text-align: center;
+    border-radius: 5px;
+    margin: 1px;
+    background-color: whitesmoke;
+}
+
+.space-between {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+}
+
+.gaugeTitle {
+    text-align: center;
+    margin: 0;
+}
+
+.marker-text {
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.585);
+}

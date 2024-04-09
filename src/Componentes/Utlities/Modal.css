@@ -1,0 +1,33 @@
+.loading-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(85, 85, 85, 0.5);
+    color: white;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.lmodal-content {
+    padding: 20px;
+}
+
+.fade-image {
+    animation: fadeInOut 2s infinite;
+    width: 10vw;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}

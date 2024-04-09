@@ -1,0 +1,59 @@
+.main-App
+{
+  overflow-y: hidden;
+}
+
+.container-Dinagramas {
+    display: flex;
+    overflow-y: auto;
+    height: calc(100vh - 85px);
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  align-content: center;
+  min-height: 80vh;
+}
+
+.main-content h2{
+  margin-left: auto;
+}
+
+
+.dinagraph
+{
+  flex: 1;
+  min-width: 450px; 
+  max-width: 60%; 
+  margin: 5px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 600px) {
+  .dinagraph {
+    max-width: 100%; /* Single chart per row on smaller screens */
+  }
+}
+
+.timeseries
+{
+  padding: 20px;
+}
+
+.header{
+  position: fixed;
+}
+
+.fullscreen {
+  width: 100vw;
+  height: 90vh;
+  max-width: 100%; 
+  position: fixed;
+  background-color: rgb(255, 255, 255);
+  top: 48;
+  left: 0;
+  z-index: 999;
+}

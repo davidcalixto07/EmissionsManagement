@@ -1,0 +1,201 @@
+.Overview-title {
+    padding-left: 1rem;
+    color: rgb(31, 21, 58);
+    font-weight: 550;
+}
+
+.Overview-100 {
+    height: 100%;
+    background-color: #efeef5;
+}
+
+.TeaView {
+    height: calc(100% - 4rem);
+    background-color: #efeef5;
+}
+
+.grid-cell-white {
+    background-color: #ffffff;
+    border: 1px solid #00000020;
+    display: flex;
+    align-items: center;
+}
+
+.grid-cell-white.vert {
+    display: block;
+}
+
+.grid-cell-white.ns {
+    border: none;
+}
+
+
+.grid-cell-white.trans {
+    background-color: transparent;
+}
+
+.justified {
+    justify-content: space-between;
+}
+
+.justified input {
+    padding-left: 0.4rem;
+    margin-right: 1rem;
+}
+.justified span {
+    margin-left: 1rem;
+}
+
+.aditionalContainer {
+    width: 100%;
+    height: 100%;
+    padding: 0.6rem;
+}
+
+.aditionalContainer span {
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.grid-cell-white.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.metric-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.metric-name {
+    font-size: 0.9rem;
+}
+
+.metric-name s {
+    font-size: 0.7rem;
+}
+
+.metric-value {
+    display: flex;
+    align-items: baseline;
+    line-height: 1.4rem;
+}
+
+.value {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.units {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.ReportButton {
+    background-color: var(--west-blue);
+    color: whitesmoke;
+    padding: 0.2rem;
+    border: 0;
+    border-radius: 4px;
+}
+
+.metricView {
+    flex-direction: column;
+}
+
+.metricView h5 {
+    font-weight: bold;
+    font-size: medium;
+    margin: 0.3rem;
+}
+
+
+.metricsList {
+    width: 100%;
+    height: calc(100% - 1rem);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.emissionsSelector {
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    padding: 5px;
+    padding-left: 0.8rem;
+    margin: 20px auto;
+    border: 1px solid #d9d9d9;
+    height: 30px;
+    width: 230px;
+    overflow: hidden;
+    position: relative;
+}
+
+.emissionsSelector::after {
+    content: "\025be";
+    display: table-cell;
+    text-align: center;
+    padding-top: 7px;
+    width: 30px;
+    height: 30px;
+    background-color: #d9d9d9;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    pointer-events: none;
+}
+
+.SimResult p{
+    margin-bottom: 0;
+}
+
+:root {
+    --arrow-bg: rgba(255, 255, 255, 0.3);
+    --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/f/fd/Arrows_down_animated.gif);
+    --option-bg: black;
+    --select-bg: rgba(255, 255, 255, 0.2);
+  }
+
+  /* <select> styles */
+  select {
+    /* Reset */
+    appearance: none;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    /* Personalize */
+    height:2.5rem;
+    width: 15rem;
+    padding: 0rem 1rem 0rem 2.5rem;
+    background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
+      linear-gradient(to left, var(--arrow-bg) 5em, var(--select-bg) 2em);
+    color: black;
+    border-radius: 1em;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    /* Remove IE arrow */
+    &::-ms-expand {
+      display: none;
+    }
+    /* Remove focus outline */
+    &:focus {
+      outline: none;
+    }
+    /* <option> colors */
+    option {
+      color: inherit;
+      background-color: white;
+    }
+  }
+  
+  

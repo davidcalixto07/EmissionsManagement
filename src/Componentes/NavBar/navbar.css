@@ -1,0 +1,29 @@
+nav {
+    height: 64px;
+    background-color: #0f2D57;
+}
+
+nav ul {
+    border-radius: 20px;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #0f2D57;
+    justify-content: flex-end;
+    /* Alinea los elementos a la derecha */
+}
+
+nav li {
+    width: 50%;
+    text-align: center;
+    color: #fff;
+    font: 16px Roboto, sans-serif, bold;
+    padding: 22px 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #062045;
+}

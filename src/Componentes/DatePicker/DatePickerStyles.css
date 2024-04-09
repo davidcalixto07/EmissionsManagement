@@ -1,0 +1,49 @@
+.DateTimeContainer {
+    width: fit-content;
+    border: 2px solid gray;
+    background-color: gainsboro;
+}
+
+.DateTimeContainer-Btn {
+    width: 5vw;
+    margin-left: calc(95% - 2.5vw);
+}
+
+.overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.DateTimeOverview {
+    width: 98%;
+    display: flex;
+    vertical-align: middle;
+    gap: 0.2rem;
+    align-items: center;
+    margin: 0;
+}
+
+.DateTimeMainButton {
+    width: 100%;
+    align-items: center;
+    border: 2px solid rgb(173, 173, 173);
+    text-wrap: nowrap;
+    height: 2.2rem;
+}
+
+.DateTimeMainButton span {
+    text-wrap: nowrap;
+}
+
+.DateTimeArrowbutton {
+    height: 2.2rem;
+    border: 2px solid rgb(173, 173, 173);
+    padding: auto;
+    font-size: 9;
+}

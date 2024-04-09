@@ -1,0 +1,24 @@
+.EventsTableContainer {
+    height: calc(100% - 1rem);
+    width: 100%;
+    overflow: hidden
+}
+
+.EventsTableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.EventsTableContainer thead {
+    background: #10101010
+}
+
+.EventsTableBody td {
+    font-size: 0.9rem;
+}
+
+.EventsTableBody {
+    max-height: 90%;
+    overflow-y: clip;
+    text-align: left
+}

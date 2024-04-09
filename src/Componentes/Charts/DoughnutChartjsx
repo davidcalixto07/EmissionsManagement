@@ -1,0 +1,47 @@
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+/**
+ * Builds a line chart from data.
+ * Barchart requieres 2 mandatory props: values and labels
+ *
+ * @param  {Object[]} values An array of objects, one for each line like {
+                                      label: "Label1",
+                                      data: [1, 2, 3] //Being data the values of the 
+                                  }
+ * @param  {string[]} labels An array of string being the labels of the x Axis
+ * @param  {boolean} freeaspect boolean for the chart to conserve rectangular aspect when false or take the container aspect when true
+ * @param  {string} legend the title of the chart
+ * @param  {string} units the label for the tooltip
+ * @return {Line} a JSX component containing chart. 
+ */
+const DoughnutChart = ({ values, labels, legend, units }) => {
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: legend,
+                text: legend,
+            },
+        },
+    };
+
+    const data = {
+        labels: labels ?? [],
+        datasets: [
+            {
+                label: units ?? '',
+                data: values ?? [],
+            },
+        ],
+    };
+    return <Doughnut data={data} />;
+};
+export default DoughnutChart;
