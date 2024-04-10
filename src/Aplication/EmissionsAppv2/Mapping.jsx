@@ -8,43 +8,25 @@ import Datasource from "../../Componentes/Datasources/Datasource";
 import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
 import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
+import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import { useOutletContext } from "react-router-dom";
 
 const Mapping = () => {
   const [config, SetConfig] = useState({});
   const [tagConfig, SetTagconfig] = useState({});
   const [changes, setChanges] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalDs, setShowModalDs] = useState(false);
+  const [showModalDp, setShowModalDp] = useState(false);
   const [datasources, setDatasources] = useState([]);
-  const [isRemoving, setIsRemoving] = useState(false);
+  const [datapoints, setDataPoints] = useState([]);
+  const [tempDataSources, setTempDatasources] = useState([]);
+  const [tempDataPoints, setTemDataPoints] = useState([]);
+  const [isRemovingds, setIsRemovingds] = useState(false);
+  const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
 
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
-
-  function GetConfig() {
-    axios
-      .get("/EmissionsApi/getConfig")
-      .then((response) => {
-        if (response.data) {
-          SetConfig(response.data);
-          console.log(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-    axios
-      .get("/EmissionsApi/getTagsList")
-      .then((response) => {
-        if (response.data) {
-          SetTagconfig(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  }
 
   console.log("Datasources", datasources);
   useEffect(() => {
@@ -56,82 +38,69 @@ const Mapping = () => {
       datapoints: ["FIT3401", "PIT3401", "TIT2501"],
     };
     setDatasources([defConf]);
-    GetConfig();
+    setDataPoints([]);
+    console.log(datapoints);
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(formData);
-
-    const newAsset = {
-      name: formData.teaId,
-      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
-      location: {
-        longitude: formData.longitude,
-        latitude: formData.latitude,
-      },
-      typeId: "colwest2.TeaEmisionesFlowData",
-    };
-
-    try {
-      const response = await axios.post(
-        "/api/assetmanagement/v3/assets",
-        newAsset
-      );
-      console.log("Response:", response.data);
-      setStatusText("Created");
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleConfigChange = (e) => {
-    setChanges(true);
-
-    const { name, value } = e.target;
-    SetConfig((prevValues) => ({
-      ...prevValues,
-      [name]: parseFloat(value) ?? value,
-    }));
-  };
-
-  const handleTagConfigChange = (e) => {
-    setChanges(true);
-
-    const { name, value } = e.target;
-    SetTagconfig((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
   function handleDataSourceClick(datasource) {
-    setSelectedDataSource(datasource);
+    if (isRemovingds) {
+      console.log(datasource.ip);
+      RemoveDataDs(datasource.ip);
+    } else {
+      setSelectedDataSource(datasource);
+      setDataPoints(datasource.datapoints);
+    }
+  }
+  function handleDataPointClick(dp) {
+    if (isRemovingdp) {
+      console.log(dp);
+      RemoveDataDp(dp);
+    }
+  }
+  function updateListDs(list) {
+    setDatasources(list);
+  }
+  function updateListDp(list) {
+    setDataPoints(list);
+  }
+  function RemoveDataDs(data) {
+    const newList = [...datasources];
+    const index = newList.findIndex((datasource) => data === datasource.ip);
+    newList.splice(index, 1);
+    setDatasources(newList);
+  }
+  function RemoveDataDp(data) {
+    const newList = [...datapoints];
+    const index = newList.findIndex((datapoint) => data === datapoint);
+    console.log(index);
+    newList.splice(index, 1);
+    setDataPoints(newList);
+  }
+  function HandleClickedRemoveDs() {
+    setIsRemovingds(true);
+    setTempDatasources(datasources);
+  }
+  function HandleClickedRemoveDp() {
+    setIsRemovingdp(true);
+    setTemDataPoints(datapoints);
+  }
+  function HandleCancelDp() {
+    setIsRemovingdp(false);
+    setDataPoints(tempDataPoints);
+  }
+  function HandleCancelDs() {
+    setIsRemovingds(false);
+    setDatasources(tempDataSources);
   }
 
-  function HandleApply() {
-    setChanges(false);
-    axios
-      .post("/EmissionsApi/setConfig", config)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-    axios
-      .post("/EmissionsApi/setTagsList", tagConfig)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  }
-
-  function SaveDatasource(ds) {
+  function SaveDatasourceDs(ds) {
     const newItem = ds;
     setDatasources((datasources) => [...datasources, newItem]);
+  }
+  function SaveDataPoints(dp, ds) {
+    const newItem = dp;
+    setDataPoints((datapoints) => [...datapoints, newItem]);
+    console.log(ds);
   }
 
   return (
@@ -145,22 +114,25 @@ const Mapping = () => {
             {datasources.map((ds) => (
               <Datasource
                 datasource={ds}
-                handleDataSourceClick={handleDataSourceClick}
+                handleDataSourceClickDs={handleDataSourceClick}
               />
             ))}
           </div>
           <div className="button-container">
             <div className="ControlButtons">
-              {isRemoving ? (
+              {isRemovingds ? (
                 <>
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      updateListDs(datasources);
+                      setIsRemovingds(false);
+                    }}
                     className="SidebarAsset-DeleteIcon"
                   >
                     Save
                   </button>
                   <button
-                    onClick={() => ""}
+                    onClick={() => HandleCancelDs()}
                     className="SidebarAsset-DeleteIcon"
                   >
                     Cancel
@@ -169,13 +141,13 @@ const Mapping = () => {
               ) : (
                 <>
                   <button
-                    onClick={() => ""}
+                    onClick={() => HandleClickedRemoveDs()}
                     className="SidebarAsset-DeleteIcon"
                   >
                     <img src={DeleteIcon} alt="-" />
                   </button>
                   <button
-                    onClick={() => setShowModal(true)}
+                    onClick={() => setShowModalDs(true)}
                     className="SidebarAsset-DeleteIcon"
                   >
                     <img src={AddIcon} alt="-" />
@@ -188,47 +160,91 @@ const Mapping = () => {
         <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
           <h4>Datapoints</h4>
         </GridElement>
-        {selectedDataSource &&
-          selectedDataSource.datapoints?.map((ds) => (
+        {datapoints &&
+          datapoints?.map((ds) => (
             <>
+              {console.log(ds)}
               <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-                <strong> Node/Tag: </strong>
-                <span> {ds} </span>
-                <strong> Flare: </strong>
-                <span>
-                  <select id="dropdown">
-                    {datasources.length > 0 &&
-                      teasList.map((ds) => (
-                        <option value={ds.name}>{ds.name}</option>
-                      ))}
-                  </select>
-                </span>
-                <strong> Variable: </strong>
-                <span>
-                  <select>
-                    <option> Gas Flow </option>
-                    <option> Gas Pressure </option>
-                    <option> Gas Temperature </option>
-                  </select>
-                </span>
+                <div onClick={() => handleDataPointClick(ds)}>
+                  <strong> Node/Tag: </strong>
+                  <span> {ds} </span>
+                  <strong> Flare: </strong>
+                  <span>
+                    <select id="dropdown">
+                      {datasources.length > 0 &&
+                        teasList.map((ds) => (
+                          <option value={ds.name}>{ds.name}</option>
+                        ))}
+                    </select>
+                  </span>
+                  <strong> Variable: </strong>
+                  <span>
+                    <select>
+                      <option> Gas Flow </option>
+                      <option> Gas Pressure </option>
+                      <option> Gas Temperature </option>
+                    </select>
+                  </span>
+                </div>
               </GridElement>
             </>
           ))}{" "}
-        <Button variant="danger" style={{ margin: "1em" }}>
-          Delete
-        </Button>
-        <Button variant="success" style={{ margin: "1em" }}>
-          Add
-        </Button>
-        <span></span>
-        <Button variant="primary" style={{ float: "1em" }}>
-          Apply
-        </Button>
+        <GridElement cols={6} ns>
+          <div className="button-container">
+            <div className="ControlButtons">
+              {isRemovingdp ? (
+                <>
+                  <button
+                    onClick={() => {
+                      updateListDp(datapoints);
+                      setIsRemovingdp(false);
+                    }}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => HandleCancelDp()}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => HandleClickedRemoveDp()}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    <img src={DeleteIcon} alt="-" />
+                  </button>
+                  <button
+                    onClick={() => setShowModalDp(true)}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    <img src={AddIcon} alt="-" />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </GridElement>
+        <GridElement cols={6} ns style={{ alignContent: "center" }}>
+          <Button variant="primary" onClick={() => updateListDs}>
+            Apply
+          </Button>
+        </GridElement>
       </CustomGrid>
       <AddDatasource
-        show={showModal}
-        setShow={setShowModal}
-        saveDatasource={SaveDatasource}
+        show={showModalDs}
+        setShow={setShowModalDs}
+        saveDatasource={SaveDatasourceDs}
+      />
+      <AddDataPoint
+        show={showModalDp}
+        setShow={setShowModalDp}
+        saveDataPoint={SaveDataPoints}
+        ds={datasources}
       />
     </>
   );

@@ -1,8 +1,8 @@
-const Datasource = ({ datasource, handleDataSourceClick }) => {
+const Datasource = ({ datasource, handleDataSourceClickDs }) => {
   return (
     <div
       className="grid-container"
-      onClick={() => handleDataSourceClick(datasource)}
+      onClick={() => handleDataSourceClickDs(datasource)}
     >
       <div>
         <strong>Name:</strong>
