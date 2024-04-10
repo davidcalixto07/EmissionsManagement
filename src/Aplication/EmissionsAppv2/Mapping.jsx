@@ -5,6 +5,8 @@ import CustomGrid from "../Utils/CustomGrid";
 import GridElement from "../Utils/GridElement";
 import { Button } from "react-bootstrap";
 import Datasource from "../../Componentes/Datasources/Datasource";
+import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
+import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import { useOutletContext } from "react-router-dom";
 
@@ -14,6 +16,7 @@ const Mapping = () => {
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [datasources, setDatasources] = useState([]);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
 
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
@@ -147,14 +150,46 @@ const Mapping = () => {
             ))}
           </div>
           <div className="button-container">
-            <Button onClick={() => setShowModal(true)}>Add Datasource</Button>
+            <div className="ControlButtons">
+              {isRemoving ? (
+                <>
+                  <button
+                    onClick={() => {}}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => ""}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => ""}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    <img src={DeleteIcon} alt="-" />
+                  </button>
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="SidebarAsset-DeleteIcon"
+                  >
+                    <img src={AddIcon} alt="-" />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </GridElement>
         <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
           <h4>Datapoints</h4>
         </GridElement>
         {selectedDataSource &&
-          selectedDataSource.datapoints.map((ds) => (
+          selectedDataSource.datapoints?.map((ds) => (
             <>
               <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
                 <strong> Node/Tag: </strong>
@@ -179,12 +214,16 @@ const Mapping = () => {
               </GridElement>
             </>
           ))}{" "}
-        <GridElement cols={6} rows={1} ns style={{ alignContent: "center" }}>
-          <Button variant="success">Add</Button>
-          <Button variant="danger">Delete</Button>
-          <span></span>
-          <Button variant="primary">Map</Button>
-        </GridElement>
+        <Button variant="danger" style={{ margin: "1em" }}>
+          Delete
+        </Button>
+        <Button variant="success" style={{ margin: "1em" }}>
+          Add
+        </Button>
+        <span></span>
+        <Button variant="primary" style={{ float: "1em" }}>
+          Apply
+        </Button>
       </CustomGrid>
       <AddDatasource
         show={showModal}

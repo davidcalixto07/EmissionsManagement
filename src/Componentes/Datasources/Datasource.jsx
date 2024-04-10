@@ -17,6 +17,10 @@ const Datasource = ({ datasource, handleDataSourceClick }) => {
         {datasource.ip}
       </div>
       <div>
+        <strong>{datasource.type == "Logix" ? "Tags:" : "Nodes:"} </strong>
+        {datasource.datapoints.length}
+      </div>
+      <div>
         <strong>Status:</strong>
         <span
           style={{ color: datasource.status === "Connected" ? "green" : "red" }}
