@@ -29,11 +29,10 @@ export async function CreateDatapoint(ds, dp) {
     {
         type: ds.type,
         ip: ds.ip,
-        tag: dp.tag,
-        type: dp.type
+        tag: dp,
     }
     try {
-        const response = await axios.post('/api/CreateConnection', json)
+        const response = await axios.post('/api/CreateDatapoint', json)
         return response.data
     } catch (error) {
         console.log('Error fetching data:', error);
@@ -48,7 +47,7 @@ export async function DeleteDatapoint(ds, dp) {
     };
 
     try {
-        const response = await axios.delete('/api/DeleteConnection' + new URLSearchParams(params))
+        const response = await axios.delete('/api/DeleteDatapoint?' + new URLSearchParams(params))
         return response.data
     } catch (error) {
         console.log('Error fetching data:', error);
@@ -63,7 +62,6 @@ export async function GetDatasources() {
     } catch (error) {
         throw new Error('Error fetching data:', error);
     }
-
 }
 
 

@@ -21,15 +21,12 @@ const Mapping = () => {
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
-  const [tempDataSources, setTempDatasources] = useState([]);
-  const [tempDataPoints, setTemDataPoints] = useState([]);
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
-  const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
+  const [, , , , , teasList, , ,] =
     useOutletContext();
-
 
   function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
@@ -41,6 +38,7 @@ const Mapping = () => {
       setDataPoints(datasource.datapoints);
     }
   }
+
   function handleDataPointClick(dp) {
     setSelectedDataPoint(dp);
     if (isRemovingdp) {
@@ -51,16 +49,12 @@ const Mapping = () => {
   function updateListDs(list) {
     setDatasources(list);
   }
-  function updateListDp(list) {
-    setDataPoints(list);
-  }
+
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
-    setTempDatasources(datasources);
   }
   function HandleClickedRemoveDp() {
     setIsRemovingdp(true);
-    setTemDataPoints(datapoints);
   }
 
   function HandleCancelDp() {
@@ -79,9 +73,12 @@ const Mapping = () => {
   }
 
   async function SaveDataPoints(dp, ds) {
-    const newItem = dp;
-    setDataPoints((datapoints) => [...datapoints, newItem]);
-    console.log(ds);
+    setShowModalDp(false);
+    console.log("SaveDp", dp, "Ds", ds);
+    if (await CreateDatapoint(ds, dp))
+      getApiData();
+    else
+      console.log("Not created");
   }
 
   async function confirmDelete(ds) {
@@ -91,10 +88,10 @@ const Mapping = () => {
     getApiData();
   }
 
-  async function confirmDeleteDp(ds) {
-    console.log("delete", ds);
-    setShowModalDeleteDs(false);
-    await DeleteDatasource(ds);
+  async function confirmDeleteDp(dp) {
+    console.log("delete", dp);
+    setShowModalDeleteDp(false);
+    await DeleteDatapoint(selectedDataSource, { tag: dp });
     getApiData();
   }
 
@@ -116,6 +113,13 @@ const Mapping = () => {
     getApiData();
   }, []);
 
+  useEffect(() => {
+    console.log("Ds update", datasources);
+    if (selectedDataSource) {
+      const ds = datasources.find(x => x.ip === selectedDataSource.ip && x.type === selectedDataSource.type)
+      setDataPoints(ds?.datapoints ?? []);
+    }
+  }, [datasources]);
 
   return (
     <>
@@ -168,7 +172,6 @@ const Mapping = () => {
         {datapoints &&
           datapoints?.map((ds) => (
             <>
-              {console.log(ds)}
               <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
                 <div onClick={() => handleDataPointClick(ds)}>
                   <strong> Node/Tag: </strong>
