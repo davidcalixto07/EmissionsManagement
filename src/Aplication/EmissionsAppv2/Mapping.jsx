@@ -27,23 +27,9 @@ const Mapping = () => {
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
-
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
 
-  console.log("Datasources", datasources);
-  useEffect(() => {
-    const defConf = {
-      name: "PLC1",
-      ip: "192.168.34.124",
-      status: "Disconnected",
-      type: "Logix",
-      datapoints: ["FIT3401", "PIT3401", "TIT2501"],
-    };
-    setDatasources([defConf]);
-    setDataPoints([]);
-    console.log(datapoints);
-  }, []);
 
   function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
@@ -76,6 +62,7 @@ const Mapping = () => {
     setIsRemovingdp(true);
     setTemDataPoints(datapoints);
   }
+
   function HandleCancelDp() {
     setIsRemovingdp(false);
     setDataPoints(tempDataPoints);
@@ -97,16 +84,29 @@ const Mapping = () => {
 
   async function confirmDelete(ds) {
     console.log("delete", ds);
-    setShowModalDelete(false);
+    setShowModalDeleteDs(false);
     await DeleteDatasource(ds);
-    getData();
+    getApiData();
   }
 
+  const getApiData = async () => {
+    try {
+      const res = await GetDatasources();
+      setDatasources(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   function noDelete() {
-    console.log("Nodelete");
     setShowModalDeleteDs(false);
     setShowModalDeleteDp(false);
   }
+
+  useEffect(() => {
+    getApiData();
+  }, []);
+
 
   return (
     <>
@@ -234,13 +234,14 @@ const Mapping = () => {
         ds={selectedDataSource}
       />
 
-      <PopupDelete
-        show={showModalDelete}
-        setShow={setShowModalDelete}
+      <PopupDeleteDs
+        show={showModalDeleteDs}
+        setShow={setShowModalDeleteDs}
         confirmDelete={confirmDelete}
         noDelete={noDelete}
         ds={selectedDataSource}
       />
+
       <PopupDeleteDp
         show={showModalDeleteDp}
         setShow={setShowModalDeleteDp}
