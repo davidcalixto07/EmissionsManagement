@@ -6,7 +6,8 @@ import { useState } from "react";
 function AddDatasource({ show, setShow, saveDatasource }) {
   const [ip, setIp] = useState("127.0.0.1");
   const [name, setName] = useState("PLC1");
-  const [type, setType] = useState("logix");
+  const [type, setType] = useState("Logix");
+  const [datapoints, setDatapoints] = useState(["PIT1201"]);
 
   return (
     <Modal
@@ -29,9 +30,14 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value="logix">Logix</option>
-            <option value="ua">OPC UA</option>
+            <option value="Logix">Logix</option>
+            <option value="OPC UA">OPC UA</option>
           </select>
+          DataPoint:
+          <input
+            value={datapoints}
+            onChange={(e) => setDatapoints(e.target.value)}
+          ></input>
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -46,6 +52,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
               ip: ip,
               type: type,
               status: "Disconnected",
+              datapoints: [datapoints],
             })
           }
         >
