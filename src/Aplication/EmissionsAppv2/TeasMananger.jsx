@@ -7,7 +7,7 @@ import { useOutletContext } from "react-router-dom";
 import TeaCreation from "./TeaCreation";
 import Mapping from "./Mapping";
 
-const TeaMananger = () => {
+const TeaMananger = ({assetList}) => {
   const [viewDate, setViewDate] = useState(true);
 
   function HandleDateChange() {}
@@ -19,7 +19,7 @@ const TeaMananger = () => {
       </AppTab>
 
       <AppTab label="Mapping Tea">
-        <Mapping />
+        <Mapping assetList={assetList}/>
       </AppTab>
     </TabbedAppLayout>
   );

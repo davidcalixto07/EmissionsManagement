@@ -6,7 +6,7 @@ import GridElement from "../Utils/GridElement";
 import { Button } from "react-bootstrap";
 import Datasource from "../../Componentes/Datasources/Datasource";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
-import GridUtil from "../Utils/GridUtil";
+import { useOutletContext } from "react-router-dom";
 
 const Mapping = () => {
   const [config, SetConfig] = useState({});
@@ -14,6 +14,10 @@ const Mapping = () => {
   const [changes, setChanges] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [datasources, setDatasources] = useState([]);
+  const [selectedDataSource, setSelectedDataSource] = useState(null);
+
+  const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
+    useOutletContext();
 
   function GetConfig() {
     axios
@@ -46,6 +50,7 @@ const Mapping = () => {
       ip: "192.168.34.124",
       status: "Disconnected",
       type: "Logix",
+      datapoints: ["FIT3401", "PIT3401", "TIT2501"],
     };
     setDatasources([defConf]);
     GetConfig();
@@ -97,6 +102,10 @@ const Mapping = () => {
     }));
   };
 
+  function handleDataSourceClick(datasource) {
+    setSelectedDataSource(datasource);
+  }
+
   function HandleApply() {
     setChanges(false);
     axios
@@ -124,143 +133,57 @@ const Mapping = () => {
 
   return (
     <>
-      <CustomGrid rows={8} cols={7} className={"Overview-100"}>
+      <CustomGrid rows={8} cols={8} className={"Overview-100"}>
         <GridElement cols={2} rows={8}>
           <GridElement cols={1} ns>
             <h4>Datasources</h4>
           </GridElement>
           <div className="list">
             {datasources.map((ds) => (
-              <Datasource datasource={ds} />
+              <Datasource
+                datasource={ds}
+                handleDataSourceClick={handleDataSourceClick}
+              />
             ))}
           </div>
           <div className="button-container">
             <Button onClick={() => setShowModal(true)}>Add Datasource</Button>
           </div>
         </GridElement>
-        <GridElement cols={5} rows={8}>
-          <form onSubmit={handleSubmit} className="fullSize">
-            <GridUtil cols={2} rows={8} gap={"2em"}>
-              <GridElement
-                cols={2}
-                rows={1}
-                ns
-                style={{ aligncontent: "center", marginTop: "2em" }}
-              >
-                <h4>Datapoints</h4>
-              </GridElement>
-              <GridElement cols={1} rows={1} ns>
-                <strong>Flow To tea:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
+        <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
+          <h4>Datapoints</h4>
+        </GridElement>
+        {selectedDataSource &&
+          selectedDataSource.datapoints.map((ds) => (
+            <>
+              <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
+                <strong> Node/Tag: </strong>
+                <span> {ds} </span>
+                <strong> Flare: </strong>
+                <span>
+                  <select id="dropdown">
+                    {datasources.length > 0 &&
+                      teasList.map((ds) => (
+                        <option value={ds.name}>{ds.name}</option>
                       ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"FIT3401.Val"} />
-                  </div>
-                </div>
+                  </select>
+                </span>
+                <strong> Variable: </strong>
+                <span>
+                  <select>
+                    <option> Gas Flow </option>
+                    <option> Gas Pressure </option>
+                    <option> Gas Temperature </option>
+                  </select>
+                </span>
               </GridElement>
-
-              <GridElement cols={1} rows={1} ns>
-                <strong>Gas pressure:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"PIT3401.Val"} />
-                  </div>
-                </div>
-              </GridElement>
-
-              <GridElement cols={1} rows={1} ns>
-                <strong>Gas Temperature:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"TIT3401.Val"} />
-                  </div>
-                </div>
-              </GridElement>
-
-              <GridElement cols={1} rows={1} ns>
-                <strong>Composition Array:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"Comp"} />
-                  </div>
-                </div>
-              </GridElement>
-
-              <GridElement cols={1} rows={1} ns>
-                <strong>Density:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"Density"} />
-                  </div>
-                </div>
-              </GridElement>
-
-              <GridElement cols={1} rows={1} ns>
-                <strong>LHV:</strong>
-                <div className="Datapoint">
-                  <div>
-                    <span>Source: </span>
-                    <select id="dropdown">
-                      {datasources.map((ds) => (
-                        <option value="">{ds.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <span>Tag or nodeId:</span>
-                    <input name="tag" defaultValue={"Comp[18]"} />
-                  </div>
-                </div>
-              </GridElement>
-              <GridElement cols={2} rows={2} ns>
-                <Button type="submit">Submit</Button>
-              </GridElement>
-            </GridUtil>
-          </form>
+            </>
+          ))}{" "}
+        <GridElement cols={6} rows={1} ns style={{ alignContent: "center" }}>
+          <Button variant="success">Add</Button>
+          <Button variant="danger">Delete</Button>
+          <span></span>
+          <Button variant="primary">Map</Button>
         </GridElement>
       </CustomGrid>
       <AddDatasource

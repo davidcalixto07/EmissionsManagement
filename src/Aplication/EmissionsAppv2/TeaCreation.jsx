@@ -132,7 +132,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="teaId"
-            placeholder="Ej: Tea001"
+            placeholder="Tea001"
             value={formData.teaId}
             onChange={handleChange}
           />
@@ -161,7 +161,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="height"
-            placeholder="E: 30"
+            placeholder="  30"
             value={formData.height}
             onChange={handleChange}
           />
@@ -187,7 +187,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="diameter"
-            placeholder="E: 9.1"
+            placeholder="  9.1"
             value={formData.diameter}
             onChange={handleChange}
           />
@@ -210,7 +210,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="instalationYear"
-            placeholder="Ej: 2024"
+            placeholder=" 2024"
             value={formData.instalationYear}
             onChange={handleChange}
           />
@@ -231,7 +231,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="transmitterSerial"
-            placeholder="Ej: A-00000"
+            placeholder=" A-00000"
             value={formData.transmitterSerial}
             onChange={handleChange}
           />
@@ -259,7 +259,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="WindSpeed"
-            placeholder="Ej: 4"
+            placeholder=" 4"
             value={formData.wind}
             onChange={handleChange}
           />
@@ -280,7 +280,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="TeaDiameter"
-            placeholder="Ej: 8.1"
+            placeholder=" 8.1"
             value={formData.wind}
             onChange={handleChange}
           />
@@ -310,7 +310,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="estimatedHours"
-            placeholder="Ej: 3500"
+            placeholder=" 3500"
             value={formData.estimatedHours}
             onChange={handleChange}
           />
