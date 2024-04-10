@@ -9,6 +9,7 @@ import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
 import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
+import PopupDelete from "../../Componentes/Utlities/PopupDelete";
 import { useOutletContext } from "react-router-dom";
 
 const Mapping = () => {
@@ -17,6 +18,7 @@ const Mapping = () => {
   const [changes, setChanges] = useState(false);
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
   const [tempDataSources, setTempDatasources] = useState([]);
@@ -45,7 +47,7 @@ const Mapping = () => {
   function handleDataSourceClick(datasource) {
     if (isRemovingds) {
       console.log(datasource.ip);
-      RemoveDataDs(datasource.ip);
+      setShowModalDelete(true);
     } else {
       setSelectedDataSource(datasource);
       setDataPoints(datasource.datapoints);
@@ -101,6 +103,14 @@ const Mapping = () => {
     const newItem = dp;
     setDataPoints((datapoints) => [...datapoints, newItem]);
     console.log(ds);
+  }
+  function confirmDelete() {
+    console.log("delete");
+    setShowModalDelete(false);
+  }
+  function noDelete() {
+    console.log("Nodelete");
+    setShowModalDelete(false);
   }
 
   return (
@@ -244,6 +254,13 @@ const Mapping = () => {
         show={showModalDp}
         setShow={setShowModalDp}
         saveDataPoint={SaveDataPoints}
+        ds={selectedDataSource}
+      />
+      <PopupDelete
+        show={showModalDelete}
+        setShow={setShowModalDelete}
+        confirmDelete={confirmDelete}
+        noDelete={noDelete}
         ds={selectedDataSource}
       />
     </>
