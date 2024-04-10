@@ -11,12 +11,13 @@ export async function CreateDatasource(ds) {
 }
 
 export async function DeleteDatasource(ds) {
+    console.log("Deleting", ds);
     const params = {
         type: ds.type,
         ip: ds.ip
     };
     try {
-        const response = await axios.delete('/api/DeleteConnection' + new URLSearchParams(params))
+        const response = await axios.delete('/api/DeleteConnection?' + new URLSearchParams(params))
         return response.data
     } catch (error) {
         console.log('Error fetching data:', error);

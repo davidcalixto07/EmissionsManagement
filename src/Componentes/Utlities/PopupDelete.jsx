@@ -18,10 +18,10 @@ function PopupDelete({ show, setShow, confirmDelete, noDelete, ds }) {
         <strong> Node/Tag: </strong>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => confirmDelete()}>
+        <Button variant="secondary" onClick={() => confirmDelete(ds)}>
           Yes
         </Button>
-        <Button variant="primary" onClick={() => noDelete()}>
+        <Button variant="primary" onClick={() => noDelete(ds)}>
           No
         </Button>
       </Modal.Footer>

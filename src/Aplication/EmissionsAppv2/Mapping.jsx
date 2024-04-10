@@ -13,7 +13,6 @@ import PopupDelete from "../../Componentes/Utlities/PopupDelete";
 import { useOutletContext } from "react-router-dom";
 import { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources } from "./apiHandler";
 
-
 const Mapping = () => {
   const [config, SetConfig] = useState({});
   const [tagConfig, SetTagconfig] = useState({});
@@ -34,11 +33,12 @@ const Mapping = () => {
 
 
   function handleDataSourceClick(datasource) {
+    setSelectedDataSource(datasource);
+
     if (isRemovingds) {
       console.log(datasource.ip);
       setShowModalDelete(true);
     } else {
-      setSelectedDataSource(datasource);
       setDataPoints(datasource.datapoints);
     }
   }
@@ -109,10 +109,14 @@ const Mapping = () => {
     setDataPoints((datapoints) => [...datapoints, newItem]);
     console.log(ds);
   }
-  function confirmDelete() {
-    console.log("delete");
+
+  async function confirmDelete(ds) {
+    console.log("delete", ds);
     setShowModalDelete(false);
+    await DeleteDatasource(ds);
+    getData();
   }
+
   function noDelete() {
     console.log("Nodelete");
     setShowModalDelete(false);
@@ -266,6 +270,7 @@ const Mapping = () => {
         saveDataPoint={SaveDataPoints}
         ds={selectedDataSource}
       />
+
       <PopupDelete
         show={showModalDelete}
         setShow={setShowModalDelete}

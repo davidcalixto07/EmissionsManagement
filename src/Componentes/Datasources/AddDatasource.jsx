@@ -41,7 +41,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
         <Button
           variant="primary"
           onClick={() =>
-            saveDatasource({
+            saveDatasource({ 
               name: name,
               ip: ip,
               type: type,
