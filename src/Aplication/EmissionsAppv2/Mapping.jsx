@@ -30,20 +30,6 @@ const Mapping = () => {
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
 
-  console.log("Datasources", datasources);
-  useEffect(() => {
-    const defConf = {
-      name: "PLC1",
-      ip: "192.168.34.124",
-      status: "Disconnected",
-      type: "Logix",
-      datapoints: ["FIT3401", "PIT3401", "TIT2501"],
-    };
-    setDatasources([defConf]);
-    setDataPoints([]);
-    console.log(datapoints);
-  }, []);
-
   function handleDataSourceClick(datasource) {
     if (isRemovingds) {
       console.log(datasource.ip);
@@ -53,6 +39,7 @@ const Mapping = () => {
       setDataPoints(datasource.datapoints);
     }
   }
+
   function handleDataPointClick(dp) {
     setSelectedDataPoint(dp);
     if (isRemovingdp) {
@@ -87,6 +74,7 @@ const Mapping = () => {
     const newItem = ds;
     setDatasources((datasources) => [...datasources, newItem]);
   }
+
   function SaveDataPoints(dp, ds) {
     const newItem = dp;
     setDataPoints((datapoints) => [...datapoints, newItem]);
