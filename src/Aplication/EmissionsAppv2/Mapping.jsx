@@ -9,17 +9,16 @@ import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
 import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
-import PopupDelete from "../../Componentes/Utlities/PopupDelete";
+import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
+import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
 import { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources } from "./apiHandler";
 
 const Mapping = () => {
-  const [config, SetConfig] = useState({});
-  const [tagConfig, SetTagconfig] = useState({});
-  const [changes, setChanges] = useState(false);
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
-  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
+  const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
   const [tempDataSources, setTempDatasources] = useState([]);
@@ -27,50 +26,47 @@ const Mapping = () => {
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
+  const [selectedDataPoint, setSelectedDataPoint] = useState(null);
 
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
 
+  console.log("Datasources", datasources);
+  useEffect(() => {
+    const defConf = {
+      name: "PLC1",
+      ip: "192.168.34.124",
+      status: "Disconnected",
+      type: "Logix",
+      datapoints: ["FIT3401", "PIT3401", "TIT2501"],
+    };
+    setDatasources([defConf]);
+    setDataPoints([]);
+    console.log(datapoints);
+  }, []);
 
   function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
 
     if (isRemovingds) {
       console.log(datasource.ip);
-      setShowModalDelete(true);
+      setShowModalDeleteDs(true);
     } else {
       setDataPoints(datasource.datapoints);
     }
   }
-
   function handleDataPointClick(dp) {
+    setSelectedDataPoint(dp);
     if (isRemovingdp) {
       console.log(dp);
-      RemoveDataDp(dp);
+      setShowModalDeleteDp(true);
     }
   }
   function updateListDs(list) {
     setDatasources(list);
   }
-
-
   function updateListDp(list) {
     setDataPoints(list);
-  }
-
-  function RemoveDataDs(data) {
-    const newList = [...datasources];
-    const index = newList.findIndex((datasource) => data === datasource.ip);
-    newList.splice(index, 1);
-    setDatasources(newList);
-  }
-
-  function RemoveDataDp(data) {
-    const newList = [...datapoints];
-    const index = newList.findIndex((datapoint) => data === datapoint);
-    console.log(index);
-    newList.splice(index, 1);
-    setDataPoints(newList);
   }
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
@@ -89,21 +85,10 @@ const Mapping = () => {
     setDatasources(tempDataSources);
   }
 
-  const getData = async () => {
-    try {
-      const res = await GetDatasources();
-      setDatasources(res);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  async function SaveDatasourceDs(ds) {
-    console.log("Datasource", ds);
-    await CreateDatasource(ds)
-    getData();
+  function SaveDatasourceDs(ds) {
+    const newItem = ds;
+    setDatasources((datasources) => [...datasources, newItem]);
   }
-
   function SaveDataPoints(dp, ds) {
     const newItem = dp;
     setDataPoints((datapoints) => [...datapoints, newItem]);
@@ -119,13 +104,9 @@ const Mapping = () => {
 
   function noDelete() {
     console.log("Nodelete");
-    setShowModalDelete(false);
+    setShowModalDeleteDs(false);
+    setShowModalDeleteDp(false);
   }
-
-  useEffect(() => {
-    getData();
-  }, []);
-
 
   return (
     <>
@@ -146,15 +127,6 @@ const Mapping = () => {
             <div className="ControlButtons">
               {isRemovingds ? (
                 <>
-                  <button
-                    onClick={() => {
-                      updateListDs(datasources);
-                      setIsRemovingds(false);
-                    }}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Save
-                  </button>
                   <button
                     onClick={() => HandleCancelDs()}
                     className="SidebarAsset-DeleteIcon"
@@ -182,7 +154,7 @@ const Mapping = () => {
           </div>
         </GridElement>
         <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-          <h4>Datapoints</h4>
+          <h4>Datapoints</h4>|
         </GridElement>
         {datapoints &&
           datapoints?.map((ds) => (
@@ -218,15 +190,6 @@ const Mapping = () => {
             <div className="ControlButtons">
               {isRemovingdp ? (
                 <>
-                  <button
-                    onClick={() => {
-                      updateListDp(datapoints);
-                      setIsRemovingdp(false);
-                    }}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Save
-                  </button>
                   <button
                     onClick={() => HandleCancelDp()}
                     className="SidebarAsset-DeleteIcon"
@@ -277,6 +240,13 @@ const Mapping = () => {
         confirmDelete={confirmDelete}
         noDelete={noDelete}
         ds={selectedDataSource}
+      />
+      <PopupDeleteDp
+        show={showModalDeleteDp}
+        setShow={setShowModalDeleteDp}
+        confirmDelete={confirmDelete}
+        noDelete={noDelete}
+        dp={selectedDataPoint}
       />
     </>
   );
