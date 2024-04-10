@@ -11,6 +11,8 @@ import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDelete from "../../Componentes/Utlities/PopupDelete";
 import { useOutletContext } from "react-router-dom";
+import { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources } from "./apiHandler";
+
 
 const Mapping = () => {
   const [config, SetConfig] = useState({});
@@ -30,19 +32,6 @@ const Mapping = () => {
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
 
-  console.log("Datasources", datasources);
-  useEffect(() => {
-    const defConf = {
-      name: "PLC1",
-      ip: "192.168.34.124",
-      status: "Disconnected",
-      type: "Logix",
-      datapoints: ["FIT3401", "PIT3401", "TIT2501"],
-    };
-    setDatasources([defConf]);
-    setDataPoints([]);
-    console.log(datapoints);
-  }, []);
 
   function handleDataSourceClick(datasource) {
     if (isRemovingds) {
@@ -53,6 +42,7 @@ const Mapping = () => {
       setDataPoints(datasource.datapoints);
     }
   }
+
   function handleDataPointClick(dp) {
     if (isRemovingdp) {
       console.log(dp);
@@ -62,15 +52,19 @@ const Mapping = () => {
   function updateListDs(list) {
     setDatasources(list);
   }
+
+
   function updateListDp(list) {
     setDataPoints(list);
   }
+
   function RemoveDataDs(data) {
     const newList = [...datasources];
     const index = newList.findIndex((datasource) => data === datasource.ip);
     newList.splice(index, 1);
     setDatasources(newList);
   }
+
   function RemoveDataDp(data) {
     const newList = [...datapoints];
     const index = newList.findIndex((datapoint) => data === datapoint);
@@ -95,10 +89,21 @@ const Mapping = () => {
     setDatasources(tempDataSources);
   }
 
-  function SaveDatasourceDs(ds) {
-    const newItem = ds;
-    setDatasources((datasources) => [...datasources, newItem]);
+  const getData = async () => {
+    try {
+      const res = await GetDatasources();
+      setDatasources(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  async function SaveDatasourceDs(ds) {
+    console.log("Datasource", ds);
+    await CreateDatasource(ds)
+    getData();
   }
+
   function SaveDataPoints(dp, ds) {
     const newItem = dp;
     setDataPoints((datapoints) => [...datapoints, newItem]);
@@ -112,6 +117,11 @@ const Mapping = () => {
     console.log("Nodelete");
     setShowModalDelete(false);
   }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
 
   return (
     <>
