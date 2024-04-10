@@ -6,7 +6,7 @@ import { useState } from "react";
 function AddDatasource({ show, setShow, saveDatasource }) {
   const [ip, setIp] = useState("127.0.0.1");
   const [name, setName] = useState("PLC1");
-  const [type, setType] = useState("Logix");
+  const [type, setType] = useState("logix");
   const [datapoints, setDatapoints] = useState(["PIT1201"]);
 
   return (
@@ -30,8 +30,8 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value="Logix">Logix</option>
-            <option value="OPC UA">OPC UA</option>
+            <option value="logix">Logix</option>
+            <option value="opc_ua">OPC UA</option>
           </select>
           DataPoint:
           <input
@@ -47,7 +47,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
         <Button
           variant="primary"
           onClick={() =>
-            saveDatasource({ 
+            saveDatasource({
               name: name,
               ip: ip,
               type: type,

@@ -65,24 +65,33 @@ const Mapping = () => {
 
   function HandleCancelDp() {
     setIsRemovingdp(false);
-    setDataPoints(tempDataPoints);
   }
   function HandleCancelDs() {
     setIsRemovingds(false);
-    setDatasources(tempDataSources);
   }
 
-  function SaveDatasourceDs(ds) {
-    const newItem = ds;
-    setDatasources((datasources) => [...datasources, newItem]);
+  async function SaveDatasourceDs(ds) {
+    setShowModalDs(false);
+    if (await CreateDatasource(ds))
+      getApiData();
+    else
+      console.log("Not created");
   }
-  function SaveDataPoints(dp, ds) {
+
+  async function SaveDataPoints(dp, ds) {
     const newItem = dp;
     setDataPoints((datapoints) => [...datapoints, newItem]);
     console.log(ds);
   }
 
   async function confirmDelete(ds) {
+    console.log("delete", ds);
+    setShowModalDeleteDs(false);
+    await DeleteDatasource(ds);
+    getApiData();
+  }
+
+  async function confirmDeleteDp(ds) {
     console.log("delete", ds);
     setShowModalDeleteDs(false);
     await DeleteDatasource(ds);
@@ -245,7 +254,7 @@ const Mapping = () => {
       <PopupDeleteDp
         show={showModalDeleteDp}
         setShow={setShowModalDeleteDp}
-        confirmDelete={confirmDelete}
+        confirmDelete={confirmDeleteDp}
         noDelete={noDelete}
         dp={selectedDataPoint}
       />
