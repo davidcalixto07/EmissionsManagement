@@ -9,16 +9,15 @@ import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
 import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
-import PopupDelete from "../../Componentes/Utlities/PopupDelete";
+import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
+import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
 
 const Mapping = () => {
-  const [config, SetConfig] = useState({});
-  const [tagConfig, SetTagconfig] = useState({});
-  const [changes, setChanges] = useState(false);
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
-  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
+  const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
   const [tempDataSources, setTempDatasources] = useState([]);
@@ -26,6 +25,7 @@ const Mapping = () => {
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
+  const [selectedDataPoint, setSelectedDataPoint] = useState(null);
 
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
@@ -47,16 +47,17 @@ const Mapping = () => {
   function handleDataSourceClick(datasource) {
     if (isRemovingds) {
       console.log(datasource.ip);
-      setShowModalDelete(true);
+      setShowModalDeleteDs(true);
     } else {
       setSelectedDataSource(datasource);
       setDataPoints(datasource.datapoints);
     }
   }
   function handleDataPointClick(dp) {
+    setSelectedDataPoint(dp);
     if (isRemovingdp) {
       console.log(dp);
-      RemoveDataDp(dp);
+      setShowModalDeleteDp(true);
     }
   }
   function updateListDs(list) {
@@ -64,19 +65,6 @@ const Mapping = () => {
   }
   function updateListDp(list) {
     setDataPoints(list);
-  }
-  function RemoveDataDs(data) {
-    const newList = [...datasources];
-    const index = newList.findIndex((datasource) => data === datasource.ip);
-    newList.splice(index, 1);
-    setDatasources(newList);
-  }
-  function RemoveDataDp(data) {
-    const newList = [...datapoints];
-    const index = newList.findIndex((datapoint) => data === datapoint);
-    console.log(index);
-    newList.splice(index, 1);
-    setDataPoints(newList);
   }
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
@@ -106,11 +94,13 @@ const Mapping = () => {
   }
   function confirmDelete() {
     console.log("delete");
-    setShowModalDelete(false);
+    setShowModalDeleteDs(false);
+    setShowModalDeleteDp(false);
   }
   function noDelete() {
     console.log("Nodelete");
-    setShowModalDelete(false);
+    setShowModalDeleteDs(false);
+    setShowModalDeleteDp(false);
   }
 
   return (
@@ -132,15 +122,6 @@ const Mapping = () => {
             <div className="ControlButtons">
               {isRemovingds ? (
                 <>
-                  <button
-                    onClick={() => {
-                      updateListDs(datasources);
-                      setIsRemovingds(false);
-                    }}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Save
-                  </button>
                   <button
                     onClick={() => HandleCancelDs()}
                     className="SidebarAsset-DeleteIcon"
@@ -168,7 +149,7 @@ const Mapping = () => {
           </div>
         </GridElement>
         <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-          <h4>Datapoints</h4>
+          <h4>Datapoints</h4>|
         </GridElement>
         {datapoints &&
           datapoints?.map((ds) => (
@@ -204,15 +185,6 @@ const Mapping = () => {
             <div className="ControlButtons">
               {isRemovingdp ? (
                 <>
-                  <button
-                    onClick={() => {
-                      updateListDp(datapoints);
-                      setIsRemovingdp(false);
-                    }}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Save
-                  </button>
                   <button
                     onClick={() => HandleCancelDp()}
                     className="SidebarAsset-DeleteIcon"
@@ -256,12 +228,19 @@ const Mapping = () => {
         saveDataPoint={SaveDataPoints}
         ds={selectedDataSource}
       />
-      <PopupDelete
-        show={showModalDelete}
-        setShow={setShowModalDelete}
+      <PopupDeleteDs
+        show={showModalDeleteDs}
+        setShow={setShowModalDeleteDs}
         confirmDelete={confirmDelete}
         noDelete={noDelete}
         ds={selectedDataSource}
+      />
+      <PopupDeleteDp
+        show={showModalDeleteDp}
+        setShow={setShowModalDeleteDp}
+        confirmDelete={confirmDelete}
+        noDelete={noDelete}
+        dp={selectedDataPoint}
       />
     </>
   );
