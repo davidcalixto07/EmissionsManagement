@@ -244,7 +244,7 @@ const Mapping = () => {
         show={showModalDp}
         setShow={setShowModalDp}
         saveDataPoint={SaveDataPoints}
-        ds={datasources}
+        ds={selectedDataSource}
       />
     </>
   );
