@@ -11,6 +11,7 @@ import { Button } from "react-bootstrap";
 import ImageLoader from "./ImageLoader";
 import { useOutletContext } from "react-router-dom";
 
+
 const AppConfiguration = () => {
   const [, , , units, setUnits, teasList, coordinates, imageSrc, loading] =
     useOutletContext();
