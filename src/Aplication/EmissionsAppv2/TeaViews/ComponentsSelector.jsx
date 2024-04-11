@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-export const ComponentSelector = ({ options, onChange, initiallySelected }) => {
-
-
+export const ComponentSelector = ({ options, onSelect, initiallySelected }) => {
   const [selectedOptions, setSelectedOptions] = useState(
     initiallySelected || []
   );
@@ -16,10 +14,6 @@ export const ComponentSelector = ({ options, onChange, initiallySelected }) => {
       setSelectedOptions([...selectedOptions, option]);
     }
   };
-
-  useEffect(() => {
-    onChange(selectedOptions);
-  }, [selectedOptions]);
 
   return (
     <div

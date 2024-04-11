@@ -65,10 +65,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
       }&sort=desc`;
       const response = await fetch(url);
       if (!response.ok) {
-        console.error(
-          Error(`Failed to fetch data for assetId ${data.assetId}`)
-        );
-        return;
+        throw new Error(`Failed to fetch data for assetId GasComposition`);
       }
 
       const json = await response.json();

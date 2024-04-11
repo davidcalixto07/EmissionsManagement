@@ -28,13 +28,13 @@ function useEmissionsV2() {
       .then((json) => {
         const assets = json._embedded.assets;
         setTeasList(assets);
-        console.warn("Assets to fectch", assets);
+        console.warn(assets);
         GetTeasTs(assets);
       })
       .catch((error) => {
         console.error("Error fetching image:", error);
       })
-      .finally(() => { });
+      .finally(() => {});
   }, [sidebarList]);
 
   function GetTeasTs(teaslist) {

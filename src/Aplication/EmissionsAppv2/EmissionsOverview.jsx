@@ -20,7 +20,7 @@ const EmissionsOverview = () => {
   const [ts, setTs] = useState([]);
   const nav = useNavigate();
 
-  function setDate() { }
+  function setDate() {}
 
   function handleCloseModal() {
     setDirectModal(false);
@@ -185,7 +185,7 @@ const EmissionsOverview = () => {
               description: "Emissions too high",
             },
             {
-              id: "435",
+              id: "433",
               severity: 20,
               timestamp: "01-01-24 10:43",
               entityId: 1,
