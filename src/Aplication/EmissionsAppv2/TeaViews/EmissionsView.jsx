@@ -65,7 +65,8 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
             const url = `/api/iottimeseries/v3/timeseries/${data.assetId}/GasComposition?from=${data.timeSerie[data.timeSerie.length - 1]._time}&sort=desc`;
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error(`Failed to fetch data for assetId GasComposition`);
+                console.error(Error(`Failed to fetch data for assetId ${data.assetId}`));
+                return;
             }
 
             const json = await response.json();
