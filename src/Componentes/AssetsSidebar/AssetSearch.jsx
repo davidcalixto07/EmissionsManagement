@@ -43,8 +43,7 @@ const AssetSearch = ({ show, handleClose, type, assetList }) => {
       list.forEach(function (asset) {
         if (!asset.hasOwnProperty("nestDeep")) {
           const parent = list.find((obj) => obj.assetId === asset.parentId);
-
-          if (parent.hasOwnProperty("nestDeep")) {
+          if (parent?.hasOwnProperty("nestDeep")) {
             asset.nestDeep = parent.nestDeep + 1;
             const assetIndex = list.findIndex((obj) => obj === asset);
             const parentIndex = list.findIndex((obj) => obj === parent);
