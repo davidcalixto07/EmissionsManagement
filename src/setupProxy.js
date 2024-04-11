@@ -9,6 +9,7 @@ module.exports = function (app) {
         '^/api/emissionsapi2-colwest2/v1/': '', // Cut the path to redirect to the endpoint
       },
       changeOrigin: true,
+      changeOrigin: true,
     })
   );
 
