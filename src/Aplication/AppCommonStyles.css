@@ -75,7 +75,7 @@
 
 .Main-Content {
     width: 100%;
-    height: calc(100% - 4rem);
+    height: calc(100%);
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(5, 1fr);

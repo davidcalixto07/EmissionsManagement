@@ -24,6 +24,7 @@ const AssetSidebar = ({
   getList,
 }) => {
   const { tenant } = useContext(AppContext);
+  const nav = useNavigate();
   const { data, error, loading, fetchData } = useApi(
     `/api/westapi-colwest2/v1/read_byID?application=${appId}&tenant=${tenant}`
   );
@@ -136,15 +137,6 @@ const AssetSidebar = ({
         {isRemoving ? (
           <>
             <button
-              onClick={() => {
-                UpdateAssetList(assetList);
-                setIsRemoving(false);
-              }}
-              className="SidebarAsset-DeleteIcon"
-            >
-              Save
-            </button>
-            <button
               onClick={() => HandleCancel()}
               className="SidebarAsset-DeleteIcon"
             >
@@ -160,7 +152,7 @@ const AssetSidebar = ({
               <img src={DeleteIcon} alt="-" />
             </button>
             <button
-              onClick={() => setShow(true)}
+              onClick={() => nav("/create")}
               className="SidebarAsset-DeleteIcon"
             >
               <img src={AddIcon} alt="-" />
