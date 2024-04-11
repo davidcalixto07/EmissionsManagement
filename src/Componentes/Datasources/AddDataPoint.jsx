@@ -24,7 +24,7 @@ function AddDatasource({ show, setShow, saveDataPoint, ds }) {
         <Button variant="secondary" onClick={() => setShow(false)}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={() => saveDataPoint([Tag], ds)}>
+        <Button variant="primary" onClick={() => saveDataPoint(Tag, ds)}>
           Save
         </Button>
       </Modal.Footer>
