@@ -1,8 +1,8 @@
-const Datasource = ({ datasource, handleDataSourceClickDs }) => {
+const Datasource = ({ datasource, handleDataSourceClickDs, selected }) => {
   return (
     <div
-      className="grid-container"
       onClick={() => handleDataSourceClickDs(datasource)}
+      className={selected === datasource ? `Datasource selected` : "Datasource"}
     >
       <div>
         <strong>Name:</strong>

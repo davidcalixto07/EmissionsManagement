@@ -293,7 +293,26 @@ span.unit {
     margin-bottom: 4px;
     padding-left: 0px;
 }
-
+.Datasource{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    background-color: whitesmoke;
+    border: 1px solid;
+    border-radius: 4px;
+    margin: 4px;
+    text-align: start;
+}
+.Datasource.selected {
+    border: 2px solid #1d1976;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    border-radius: 4px;
+    margin: 4px;
+    text-align: start;
+  }
 .Datapoint {
     vertical-align: middle;
     display: flex;

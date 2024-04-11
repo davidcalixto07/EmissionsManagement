@@ -12,7 +12,13 @@ import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
-import { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources } from "./apiHandler";
+import {
+  CreateDatasource,
+  DeleteDatasource,
+  CreateDatapoint,
+  DeleteDatapoint,
+  GetDatasources,
+} from "./apiHandler";
 
 const Mapping = () => {
   const [showModalDs, setShowModalDs] = useState(false);
@@ -25,8 +31,7 @@ const Mapping = () => {
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
-  const [, , , , , teasList, , ,] =
-    useOutletContext();
+  const [, , , , , teasList, , ,] = useOutletContext();
 
   function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
@@ -66,19 +71,15 @@ const Mapping = () => {
 
   async function SaveDatasourceDs(ds) {
     setShowModalDs(false);
-    if (await CreateDatasource(ds))
-      getApiData();
-    else
-      console.log("Not created");
+    if (await CreateDatasource(ds)) getApiData();
+    else console.log("Not created");
   }
 
   async function SaveDataPoints(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
-    if (await CreateDatapoint(ds, dp))
-      getApiData();
-    else
-      console.log("Not created");
+    if (await CreateDatapoint(ds, dp)) getApiData();
+    else console.log("Not created");
   }
 
   async function confirmDelete(ds) {
@@ -116,7 +117,10 @@ const Mapping = () => {
   useEffect(() => {
     console.log("Ds update", datasources);
     if (selectedDataSource) {
-      const ds = datasources.find(x => x.ip === selectedDataSource.ip && x.type === selectedDataSource.type)
+      const ds = datasources.find(
+        (x) =>
+          x.ip === selectedDataSource.ip && x.type === selectedDataSource.type
+      );
       setDataPoints(ds?.datapoints ?? []);
     }
   }, [datasources]);
@@ -133,6 +137,7 @@ const Mapping = () => {
               <Datasource
                 datasource={ds}
                 handleDataSourceClickDs={handleDataSourceClick}
+                selected={selectedDataSource}
               />
             ))}
           </div>
@@ -167,7 +172,7 @@ const Mapping = () => {
           </div>
         </GridElement>
         <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-          <h4>Datapoints</h4>|
+          <h4>Datapoints</h4>
         </GridElement>
         {datapoints &&
           datapoints?.map((ds) => (
