@@ -9,6 +9,7 @@ import { AssetSearch } from "./AssetSearch";
 import { AppContext } from "../Context/AppContext";
 import AddIcon from "./add_icon.png";
 import DeleteIcon from "./trash-can-icon.png";
+import DeleteAssetPopUp from "../Utlities/DeleteAssetPopUp";
 import { useNavigate } from "react-router-dom";
 import useSidebar from "./useSidebar";
 
@@ -34,6 +35,7 @@ const AssetSidebar = ({
   const [tempassetList, setTempassetList] = useState([]);
   const [selected, setSelected] = useState(null);
   const [show, setShow] = useState(false);
+  const [showDeletePopUp, setShowDeletePopUp] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
   useEffect(() => {
@@ -48,8 +50,10 @@ const AssetSidebar = ({
   }, [loading]);
 
   function AssetClicked(asset) {
-    if (isRemoving) RemoveAsset(asset.assetId);
-    else {
+    if (isRemoving) {
+      RemoveAsset(asset.assetId);
+      setShowDeletePopUp(true);
+    } else {
       setSelected(asset);
       if (typeof handleSelectedAsset === "function") handleSelectedAsset(asset);
     }
@@ -81,6 +85,12 @@ const AssetSidebar = ({
     setAssetList(list);
     SaveToAPI(list);
     if (getList) getList(list);
+  }
+  function noDelete() {
+    setShowDeletePopUp(false);
+  }
+  function confirmDelete() {
+    setShowDeletePopUp(false);
   }
 
   return (
@@ -167,6 +177,13 @@ const AssetSidebar = ({
         handleClose={HandleAssetSearchClosed}
         type={type}
         assetList={assetList}
+      />
+      <DeleteAssetPopUp
+        show={showDeletePopUp}
+        setShow={setShowDeletePopUp}
+        confirmDelete={confirmDelete}
+        noDelete={noDelete}
+        asset={selected}
       />
     </div>
   );
