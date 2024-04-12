@@ -57,13 +57,19 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
   useEffect(() => {
     if (!data || !data.timeSerie || !data.timeSerie.length) return;
 
-        async function fetchData() {
-            const url = `/api/iottimeseries/v3/timeseries/${data.assetId}/GasComposition?from=${data.timeSerie[data.timeSerie.length - 1]._time}&sort=desc`;
-            const response = await fetch(url);
-            if (!response.ok) {
-                console.error(Error(`Failed to fetch data for assetId ${data.assetId}`));
-                return;
-            }
+    async function fetchData() {
+      const url = `/api/iottimeseries/v3/timeseries/${
+        data.assetId
+      }/GasComposition?from=${
+        data.timeSerie[data.timeSerie.length - 1]._time
+      }&sort=desc`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error(
+          Error(`Failed to fetch data for assetId ${data.assetId}`)
+        );
+        return;
+      }
 
       const json = await response.json();
       console.log("Api response from GasComposition", json);

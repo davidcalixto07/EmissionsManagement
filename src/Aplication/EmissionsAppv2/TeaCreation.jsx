@@ -3,7 +3,15 @@ import CustomGrid from "../Utils/CustomGrid";
 import GridUtil from "../Utils/GridUtil";
 import GridElement from "../Utils/GridElement";
 import { ComponentSelector } from "./TeaViews/ComponentsSelector";
+import {
+  emissionsUnits,
+  flowUnits,
+  pressureUnits,
+  tempUnits,
+} from "./conversions";
 import { Button } from "react-bootstrap";
+import ImageLoader from "./ImageLoader";
+import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 
 const composition = [
@@ -24,11 +32,29 @@ const composition = [
   "N2",
   "H2O",
 ];
-
+const initiallySelected = [
+  "C1",
+  "C2",
+  "C3",
+  "I-C4",
+  "C4",
+  "N-C5",
+  "I-C5",
+  "C5",
+  "C6",
+  "C7",
+  "C8",
+  "C9",
+  "C10",
+  "CO2",
+  "N2",
+  "H2O",
+];
 
 const emptyForm = {
   teaId: "",
   teaType: "Tea Alta",
+  pressure: "",
   tecnology: "",
   height: "",
   diameter: "",
@@ -41,24 +67,22 @@ const emptyForm = {
   latitude: 3.072371,
   longitude: -75.290777,
   wind: 4,
-  defaultModel: 'West',
-  compList: [],
-  addComponents: []
+  teaDiameter: 8.1,
 };
 
 const AppConfiguration = () => {
   const [formData, setFormData] = useState(emptyForm);
-  const [components, setComponents] = useState([]);
-
   const [statusText, setStatusText] = useState("");
+  const [aditional1, setAditional1] = useState("");
+  const [aditional2, setAditional2] = useState("");
+  const [aditional3, setAditional3] = useState("");
+  const [model, setModel] = useState("West");
 
-  const [aditional1, setAditional1] = useState({});
-  const [aditional2, setAditional2] = useState({});
-  const [aditional3, setAditional3] = useState({});
+  const [wind, setWind] = useState(4);
+  const [diameter, setDiameter] = useState(8.1);
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
-    setComponents(selectedOptions);
   };
 
   const handleChange = (e) => {
@@ -71,41 +95,28 @@ const AppConfiguration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    formData.compList = components;
-    formData.addComponents = [aditional1, aditional2, aditional3];
     console.log(formData);
+
+    const newAsset = {
+      name: formData.teaId,
+      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
+      location: {
+        longitude: formData.longitude,
+        latitude: formData.latitude,
+      },
+      typeId: "colwest2.TeaEmisionesFlowData",
+    };
 
     try {
       const response = await axios.post(
-        "/api/assets/CreateAsset",
-        formData
+        "/api/assetmanagement/v3/assets",
+        newAsset
       );
       console.log("Response:", response.data);
       setStatusText("Created");
     } catch (error) {
       console.error("Error:", error);
     }
-
-    // const newAsset = {
-    //   name: formData.teaId,
-    //   parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
-    //   location: {
-    //     longitude: formData.longitude,
-    //     latitude: formData.latitude,
-    //   },
-    //   typeId: "colwest2.TeaEmisionesFlowData",
-    // };
-
-    // try {
-    //   const response = await axios.post(
-    //     "/api/assetmanagement/v3/assets",
-    //     newAsset
-    //   );
-    //   console.log("Response:", response.data);
-    //   setStatusText("Created");
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
   };
 
   return (
@@ -141,8 +152,8 @@ const AppConfiguration = () => {
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
             options={composition}
-            onChange={handleSelect}
-            initiallySelected={composition}
+            onSelect={handleSelect}
+            initiallySelected={initiallySelected}
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
@@ -265,6 +276,16 @@ const AppConfiguration = () => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Tea Diameter (ft):</span>
+          <input
+            type="text"
+            name="TeaDiameter"
+            placeholder=" 8.1"
+            value={formData.wind}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Longitude:</span>
           <input
             type="text"
@@ -294,17 +315,6 @@ const AppConfiguration = () => {
             onChange={handleChange}
           />
         </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Default Model:</span>
-          <select
-            name="DefaultModel"
-            value={formData.defaultModel}
-            onChange={handleChange}
-          >
-            <option value="Balance">Continuous</option>
-            <option value="Medidor">Intermittent</option>
-          </select>
-        </GridElement>
         <GridElement rows={4} cols={4}>
           <GridUtil rows={4} cols={4}>
             <GridElement rows={1} cols={4} ns>
@@ -318,8 +328,8 @@ const AppConfiguration = () => {
             >
               <span>Component 1 name:</span>
               <input
-                value={aditional1.name}
-                onChange={(event) => setAditional1(p => ({ ...p, name: event.target.value }))}
+                value={aditional1}
+                onChange={(event) => setAditional1(event.target.value)}
                 name="AC1"
                 placeholder="component name"
               />
@@ -332,8 +342,8 @@ const AppConfiguration = () => {
             >
               <span>Gwp:</span>
               <input
-                value={aditional1.gwp}
-                onChange={(event) => setAditional1(p => ({ ...p, gwp: event.target.value }))}
+                value={aditional1}
+                onChange={(event) => setAditional1(event.target.value)}
                 name="AC1"
                 placeholder="gwp value"
               />
@@ -346,8 +356,8 @@ const AppConfiguration = () => {
             >
               <span>Component 2 name:</span>
               <input
-                value={aditional2.name}
-                onChange={(event) => setAditional2(p => ({ ...p, name: event.target.value }))}
+                value={aditional2}
+                onChange={(event) => setAditional2(event.target.value)}
                 name="AC1"
                 placeholder="component name"
               />
@@ -360,8 +370,8 @@ const AppConfiguration = () => {
             >
               <span>Gwp:</span>
               <input
-                value={aditional2.gwp}
-                onChange={(event) => setAditional2(p => ({ ...p, gwp: event.target.value }))}
+                value={aditional1}
+                onChange={(event) => setAditional1(event.target.value)}
                 name="AC1"
                 placeholder="gwp value"
               />
@@ -374,8 +384,8 @@ const AppConfiguration = () => {
             >
               <span>Component 3 name:</span>
               <input
-                value={aditional3.name}
-                onChange={(event) => setAditional3(p => ({ ...p, name: event.target.value }))}
+                value={aditional3}
+                onChange={(event) => setAditional3(event.target.value)}
                 name="AC1"
                 placeholder="component name"
               />
@@ -388,13 +398,12 @@ const AppConfiguration = () => {
             >
               <span>Gwp:</span>
               <input
-                value={aditional3.gwp}
-                onChange={(event) => setAditional3(p => ({ ...p, gwp: event.target.value }))}
+                value={aditional1}
+                onChange={(event) => setAditional1(event.target.value)}
                 name="AC1"
                 placeholder="gwp value"
               />
             </GridElement>
-
           </GridUtil>
         </GridElement>
         <GridElement
