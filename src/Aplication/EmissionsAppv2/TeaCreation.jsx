@@ -86,7 +86,12 @@ const AppConfiguration = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    var { name, value } = e.target;
+
+    const parsed_value = parseFloat(value)
+    if (!isNaN(parsed_value))
+      value = parsed_value
+
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -109,8 +114,8 @@ const AppConfiguration = () => {
 
     try {
       const response = await axios.post(
-        "/api/assetmanagement/v3/assets",
-        newAsset
+        "/api/assets/CreateAsset",
+        formData
       );
       console.log("Response:", response.data);
       setStatusText("Created");

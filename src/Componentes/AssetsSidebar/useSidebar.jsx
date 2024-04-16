@@ -26,7 +26,12 @@ const useSidebar = (application, tenant) => {
       });
   }
 
-  return { SaveToAPI };
+  async function DeleteAsset(assetId) {
+    const res = await axios.delete('/api/assets/DeleteAsset?id=' + assetId);
+    return res.data
+  }
+
+  return { SaveToAPI, DeleteAsset };
 };
 
 export default useSidebar;

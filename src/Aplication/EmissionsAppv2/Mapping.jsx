@@ -18,6 +18,7 @@ import {
   CreateDatapoint,
   DeleteDatapoint,
   GetDatasources,
+  PostDatamappings
 } from "./apiHandler";
 
 const Mapping = () => {
@@ -33,14 +34,21 @@ const Mapping = () => {
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
   const [, , , , , teasList, , ,] = useOutletContext();
 
-  function handleDataSourceClick(datasource) {
+
+  async function getApiDatasources(dp_id) {
+    const res = await axios.get('/api/assets/GetMappings?ds_id=' + dp_id);
+    console.log("Mappings", res)
+    setDataPoints(res.data)
+  }
+
+  async function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
 
     if (isRemovingds) {
       console.log(datasource.ip);
       setShowModalDeleteDs(true);
     } else {
-      setDataPoints(datasource.datapoints);
+      getApiDatasources(datasource.ip)
     }
   }
 
@@ -51,9 +59,7 @@ const Mapping = () => {
       setShowModalDeleteDp(true);
     }
   }
-  function updateListDs(list) {
-    setDatasources(list);
-  }
+
 
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
@@ -78,8 +84,12 @@ const Mapping = () => {
   async function SaveDataPoints(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
-    if (await CreateDatapoint(ds, dp)) getApiData();
-    else console.log("Not created");
+
+
+    if (await CreateDatapoint(ds, dp))
+      getApiDatasources(ds.ip)
+    else
+      console.log("Not created");
   }
 
   async function confirmDelete(ds) {
@@ -92,8 +102,8 @@ const Mapping = () => {
   async function confirmDeleteDp(dp) {
     console.log("delete", dp);
     setShowModalDeleteDp(false);
-    await DeleteDatapoint(selectedDataSource, { tag: dp });
-    getApiData();
+    await DeleteDatapoint(selectedDataSource, dp);
+    getApiDatasources(selectedDataSource);
   }
 
   const getApiData = async () => {
@@ -110,6 +120,34 @@ const Mapping = () => {
     setShowModalDeleteDp(false);
   }
 
+  function handleMappingFlare(dp, value) {
+    console.log("Dp", dp, "Value", value);
+    const newDps = [...datapoints];
+    const newDp = newDps.find((x) => x === dp)
+    newDp.flare = value;
+    setDataPoints(newDps)
+  }
+
+  function handleMappingVar(dp, value) {
+    console.log("Dp", dp, "Value", value);
+    const newDps = [...datapoints];
+    const newDp = newDps.find((x) => x === dp)
+    newDp.variable = value;
+    setDataPoints(newDps)
+  }
+
+  async function saveMappings() {
+    const json = {
+      dp_id: selectedDataSource.ip,
+      dp_type: selectedDataSource.type,
+      datapoints: datapoints
+    }
+    if (await PostDatamappings(json))
+      getApiData();
+    else
+      console.log("Not created");
+  }
+
   useEffect(() => {
     getApiData();
   }, []);
@@ -121,8 +159,18 @@ const Mapping = () => {
         (x) =>
           x.ip === selectedDataSource.ip && x.type === selectedDataSource.type
       );
-      setDataPoints(ds?.datapoints ?? []);
+      if (ds != null) {
+        setSelectedDataSource(ds);
+        getApiDatasources(ds.ip);
+        return;
+      }
+
     }
+    if (datasources[0]) {
+      setSelectedDataSource(datasources[0]);
+      getApiDatasources(datasources[0].ip);
+    }
+
   }, [datasources]);
 
   return (
@@ -171,19 +219,20 @@ const Mapping = () => {
             </div>
           </div>
         </GridElement>
-        <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-          <h4>Datapoints</h4>
+        <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
+          <h4>Datapoints for {selectedDataSource?.ip ?? ''}</h4>
         </GridElement>
         {datapoints &&
-          datapoints?.map((ds) => (
+          datapoints?.map((dp) => (
             <>
-              <GridElement cols={6} rows={1} style={{ alignContent: "center" }}>
-                <div onClick={() => handleDataPointClick(ds)}>
+              <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
+                <div onClick={() => handleDataPointClick(dp)}>
                   <strong> Node/Tag: </strong>
-                  <span> {ds} </span>
-                  <strong> Flare: </strong>
+                  <span> {dp.tag} </span>
+                  <strong style={{ marginLeft: '1rem' }}> Flare: </strong>
                   <span>
-                    <select id="dropdown">
+                    <select id="dropdown" defaultValue={dp.flare ?? ''} onChange={(event) => handleMappingFlare(dp, event.target.value)}>
+                      <option value=''>None</option>
                       {datasources.length > 0 &&
                         teasList.map((ds) => (
                           <option value={ds.name}>{ds.name}</option>
@@ -192,10 +241,11 @@ const Mapping = () => {
                   </span>
                   <strong> Variable: </strong>
                   <span>
-                    <select>
-                      <option> Gas Flow </option>
-                      <option> Gas Pressure </option>
-                      <option> Gas Temperature </option>
+                    <select value={dp.variable ?? ''} onChange={(event) => handleMappingVar(dp, event.target.value)}>
+                      <option value=''>None</option>
+                      <option value='flow'> Gas Flow </option>
+                      <option value='pressure'> Gas Pressure </option>
+                      <option value='temperature'> Gas Temperature </option>
                     </select>
                   </span>
                 </div>
@@ -234,8 +284,8 @@ const Mapping = () => {
           </div>
         </GridElement>
         <GridElement cols={6} ns style={{ alignContent: "center" }}>
-          <Button variant="primary" onClick={() => updateListDs}>
-            Apply
+          <Button variant="primary" onClick={() => saveMappings()}>
+            Save Mapings
           </Button>
         </GridElement>
       </CustomGrid>

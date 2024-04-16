@@ -11,6 +11,7 @@ import AddIcon from "./add_icon.png";
 import DeleteIcon from "./trash-can-icon.png";
 import { useNavigate } from "react-router-dom";
 import useSidebar from "./useSidebar";
+import DeleteConfirmPopup from "../Utlities/DeleteConfirmPopup";
 
 const AssetSidebar = ({
   appId,
@@ -28,13 +29,16 @@ const AssetSidebar = ({
   const { data, error, loading, fetchData } = useApi(
     `/api/westapi-colwest2/v1/read_byID?application=${appId}&tenant=${tenant}`
   );
-  const { SaveToAPI } = useSidebar(appId, tenant);
+  const { SaveToAPI, DeleteAsset } = useSidebar(appId, tenant);
 
   const [assetList, setAssetList] = useState([]);
   const [tempassetList, setTempassetList] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [deleteSelected, setDeleteSelected] = useState(null);
   const [show, setShow] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [deleteResult, setDeleteResult] = useState('');
 
   useEffect(() => {
     if (data && !error) {
@@ -48,7 +52,8 @@ const AssetSidebar = ({
   }, [loading]);
 
   function AssetClicked(asset) {
-    if (isRemoving) RemoveAsset(asset.assetId);
+    if (isRemoving)
+      RemoveAsset(asset.assetId);
     else {
       setSelected(asset);
       if (typeof handleSelectedAsset === "function") handleSelectedAsset(asset);
@@ -61,16 +66,39 @@ const AssetSidebar = ({
   }
 
   function RemoveAsset(assetId) {
-    const newList = [...assetList];
-    const index = newList.findIndex((asset) => assetId === asset.assetId);
-    newList.splice(index, 1);
-    setAssetList(newList);
+    // const newList = [...assetList];
+    // const index = newList.findIndex((asset) => assetId === asset.assetId);
+    // newList.splice(index, 1);
+    // setAssetList(newList);
+    const asset = assetList.find((asset) => assetId === asset.assetId);
+    console.log("Deleting ", asset)
+    setDeleteSelected(asset);
+    setShowConfirmModal(true);
   }
+
+  async function HandleConfirmResponse(response) {
+    if (response) {
+      setDeleteResult("Deleting...");
+      const result = await DeleteAsset(deleteSelected.name);
+      console.log("Deleting Assset", result);
+      setDeleteResult(result ? "Deleted." : "Cannot delete asset");
+
+      setTimeout(() => {
+        setDeleteResult('');
+        setShowConfirmModal(false);
+      }, (1000));
+    }
+    else
+      setShowConfirmModal(false);
+  }
+
 
   const HandleAssetSearchClosed = (newList) => {
     UpdateAssetList(newList);
     setShow(false);
   };
+
+
 
   function HandleCancel() {
     setIsRemoving(false);
@@ -122,14 +150,14 @@ const AssetSidebar = ({
         {!loading &&
           (assetList.length > 0
             ? assetList.map((asset) => (
-                <SidebarAsset
-                  key={asset.assetId}
-                  asset={asset}
-                  onClick={AssetClicked}
-                  selected={selected}
-                  deleting={isRemoving}
-                />
-              ))
+              <SidebarAsset
+                key={asset.assetId}
+                asset={asset}
+                onClick={AssetClicked}
+                selected={selected}
+                deleting={isRemoving}
+              />
+            ))
             : "There is no assets to show, add one with the + button")}
       </div>
 
@@ -167,6 +195,14 @@ const AssetSidebar = ({
         handleClose={HandleAssetSearchClosed}
         type={type}
         assetList={assetList}
+      />
+      <DeleteConfirmPopup
+        title='Delete an Asset'
+        label={`Do you really want to delete ${deleteSelected?.name ?? ''}`}
+        result={deleteResult}
+        show={showConfirmModal}
+        setShow={setShowConfirmModal}
+        handleResponse={HandleConfirmResponse}
       />
     </div>
   );

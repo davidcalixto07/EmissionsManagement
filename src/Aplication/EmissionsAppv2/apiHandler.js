@@ -64,4 +64,14 @@ export async function GetDatasources() {
     }
 }
 
+export async function PostDatamappings(json) {
+    try {
+        const response = await axios.post('/api/assets/SaveMappings', json)
+        return response.data
+    } catch (error) {
+        console.log('Error fetching data:', error);
+    }
+}
+
+
 

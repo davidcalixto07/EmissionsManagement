@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import React from "react";
 
-function PopupDeleteDp({ show, setShow, confirmDelete, noDelete, dp }) {
+function DeleteConfirmPopup({ title, label, result, show, setShow, handleResponse }) {
   return (
     <Modal
       show={show}
@@ -11,16 +11,17 @@ function PopupDeleteDp({ show, setShow, confirmDelete, noDelete, dp }) {
       keyboard={true}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add a datapoint</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Do you wish to delete datasource with Tag: {dp?.tag ?? ""}
+        {label}
+        <p><strong>{result}</strong></p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => confirmDelete(dp)}>
+        <Button variant="secondary" onClick={() => handleResponse(true)}>
           Yes
         </Button>
-        <Button variant="primary" onClick={() => noDelete(dp)}>
+        <Button variant="primary" onClick={() => handleResponse(false)}>
           No
         </Button>
       </Modal.Footer>
@@ -28,4 +29,4 @@ function PopupDeleteDp({ show, setShow, confirmDelete, noDelete, dp }) {
   );
 }
 
-export default PopupDeleteDp;
+export default DeleteConfirmPopup;
