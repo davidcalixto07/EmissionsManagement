@@ -21,12 +21,14 @@ import {
   PostDatamappings,
 } from "./apiHandler";
 import Datapoint from "../../Componentes/Datasources/Datapoint";
+import Alerts from "../../Componentes/Alerts/Alerts";
 
 const Mapping = () => {
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
   const [isRemovingds, setIsRemovingds] = useState(false);
@@ -84,8 +86,9 @@ const Mapping = () => {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
 
-    if (await CreateDatapoint(ds, dp)) getApiDatasources(ds.ip);
-    else console.log("Not created");
+    if (await CreateDatapoint(ds, dp))
+      getApiDatasources(ds.ip), setShowAlerts("success");
+    else setShowAlerts("Danger"), console.log("Not created");
   }
 
   async function confirmDelete(ds) {
@@ -178,6 +181,7 @@ const Mapping = () => {
                 datasource={ds}
                 handleDataSourceClickDs={handleDataSourceClick}
                 selected={selectedDataSource}
+                deleting={isRemovingds}
               />
             ))}
           </div>
@@ -230,12 +234,15 @@ const Mapping = () => {
             <GridElement cols={6} style={{ alignContent: "center" }}>
               <h3> DataPoints</h3>
             </GridElement>
-            {datapoints?.map((ds) => (
+            {datapoints?.map((dp) => (
               <Datapoint
-                datapoint={ds}
+                datapoint={dp}
                 handleDataPointClick={handleDataPointClick}
                 teasList={teasList}
                 datasources={datasources}
+                deleting={isRemovingdp}
+                handleMappingVar={handleMappingVar}
+                HandleMappingFlare={handleMappingFlare}
               />
             ))}
             <GridElement cols={6} ns>
@@ -286,8 +293,55 @@ const Mapping = () => {
               <h4 style={{ color: "grey" }}>
                 {" "}
                 There's no data points in the data source, please select one
-                wich has nodes or tags{" "}
+                wich has nodes or tags or add a datapoint{" "}
               </h4>
+              <GridElement
+                cols={6}
+                ns
+                style={{ backgroundColor: "transparent" }}
+              >
+                <div className="button-container">
+                  <div className="ControlButtons">
+                    {isRemovingdp ? (
+                      <>
+                        <button
+                          onClick={() => HandleCancelDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => HandleClickedRemoveDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={DeleteIcon} alt="-" />
+                        </button>
+                        <button
+                          onClick={() => setShowModalDp(true)}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={AddIcon} alt="-" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </GridElement>
+              <GridElement
+                cols={6}
+                ns
+                style={{
+                  alignContent: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Button variant="primary" onClick={() => updateListDs}>
+                  Apply
+                </Button>
+              </GridElement>
             </GridElement>
           </>
         )}
@@ -318,6 +372,11 @@ const Mapping = () => {
         confirmDelete={confirmDeleteDp}
         noDelete={noDelete}
         dp={selectedDataPoint}
+      />
+      <Alerts
+        status={"success"}
+        show={showAlerts}
+        setShowAlert={setShowAlerts}
       />
     </>
   );

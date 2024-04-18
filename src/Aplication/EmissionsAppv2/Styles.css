@@ -9,11 +9,6 @@
     background-color: #efeef5;
 }
 
-.TeaView {
-    height: calc(100% - 4rem);
-    background-color: #efeef5;
-}
-
 .grid-cell-white {
     background-color: #ffffff;
     border: 1px solid #00000020;
@@ -294,34 +289,33 @@ span.unit {
     padding-left: 0px;
 }
 .Datasource{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    display: ruby;
     background-color: whitesmoke;
     border: 1px solid;
     border-radius: 4px;
     margin: 4px;
     text-align: start;
+    cursor: pointer;
 }
+
+.Datasource:hover {
+    transform: scale(1.02);
+  }
 .Datasource.selected {
     border: 2px solid #1d1976;
     background-color: white;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    display: ruby;
     border-radius: 4px;
     margin: 4px;
     text-align: start;
   }
 .Datapoint {
-    vertical-align: middle;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 5px;
+    display: ruby;
+    background-color: whitesmoke;
+    margin: 4px;
+    text-align: start;
+    cursor: pointer;
 }
-
 .Datapoint input{
     border: none;
     background-color: whitesmoke;
@@ -387,5 +381,14 @@ span.unit {
       background-color: white;
     }
   }
-  
+
+.alert{
+    position: absolute;
+    left: 16rem;
+    width: calc(100% - 18rem);
+    margin: 0.5rem;
+}
+
+
+
   

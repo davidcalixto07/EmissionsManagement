@@ -88,9 +88,8 @@ const AppConfiguration = () => {
   const handleChange = (e) => {
     var { name, value } = e.target;
 
-    const parsed_value = parseFloat(value)
-    if (!isNaN(parsed_value))
-      value = parsed_value
+    const parsed_value = parseFloat(value);
+    if (!isNaN(parsed_value)) value = parsed_value;
 
     setFormData((prevState) => ({
       ...prevState,
@@ -113,19 +112,17 @@ const AppConfiguration = () => {
     };
 
     try {
-      const response = await axios.post(
-        "/api/assets/CreateAsset",
-        formData
-      );
+      const response = await axios.post("/api/assets/CreateAsset", formData);
       console.log("Response:", response.data);
       setStatusText("Created");
+      window.location.href = "/";
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="fullSize">
+    <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
         cols={5}
         rows={12}
