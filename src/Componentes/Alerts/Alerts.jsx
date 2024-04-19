@@ -3,15 +3,27 @@ import { Alert } from "react-bootstrap";
 const Alerts = ({ status, show, setShowAlert }) => {
   return (
     <>
-      <Alert
-        show={show}
-        key={status}
-        variant={status}
-        onClose={() => setShowAlert(false)}
-        dismissible
-      >
-        The Datapoint was created successfully
-      </Alert>
+      {status == 200 ? (
+        <Alert
+          show={show}
+          key={"success"}
+          variant={"success"}
+          onClose={() => setShowAlert(false)}
+          dismissible
+        >
+          The Datapoint was <strong> created successfully </strong>
+        </Alert>
+      ) : (
+        <Alert
+          show={show}
+          key={"danger"}
+          variant={"danger"}
+          onClose={() => setShowAlert(false)}
+          dismissible
+        >
+          The DataPoint <strong> wasn't created :</strong> {status}
+        </Alert>
+      )}
     </>
   );
 };

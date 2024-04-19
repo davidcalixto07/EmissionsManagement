@@ -17,11 +17,7 @@ function PopupDeleteDp({ show, setShow, confirmDelete, noDelete, dp }) {
         Do you wish to delete datasource with Tag: {dp?.tag ?? ""}
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={() => confirmDelete(dp)}
-          href="/manage"
-        >
+        <Button variant="secondary" onClick={() => confirmDelete(dp)}>
           Yes
         </Button>
         <Button variant="primary" onClick={() => noDelete(dp)}>

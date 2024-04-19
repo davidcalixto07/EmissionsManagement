@@ -33,11 +33,6 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             <option value="logix">Logix</option>
             <option value="opc_ua">OPC UA</option>
           </select>
-          DataPoint:
-          <input
-            value={datapoints}
-            onChange={(e) => setDatapoints(e.target.value)}
-          ></input>
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -52,7 +47,6 @@ function AddDatasource({ show, setShow, saveDatasource }) {
               ip: ip,
               type: type,
               status: "Disconnected",
-              datapoints: [datapoints],
             })
           }
         >

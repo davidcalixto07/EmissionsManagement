@@ -35,6 +35,7 @@ const Mapping = () => {
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
+  const [response, setResponse] = useState(200);
   const [, , , , , teasList, , ,] = useOutletContext();
 
   async function getApiDatasources(dp_id) {
@@ -85,10 +86,17 @@ const Mapping = () => {
   async function SaveDataPoints(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
-
-    if (await CreateDatapoint(ds, dp))
-      getApiDatasources(ds.ip), setShowAlerts("success");
-    else setShowAlerts("Danger"), console.log("Not created");
+    const response1 = await CreateDatapoint(ds, dp);
+    console.log(response1);
+    if (response1 === "Created") {
+      getApiDatasources(ds.ip);
+      setShowAlerts(true);
+      setResponse(200);
+    } else {
+      setShowAlerts(true);
+      console.log("Not created");
+      setResponse(response1);
+    }
   }
 
   async function confirmDelete(ds) {
@@ -100,9 +108,10 @@ const Mapping = () => {
 
   async function confirmDeleteDp(dp) {
     console.log("delete", dp);
+    setSelectedDataSource(selectedDataSource);
     setShowModalDeleteDp(false);
     await DeleteDatapoint(selectedDataSource, dp);
-    getApiDatasources(selectedDataSource);
+    getApiDatasources(selectedDataSource.ip);
   }
 
   const getApiData = async () => {
@@ -229,7 +238,7 @@ const Mapping = () => {
               </h4>
             </GridElement>
           </>
-        ) : datapoints.length > 0 ? (
+        ) : selectedDataSource.datapoints.length > 0 ? (
           <>
             <GridElement cols={6} style={{ alignContent: "center" }}>
               <h3> DataPoints</h3>
@@ -277,7 +286,11 @@ const Mapping = () => {
               </div>
             </GridElement>
             <GridElement cols={6} ns style={{ alignContent: "center" }}>
-              <Button variant="primary" onClick={() => updateListDs}>
+              <Button
+                variant="primary"
+                onClick={() => saveMappings}
+                href="/manage"
+              >
                 Apply
               </Button>
             </GridElement>
@@ -338,7 +351,11 @@ const Mapping = () => {
                   backgroundColor: "transparent",
                 }}
               >
-                <Button variant="primary" onClick={() => updateListDs}>
+                <Button
+                  variant="primary"
+                  onClick={() => saveMappings}
+                  href="/manage"
+                >
                   Apply
                 </Button>
               </GridElement>
@@ -374,7 +391,7 @@ const Mapping = () => {
         dp={selectedDataPoint}
       />
       <Alerts
-        status={"success"}
+        status={response}
         show={showAlerts}
         setShowAlert={setShowAlerts}
       />
