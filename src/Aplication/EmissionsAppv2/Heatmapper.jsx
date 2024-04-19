@@ -32,12 +32,13 @@ const HeatMapper = ({ imgsrc, teas, coordinates }) => {
     if (!teas || !heatmapInstance)
       return;
 
+    console.log("TEEEEAS", teas)
     const points = teas.map((t) => (
       {
         x: GetPositionFromCoords(t.location.latitude, t.location.longitude).x,
         y: GetPositionFromCoords(t.location.latitude, t.location.longitude).y,
-        value: t.avgEmissions,
-        radius: t.avgEmissions * 0.5
+        value: t.avgEmissions * 350,
+        radius: t.avgEmissions * 200
       }
     ));
     var data = {
