@@ -3,15 +3,7 @@ import CustomGrid from "../Utils/CustomGrid";
 import GridUtil from "../Utils/GridUtil";
 import GridElement from "../Utils/GridElement";
 import { ComponentSelector } from "./TeaViews/ComponentsSelector";
-import {
-  emissionsUnits,
-  flowUnits,
-  pressureUnits,
-  tempUnits,
-} from "./conversions";
 import { Button } from "react-bootstrap";
-import ImageLoader from "./ImageLoader";
-import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 
 const composition = [
