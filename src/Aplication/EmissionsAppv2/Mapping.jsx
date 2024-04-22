@@ -12,16 +12,11 @@ import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
-import {
-  CreateDatasource,
-  DeleteDatasource,
-  CreateDatapoint,
-  DeleteDatapoint,
-  GetDatasources,
-  PostDatamappings
-} from "./apiHandler";
+import useEmissionsApi from "./useEmissionsApi";
 
 const Mapping = () => {
+  const { CreateDatasource, DeleteDatasource, CreateDatapoint,
+    DeleteDatapoint, GetDatasources, PostDatamappings } = useEmissionsApi();
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
