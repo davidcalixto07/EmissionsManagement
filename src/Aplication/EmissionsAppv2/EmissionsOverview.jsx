@@ -20,7 +20,7 @@ const EmissionsOverview = () => {
   const [ts, setTs] = useState([]);
   const nav = useNavigate();
 
-  function setDate() {}
+  function setDate() { }
 
   function handleCloseModal() {
     setDirectModal(false);
@@ -39,7 +39,7 @@ const EmissionsOverview = () => {
     );
     setTotalCo2(totalCo2);
     setTotalEq(totalEq);
-    const ts = teasList.length ? teasList[0].timeSerie ?? [] : [];
+    const ts = teasList.lengt1 ? teasList[0].timeSerie ?? [] : [];
     setTs(ts);
   }, [teasList]);
 
@@ -133,7 +133,7 @@ const EmissionsOverview = () => {
             {
               label: "CO2",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.west[0])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh.CO2)),
               color: "#0f2d57",
               Bcolor: "#0f2d5760",
               f: true,
@@ -141,7 +141,7 @@ const EmissionsOverview = () => {
             {
               label: "methane",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.west[1])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh[1])),
               color: "#6f2dA7",
               Bcolor: "#6f2dA760",
               f: true,
@@ -149,7 +149,7 @@ const EmissionsOverview = () => {
             {
               label: "CO2e",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.west[2])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh[2])),
               color: "#03D707",
               Bcolor: "#03D70760",
               f: true,
@@ -157,7 +157,7 @@ const EmissionsOverview = () => {
             {
               label: "NOx",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.west[3])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh[3])),
               color: "#6f2d07",
               Bcolor: "#6f2d0760",
               f: true,

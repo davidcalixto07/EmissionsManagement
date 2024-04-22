@@ -58,14 +58,12 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
     if (!data || !data.timeSerie || !data.timeSerie.length) return;
 
     async function fetchData() {
-      const url = `/api/iottimeseries/v3/timeseries/${
-        data.assetId
-      }/GasComposition?from=${
-        data.timeSerie[data.timeSerie.length - 1]._time
-      }&sort=desc`;
+      const url = `/api/iottimeseries/v3/timeseries/${data.assetId
+        }/GasComposition?from=${data.timeSerie[data.timeSerie.length - 1]._time
+        }&sort=desc`;
       const response = await fetch(url);
       if (!response.ok) {
-        console.error(
+        console.warn(
           Error(`Failed to fetch data for assetId ${data.assetId}`)
         );
         return;

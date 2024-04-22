@@ -34,7 +34,7 @@ function useEmissionsV2() {
       .catch((error) => {
         console.error("Error fetching image:", error);
       })
-      .finally(() => {});
+      .finally(() => { });
   }, [sidebarList]);
 
   function GetTeasTs(teaslist) {
@@ -50,39 +50,17 @@ function useEmissionsV2() {
         throw new Error(`Failed to fetch data for assetId ${tea.assetId}`);
       }
       const json = await response.json();
-      console.log("Api response from ", tea, json);
+      console.log("Api response from ", tea,);
       tea.timeSerie = Array.isArray(json) ? json : [];
+      var sum1 = 0, sum2 = 0;
 
-      if (json.length > 0) {
-        const sum = tea.timeSerie.reduce(
-          (acc, obj) =>
-            acc + obj.emissions.west[0] ?? obj.emissions.anh[0] ?? 0,
-          0
-        );
-        tea.avgEmissions = (sum / tea.timeSerie.length) * 60;
-
-        const sum2 = tea.timeSerie.reduce(
-          (acc, obj) =>
-            acc + obj.emissions.west[2] ?? obj.emissions.anh[2] ?? 0,
-          0
-        );
-        tea.avgEqEmissions = (sum2 / tea.timeSerie.length) * 60;
-      } else {
-        const sum = TestData.reduce(
-          (acc, obj) =>
-            acc + obj.emissions.west[0] ?? obj.emissions.anh[0] ?? 0,
-          0
-        );
-        const sum2 = TestData.reduce(
-          (acc, obj) =>
-            acc + obj.emissions.west[2] ?? obj.emissions.anh[2] ?? 0,
-          0
-        );
-
-        tea.avgEmissions = (sum / TestData.length) * 60;
-        tea.avgEqEmissions = (sum2 / TestData.length) * 60;
-        tea.timeSerie = TestData;
-      }
+      json.forEach(point => {
+        sum1 += point.emissions.anh.C02 ?? 0;
+        sum2 += point.emissions.anh.CO2e ?? 0;
+      });
+      tea.avgEmissions = sum1 / json.length;
+      tea.avgEqEmissions = sum2 / json.length;
+      console.log("Tea", tea);
       setLoading(false);
       return tea;
     });
