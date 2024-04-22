@@ -29,15 +29,6 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             <option value="logix">Logix</option>
             <option value="opc_ua">OPC UA</option>
           </select>
-          Name:
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Datasource name"></input>
-          Direction:<input value={direction} onChange={(e) => setDirection(e.target.value)} placeholder="url or IP"></input>
-          {
-            type === 'logix' &&
-            <>
-              Slot:<input value={slot} onChange={(e) => setSlot(e.target.value)} placeholder="url or IP"></input>
-            </>
-          }
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -51,7 +42,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
               name: name,
               direction: direction,
               type: type,
-              slot: slot
+              status: "Disconnected",
             })
           }
         >

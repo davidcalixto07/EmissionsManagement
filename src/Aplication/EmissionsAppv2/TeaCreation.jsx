@@ -3,15 +3,7 @@ import CustomGrid from "../Utils/CustomGrid";
 import GridUtil from "../Utils/GridUtil";
 import GridElement from "../Utils/GridElement";
 import { ComponentSelector } from "./TeaViews/ComponentsSelector";
-import {
-  emissionsUnits,
-  flowUnits,
-  pressureUnits,
-  tempUnits,
-} from "./conversions";
 import { Button } from "react-bootstrap";
-import ImageLoader from "./ImageLoader";
-import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 
 const composition = [
@@ -32,24 +24,25 @@ const composition = [
   "N2",
   "H2O",
 ];
-const initiallySelected = [
-  "C1",
-  "C2",
-  "C3",
-  "I-C4",
-  "C4",
-  "N-C5",
-  "I-C5",
-  "C5",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C10",
-  "CO2",
-  "N2",
-  "H2O",
-];
+
+const initiallySelected = {
+  C1: 85.4305,
+  C2: 8.5901,
+  C3: 2.7031,
+  IC4: 0.1882,
+  C4: 0.2777,
+  NC5: 0,
+  IC5: 0.0359,
+  C5: 0.0207,
+  C6: 0.0263,
+  C7: 0.0048,
+  C8: 0.0014,
+  C9: 0.0016,
+  C10: 0,
+  CO2: 0.08757,
+  N2: 2.1649,
+  H2O: 0,
+};
 
 const emptyForm = {
   teaId: "",
@@ -64,40 +57,40 @@ const emptyForm = {
   measureMethod: "Balance",
   measureType: "Coriolis",
   transmitterSerial: "",
-  latitude: 3.072371,
-  longitude: -75.290777,
-  wind: 4,
-  teaDiameter: 8.1,
+  latitude: "",
+  longitude: "",
+  wind: "",
+  teaDiameter: "",
+  defaultModel: "None",
+  HH: "",
+  H: "",
 };
 
 const AppConfiguration = () => {
   const [formData, setFormData] = useState(emptyForm);
   const [statusText, setStatusText] = useState("");
-  const [aditional1, setAditional1] = useState("");
-  const [aditional2, setAditional2] = useState("");
-  const [aditional3, setAditional3] = useState("");
-  const [model, setModel] = useState("West");
-
-  const [wind, setWind] = useState(4);
-  const [diameter, setDiameter] = useState(8.1);
+  const [name, setName] = useState("");
+  const [gwp, setGwp] = useState("");
+  const [mw, setMw] = useState("");
+  const [lhw, setlhw] = useState("");
+  const [sc, setSc] = useState("");
+  const [optionValues, setOptionValues] = useState(initiallySelected);
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
   };
 
   const handleChange = (e) => {
-    var { name, value } = e.target;
+    const { name, value } = e.target;
 
-    const parsed_value = parseFloat(value)
-    if (!isNaN(parsed_value))
-      value = parsed_value
+    const parsed_value = parseFloat(value);
+    const newValue = isNaN(parsed_value) ? value : parsed_value;
 
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: newValue,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -113,19 +106,17 @@ const AppConfiguration = () => {
     };
 
     try {
-      const response = await axios.post(
-        "/api/assets/CreateAsset",
-        formData
-      );
+      const response = await axios.post("/api/assets/CreateAsset", formData);
       console.log("Response:", response.data);
       setStatusText("Created");
+      window.location.href = "/";
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="fullSize">
+    <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
         cols={5}
         rows={12}
@@ -140,6 +131,7 @@ const AppConfiguration = () => {
             placeholder="Tea001"
             value={formData.teaId}
             onChange={handleChange}
+            required
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
@@ -156,7 +148,8 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
-            options={composition}
+            optionValues={optionValues}
+            setOptionValues={setOptionValues}
             onSelect={handleSelect}
             initiallySelected={initiallySelected}
           />
@@ -263,8 +256,8 @@ const AppConfiguration = () => {
           <span>Wind Speed (m/s): </span>
           <input
             type="text"
-            name="WindSpeed"
-            placeholder=" 4"
+            name="wind"
+            placeholder="4"
             value={formData.wind}
             onChange={handleChange}
           />
@@ -281,31 +274,34 @@ const AppConfiguration = () => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea Diameter (ft):</span>
-          <input
-            type="text"
-            name="TeaDiameter"
-            placeholder=" 8.1"
-            value={formData.wind}
-            onChange={handleChange}
-          />
-        </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Longitude:</span>
           <input
             type="text"
             name="longitude"
-            placeholder=""
+            placeholder="-75.290777"
             value={formData.longitude}
             onChange={handleChange}
           />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Default calculus Model :</span>
+          <select
+            name="Default Calculus Model"
+            value={formData.defaultModel}
+            onChange={handleChange}
+          >
+            <option value="anh">ANH Model</option>
+            <option value="west">West Model</option>
+            <option value="em_factor">Emissions Factor Model</option>
+            <option value="cu_factor">Cu Factor Model</option>
+          </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Latitude:</span>
           <input
             type="text"
             name="latitude"
-            placeholder=""
+            placeholder="3.072371"
             value={formData.latitude}
             onChange={handleChange}
           />
@@ -320,6 +316,26 @@ const AppConfiguration = () => {
             onChange={handleChange}
           />
         </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>High-High Alrm:</span>
+          <input
+            type="text"
+            name="HH"
+            placeholder=""
+            value={formData.HH}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>High Alrm:</span>
+          <input
+            type="text"
+            name="H"
+            placeholder=""
+            value={formData.H}
+            onChange={handleChange}
+          />
+        </GridElement>
         <GridElement rows={4} cols={4}>
           <GridUtil rows={4} cols={4}>
             <GridElement rows={1} cols={4} ns>
@@ -331,10 +347,10 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 1 name:</span>
+              <span>chemical symbol:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
                 name="AC1"
                 placeholder="component name"
               />
@@ -347,10 +363,10 @@ const AppConfiguration = () => {
             >
               <span>Gwp:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={gwp}
+                onChange={(event) => setGwp(event.target.value)}
                 name="AC1"
-                placeholder="gwp value"
+                placeholder="GWP value"
               />
             </GridElement>
             <GridElement
@@ -359,12 +375,12 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 2 name:</span>
+              <span>MW Value:</span>
               <input
-                value={aditional2}
-                onChange={(event) => setAditional2(event.target.value)}
-                name="AC1"
-                placeholder="component name"
+                value={mw}
+                onChange={(event) => setMw(event.target.value)}
+                name="MW"
+                placeholder="Molecular weight"
               />
             </GridElement>
             <GridElement
@@ -373,12 +389,12 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Gwp:</span>
+              <span>LHW Value:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={lhw}
+                onChange={(event) => setlhw(event.target.value)}
                 name="AC1"
-                placeholder="gwp value"
+                placeholder="Lower Heating weight value"
               />
             </GridElement>
             <GridElement
@@ -387,33 +403,27 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 3 name:</span>
+              <span>SC Value:</span>
               <input
-                value={aditional3}
-                onChange={(event) => setAditional3(event.target.value)}
+                value={sc}
+                onChange={(event) => setSc(event.target.value)}
                 name="AC1"
-                placeholder="component name"
+                placeholder="Stoichiometric coefficient"
               />
             </GridElement>
             <GridElement
-              className="grid-cell-white justified"
               rows={1}
               cols={2}
-              style={{ border: "none" }}
+              ns
+              style={{ justifyContent: "center" }}
             >
-              <span>Gwp:</span>
-              <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
-                name="AC1"
-                placeholder="gwp value"
-              />
+              <Button type="submit">Add</Button>
             </GridElement>
           </GridUtil>
         </GridElement>
         <GridElement
           className="grid-cell-white justified"
-          rows={2}
+          rows={3}
           cols={1}
           style={{ justifyContent: "center" }}
         >

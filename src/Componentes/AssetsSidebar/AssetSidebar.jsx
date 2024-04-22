@@ -38,7 +38,7 @@ const AssetSidebar = ({
   const [show, setShow] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const [deleteResult, setDeleteResult] = useState('');
+  const [deleteResult, setDeleteResult] = useState("");
 
   useEffect(() => {
     if (data && !error) {
@@ -52,8 +52,7 @@ const AssetSidebar = ({
   }, [loading]);
 
   function AssetClicked(asset) {
-    if (isRemoving)
-      RemoveAsset(asset.assetId);
+    if (isRemoving) RemoveAsset(asset.assetId);
     else {
       setSelected(asset);
       if (typeof handleSelectedAsset === "function") handleSelectedAsset(asset);
@@ -71,7 +70,7 @@ const AssetSidebar = ({
     // newList.splice(index, 1);
     // setAssetList(newList);
     const asset = assetList.find((asset) => assetId === asset.assetId);
-    console.log("Deleting ", asset)
+    console.log("Deleting ", asset);
     setDeleteSelected(asset);
     setShowConfirmModal(true);
   }
@@ -84,21 +83,16 @@ const AssetSidebar = ({
       setDeleteResult(result ? "Deleted." : "Cannot delete asset");
 
       setTimeout(() => {
-        setDeleteResult('');
+        setDeleteResult("");
         setShowConfirmModal(false);
-      }, (1000));
-    }
-    else
-      setShowConfirmModal(false);
+      }, 1000);
+    } else setShowConfirmModal(false);
   }
-
 
   const HandleAssetSearchClosed = (newList) => {
     UpdateAssetList(newList);
     setShow(false);
   };
-
-
 
   function HandleCancel() {
     setIsRemoving(false);
@@ -150,14 +144,14 @@ const AssetSidebar = ({
         {!loading &&
           (assetList.length > 0
             ? assetList.map((asset) => (
-              <SidebarAsset
-                key={asset.assetId}
-                asset={asset}
-                onClick={AssetClicked}
-                selected={selected}
-                deleting={isRemoving}
-              />
-            ))
+                <SidebarAsset
+                  key={asset.assetId}
+                  asset={asset}
+                  onClick={AssetClicked}
+                  selected={selected}
+                  deleting={isRemoving}
+                />
+              ))
             : "There is no assets to show, add one with the + button")}
       </div>
 
@@ -197,8 +191,8 @@ const AssetSidebar = ({
         assetList={assetList}
       />
       <DeleteConfirmPopup
-        title='Delete an Asset'
-        label={`Do you really want to delete ${deleteSelected?.name ?? ''}`}
+        title="Delete an Asset"
+        label={`Do you really want to delete ${deleteSelected?.name ?? ""}`}
         result={deleteResult}
         show={showConfirmModal}
         setShow={setShowConfirmModal}

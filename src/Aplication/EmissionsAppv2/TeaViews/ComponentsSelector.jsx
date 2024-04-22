@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 
-export const ComponentSelector = ({ options, onSelect, initiallySelected }) => {
+export const ComponentSelector = ({
+  optionValues,
+  onSelect,
+  initiallySelected,
+  setOptionValues,
+}) => {
   const [selectedOptions, setSelectedOptions] = useState(
-    initiallySelected || []
+    Object.keys(initiallySelected) || []
   );
-
   const toggleOption = (option) => {
     const isSelected = selectedOptions.includes(option);
 
@@ -13,6 +17,18 @@ export const ComponentSelector = ({ options, onSelect, initiallySelected }) => {
     } else {
       setSelectedOptions([...selectedOptions, option]);
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const parsed_value = parseFloat(value);
+    const newValue = isNaN(parsed_value) ? value : parsed_value;
+
+    setOptionValues((prevState) => ({
+      ...prevState,
+      [name]: newValue,
+    }));
   };
 
   return (
@@ -24,23 +40,40 @@ export const ComponentSelector = ({ options, onSelect, initiallySelected }) => {
         width: "Auto",
       }}
     >
-      {options.map((option) => (
+      {Object.keys(initiallySelected).map((option) => (
         <div
           key={option}
           style={{
             width: "auto",
-            alignContent: "end",
-            marginBottom: "0.2rem",
+            alignContent: "start",
+            alignItems: "center",
+            marginBottom: "0.1rem",
           }}
         >
           <label>
+            {option}
             <input
               type="checkbox"
               value={option}
               checked={selectedOptions.includes(option)}
               onChange={() => toggleOption(option)}
             />
-            {option}
+            <input
+              type="text"
+              name={option}
+              style={{
+                width: "5em",
+                paddingLeft: "0.4rem",
+                marginRight: "1rem",
+                border: "none",
+                backgroundColor: "transparent",
+                borderBottom: "1px dotted rgb(0, 0, 0, 0.5)",
+              }}
+              value={optionValues[option]}
+              placeholder={initiallySelected[option]}
+              onChange={handleChange}
+            />
+            %
           </label>
         </div>
       ))}

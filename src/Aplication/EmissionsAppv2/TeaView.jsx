@@ -58,7 +58,9 @@ const TeaView = () => {
       </AppTab>
 
       <AppTab label="Tea Config">
-        <TeaCreation />
+        <div style={{ height: "calc(100% - 4em)" }}>
+          <TeaCreation />
+        </div>
       </AppTab>
     </TabbedAppLayout>
   );

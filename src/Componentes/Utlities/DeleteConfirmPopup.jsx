@@ -2,7 +2,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import React from "react";
 
-function DeleteConfirmPopup({ title, label, result, show, setShow, handleResponse }) {
+function DeleteConfirmPopup({
+  title,
+  label,
+  result,
+  show,
+  setShow,
+  handleResponse,
+}) {
   return (
     <Modal
       show={show}
@@ -15,10 +22,16 @@ function DeleteConfirmPopup({ title, label, result, show, setShow, handleRespons
       </Modal.Header>
       <Modal.Body>
         {label}
-        <p><strong>{result}</strong></p>
+        <p>
+          <strong>{result}</strong>
+        </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => handleResponse(true)}>
+        <Button
+          variant="secondary"
+          onClick={() => handleResponse(true)}
+          href="/"
+        >
           Yes
         </Button>
         <Button variant="primary" onClick={() => handleResponse(false)}>

@@ -12,7 +12,16 @@ import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
-import useEmissionsApi from "./useEmissionsApi";
+import {
+  CreateDatasource,
+  DeleteDatasource,
+  CreateDatapoint,
+  DeleteDatapoint,
+  GetDatasources,
+  PostDatamappings,
+} from "./apiHandler";
+import Datapoint from "../../Componentes/Datasources/Datapoint";
+import Alerts from "../../Componentes/Alerts/Alerts";
 
 const Mapping = () => {
   const { CreateDatasource, DeleteDatasource, CreateDatapoint,
@@ -21,19 +30,20 @@ const Mapping = () => {
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [datapoints, setDataPoints] = useState([]);
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
+  const [response, setResponse] = useState(200);
   const [, , , , , teasList, , ,] = useOutletContext();
 
-
   async function getApiDatasources(dp_id) {
-    const res = await axios.get('/api/assets/GetMappings?ds_id=' + dp_id);
-    console.log("Mappings", res)
-    setDataPoints(res.data)
+    const res = await axios.get("/api/assets/GetMappings?ds_id=" + dp_id);
+    console.log("Mappings", res);
+    setDataPoints(res.data);
   }
 
   async function handleDataSourceClick(datasource) {
@@ -43,7 +53,7 @@ const Mapping = () => {
       console.log(datasource);
       setShowModalDeleteDs(true);
     } else {
-      getApiDatasources(datasource.direction)
+      getApiDatasources(datasource.ip);
     }
   }
 
@@ -54,7 +64,6 @@ const Mapping = () => {
       setShowModalDeleteDp(true);
     }
   }
-
 
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
@@ -81,12 +90,17 @@ const Mapping = () => {
   async function SaveDataPoint(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
-
-
-    if (await CreateDatapoint(ds, dp))
-      getApiDatasources(ds.direction)
-    else
+    const response1 = await CreateDatapoint(ds, dp);
+    console.log(response1);
+    if (response1 === "Created") {
+      getApiDatasources(ds.ip);
+      setShowAlerts(true);
+      setResponse(200);
+    } else {
+      setShowAlerts(true);
       console.log("Not created");
+      setResponse(response1);
+    }
   }
 
   async function confirmDelete(ds) {
@@ -98,9 +112,10 @@ const Mapping = () => {
 
   async function confirmDeleteDp(dp) {
     console.log("delete", dp);
+    setSelectedDataSource(selectedDataSource);
     setShowModalDeleteDp(false);
     await DeleteDatapoint(selectedDataSource, dp);
-    getApiDatasources(selectedDataSource);
+    getApiDatasources(selectedDataSource.ip);
   }
 
   const getApiData = async () => {
@@ -120,29 +135,27 @@ const Mapping = () => {
   function handleMappingFlare(dp, value) {
     console.log("Dp", dp, "Value", value);
     const newDps = [...datapoints];
-    const newDp = newDps.find((x) => x === dp)
+    const newDp = newDps.find((x) => x === dp);
     newDp.flare = value;
-    setDataPoints(newDps)
+    setDataPoints(newDps);
   }
 
   function handleMappingVar(dp, value) {
     console.log("Dp", dp, "Value", value);
     const newDps = [...datapoints];
-    const newDp = newDps.find((x) => x === dp)
+    const newDp = newDps.find((x) => x === dp);
     newDp.variable = value;
-    setDataPoints(newDps)
+    setDataPoints(newDps);
   }
 
   async function saveMappings() {
     const json = {
       dp_id: selectedDataSource.direction,
       dp_type: selectedDataSource.type,
-      datapoints: datapoints
-    }
-    if (await PostDatamappings(json))
-      getApiData();
-    else
-      console.log("Not created");
+      datapoints: datapoints,
+    };
+    if (await PostDatamappings(json)) getApiData();
+    else console.log("Not created");
   }
 
   useEffect(() => {
@@ -161,13 +174,11 @@ const Mapping = () => {
         getApiDatasources(ds.direction);
         return;
       }
-
     }
     if (datasources[0]) {
       setSelectedDataSource(datasources[0]);
       getApiDatasources(datasources[0].direction);
     }
-
   }, [datasources]);
 
   return (
@@ -183,6 +194,7 @@ const Mapping = () => {
                 datasource={ds}
                 handleDataSourceClickDs={handleDataSourceClick}
                 selected={selectedDataSource}
+                deleting={isRemovingds}
               />
             ))}
           </div>
@@ -216,75 +228,144 @@ const Mapping = () => {
             </div>
           </div>
         </GridElement>
-        <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
-          <h4>Datapoints for {selectedDataSource?.direction ?? ''}</h4>
-        </GridElement>
-        {datapoints &&
-          datapoints?.map((dp) => (
-            <>
-              <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
-                <div onClick={() => handleDataPointClick(dp)}>
-                  <strong> Node/Tag: </strong>
-                  <span> {dp.tag} </span>
-                  <strong style={{ marginLeft: '1rem' }}> Flare: </strong>
-                  <span>
-                    <select id="dropdown" defaultValue={dp.flare ?? ''} onChange={(event) => handleMappingFlare(dp, event.target.value)}>
-                      <option value=''>None</option>
-                      {datasources.length > 0 &&
-                        teasList.map((ds) => (
-                          <option value={ds.name}>{ds.name}</option>
-                        ))}
-                    </select>
-                  </span>
-                  <strong> Variable: </strong>
-                  <span>
-                    <select value={dp.variable ?? ''} onChange={(event) => handleMappingVar(dp, event.target.value)}>
-                      <option value=''>None</option>
-                      <option value='flow'> Gas Flow </option>
-                      <option value='pressure'> Gas Pressure </option>
-                      <option value='temperature'> Gas Temperature </option>
-                    </select>
-                  </span>
+        {!selectedDataSource ? (
+          <>
+            <GridElement
+              cols={6}
+              rows={12}
+              style={{ alignContent: "center", backgroundColor: "#efeef5" }}
+              ns
+            >
+              <h4 style={{ color: "grey" }}>
+                {" "}
+                There's no Data Source selected, please select one{" "}
+              </h4>
+            </GridElement>
+          </>
+        ) : selectedDataSource.datapoints.length > 0 ? (
+          <>
+            <GridElement cols={6} style={{ alignContent: "center" }}>
+              <h3> DataPoints</h3>
+            </GridElement>
+            {datapoints?.map((dp) => (
+              <Datapoint
+                datapoint={dp}
+                handleDataPointClick={handleDataPointClick}
+                teasList={teasList}
+                datasources={datasources}
+                deleting={isRemovingdp}
+                handleMappingVar={handleMappingVar}
+                HandleMappingFlare={handleMappingFlare}
+              />
+            ))}
+            <GridElement cols={6} ns>
+              <div className="button-container">
+                <div className="ControlButtons">
+                  {isRemovingdp ? (
+                    <>
+                      <button
+                        onClick={() => HandleCancelDp()}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => HandleClickedRemoveDp()}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        <img src={DeleteIcon} alt="-" />
+                      </button>
+                      <button
+                        onClick={() => setShowModalDp(true)}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        <img src={AddIcon} alt="-" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </GridElement>
+            <GridElement cols={6} ns style={{ alignContent: "center" }}>
+              <Button
+                variant="primary"
+                onClick={() => saveMappings}
+                href="/manage"
+              >
+                Apply
+              </Button>
+            </GridElement>
+          </>
+        ) : (
+          <>
+            <GridElement
+              cols={6}
+              rows={12}
+              style={{ alignContent: "center", backgroundColor: "#efeef5" }}
+              ns
+            >
+              <h4 style={{ color: "grey" }}>
+                {" "}
+                There's no data points in the data source, please select one
+                wich has nodes or tags or add a datapoint{" "}
+              </h4>
+              <GridElement
+                cols={6}
+                ns
+                style={{ backgroundColor: "transparent" }}
+              >
+                <div className="button-container">
+                  <div className="ControlButtons">
+                    {isRemovingdp ? (
+                      <>
+                        <button
+                          onClick={() => HandleCancelDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => HandleClickedRemoveDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={DeleteIcon} alt="-" />
+                        </button>
+                        <button
+                          onClick={() => setShowModalDp(true)}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={AddIcon} alt="-" />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </GridElement>
-            </>
-          ))}{" "}
-        <GridElement cols={6} ns>
-          <div className="button-container">
-            <div className="ControlButtons">
-              {isRemovingdp ? (
-                <>
-                  <button
-                    onClick={() => HandleCancelDp()}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => HandleClickedRemoveDp()}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    <img src={DeleteIcon} alt="-" />
-                  </button>
-                  <button
-                    onClick={() => setShowModalDp(true)}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    <img src={AddIcon} alt="-" />
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </GridElement>
-        <GridElement cols={6} ns style={{ alignContent: "center" }}>
-          <Button variant="primary" onClick={() => saveMappings()}>
-            Save Mapings
-          </Button>
-        </GridElement>
+              <GridElement
+                cols={6}
+                ns
+                style={{
+                  alignContent: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Button
+                  variant="primary"
+                  onClick={() => saveMappings}
+                  href="/manage"
+                >
+                  Apply
+                </Button>
+              </GridElement>
+            </GridElement>
+          </>
+        )}
       </CustomGrid>
       <AddDatasource
         show={showModalDs}
@@ -312,6 +393,11 @@ const Mapping = () => {
         confirmDelete={confirmDeleteDp}
         noDelete={noDelete}
         dp={selectedDataPoint}
+      />
+      <Alerts
+        status={response}
+        show={showAlerts}
+        setShowAlert={setShowAlerts}
       />
     </>
   );
