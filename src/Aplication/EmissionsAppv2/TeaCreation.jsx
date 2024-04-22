@@ -44,8 +44,6 @@ const initiallySelected = {
   H2O: 0,
 };
 
-console.log(initiallySelected);
-
 const emptyForm = {
   teaId: "",
   teaType: "Tea Alta",
@@ -64,6 +62,8 @@ const emptyForm = {
   wind: "",
   teaDiameter: "",
   defaultModel: "None",
+  HH: "",
+  H: "",
 };
 
 const AppConfiguration = () => {
@@ -74,10 +74,7 @@ const AppConfiguration = () => {
   const [mw, setMw] = useState("");
   const [lhw, setlhw] = useState("");
   const [sc, setSc] = useState("");
-  const [model, setModel] = useState("West");
-
-  const [wind, setWind] = useState(4);
-  const [diameter, setDiameter] = useState(8.1);
+  const [optionValues, setOptionValues] = useState(initiallySelected);
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
@@ -94,7 +91,6 @@ const AppConfiguration = () => {
       [name]: newValue,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -152,7 +148,8 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
-            options={composition}
+            optionValues={optionValues}
+            setOptionValues={setOptionValues}
             onSelect={handleSelect}
             initiallySelected={initiallySelected}
           />
@@ -259,7 +256,7 @@ const AppConfiguration = () => {
           <span>Wind Speed (m/s): </span>
           <input
             type="text"
-            name="wind Speed"
+            name="wind"
             placeholder="4"
             value={formData.wind}
             onChange={handleChange}
@@ -325,7 +322,7 @@ const AppConfiguration = () => {
             type="text"
             name="HH"
             placeholder=""
-            value={""}
+            value={formData.HH}
             onChange={handleChange}
           />
         </GridElement>
@@ -333,9 +330,9 @@ const AppConfiguration = () => {
           <span>High Alrm:</span>
           <input
             type="text"
-            name="HH"
+            name="H"
             placeholder=""
-            value={""}
+            value={formData.H}
             onChange={handleChange}
           />
         </GridElement>

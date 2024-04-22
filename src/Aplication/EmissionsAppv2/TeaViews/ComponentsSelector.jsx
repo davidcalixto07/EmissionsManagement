@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 
-export const ComponentSelector = ({ options, onSelect, initiallySelected }) => {
+export const ComponentSelector = ({
+  optionValues,
+  onSelect,
+  initiallySelected,
+  setOptionValues,
+}) => {
   const [selectedOptions, setSelectedOptions] = useState(
     Object.keys(initiallySelected) || []
   );
-  const [optionValues, setOptionValues] = useState(initiallySelected || {});
-
   const toggleOption = (option) => {
     const isSelected = selectedOptions.includes(option);
 
