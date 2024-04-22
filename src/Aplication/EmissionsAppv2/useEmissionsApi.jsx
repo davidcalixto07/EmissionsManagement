@@ -15,7 +15,7 @@ function useEmissionsApi() {
         console.log("Deleting", ds);
         const params = {
             type: ds.type,
-            ip: ds.ip
+            direction: ds.direction
         };
         try {
             const response = await axios.delete('/api/DeleteConnection?' + new URLSearchParams(params))
@@ -29,8 +29,8 @@ function useEmissionsApi() {
         const json =
         {
             type: ds.type,
-            ip: ds.ip,
-            tag: dp,
+            direction: ds.direction,
+            datapoint: dp,
         }
         try {
             const response = await axios.post('/api/CreateDatapoint', json)

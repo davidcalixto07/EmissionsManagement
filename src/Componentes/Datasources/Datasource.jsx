@@ -14,7 +14,7 @@ const Datasource = ({ datasource, handleDataSourceClickDs, selected }) => {
       </div>
       <div>
         <strong>IP:</strong>
-        {datasource.ip}
+        {datasource.direction}
       </div>
       <div>
         <strong>{datasource.type == "Logix" ? "Tags:" : "Nodes:"} </strong>

@@ -4,11 +4,10 @@ import React from "react";
 import { useState } from "react";
 
 function AddDatasource({ show, setShow, saveDatasource }) {
-  const [ip, setIp] = useState("127.0.0.1");
-  const [name, setName] = useState("PLC1");
+  const [direction, setDirection] = useState("");
+  const [name, setName] = useState("");
   const [type, setType] = useState("logix");
-  const [datapoints, setDatapoints] = useState(["PIT1201"]);
-
+  const [slot, setSlot] = useState(0);
   return (
     <Modal
       show={show}
@@ -21,9 +20,6 @@ function AddDatasource({ show, setShow, saveDatasource }) {
       </Modal.Header>
       <Modal.Body>
         <div className="grid-container2">
-          Name:
-          <input value={name} onChange={(e) => setName(e.target.value)}></input>
-          IP:<input value={ip} onChange={(e) => setIp(e.target.value)}></input>
           type:
           <select
             id="dropdown"
@@ -33,11 +29,15 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             <option value="logix">Logix</option>
             <option value="opc_ua">OPC UA</option>
           </select>
-          DataPoint:
-          <input
-            value={datapoints}
-            onChange={(e) => setDatapoints(e.target.value)}
-          ></input>
+          Name:
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Datasource name"></input>
+          Direction:<input value={direction} onChange={(e) => setDirection(e.target.value)} placeholder="url or IP"></input>
+          {
+            type === 'logix' &&
+            <>
+              Slot:<input value={slot} onChange={(e) => setSlot(e.target.value)} placeholder="url or IP"></input>
+            </>
+          }
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -49,10 +49,9 @@ function AddDatasource({ show, setShow, saveDatasource }) {
           onClick={() =>
             saveDatasource({
               name: name,
-              ip: ip,
+              direction: direction,
               type: type,
-              status: "Disconnected",
-              datapoints: [datapoints],
+              slot: slot
             })
           }
         >

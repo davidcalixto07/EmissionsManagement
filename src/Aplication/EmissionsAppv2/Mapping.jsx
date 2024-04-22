@@ -40,10 +40,10 @@ const Mapping = () => {
     setSelectedDataSource(datasource);
 
     if (isRemovingds) {
-      console.log(datasource.ip);
+      console.log(datasource);
       setShowModalDeleteDs(true);
     } else {
-      getApiDatasources(datasource.ip)
+      getApiDatasources(datasource.direction)
     }
   }
 
@@ -72,17 +72,19 @@ const Mapping = () => {
 
   async function SaveDatasourceDs(ds) {
     setShowModalDs(false);
-    if (await CreateDatasource(ds)) getApiData();
-    else console.log("Not created");
+    if (await CreateDatasource(ds))
+      getApiData();
+    else
+      console.log("Not created");
   }
 
-  async function SaveDataPoints(dp, ds) {
+  async function SaveDataPoint(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
 
 
     if (await CreateDatapoint(ds, dp))
-      getApiDatasources(ds.ip)
+      getApiDatasources(ds.direction)
     else
       console.log("Not created");
   }
@@ -133,7 +135,7 @@ const Mapping = () => {
 
   async function saveMappings() {
     const json = {
-      dp_id: selectedDataSource.ip,
+      dp_id: selectedDataSource.direction,
       dp_type: selectedDataSource.type,
       datapoints: datapoints
     }
@@ -152,18 +154,18 @@ const Mapping = () => {
     if (selectedDataSource) {
       const ds = datasources.find(
         (x) =>
-          x.ip === selectedDataSource.ip && x.type === selectedDataSource.type
+          x.direction === selectedDataSource.direction && x.type === selectedDataSource.type
       );
       if (ds != null) {
         setSelectedDataSource(ds);
-        getApiDatasources(ds.ip);
+        getApiDatasources(ds.direction);
         return;
       }
 
     }
     if (datasources[0]) {
       setSelectedDataSource(datasources[0]);
-      getApiDatasources(datasources[0].ip);
+      getApiDatasources(datasources[0].direction);
     }
 
   }, [datasources]);
@@ -215,7 +217,7 @@ const Mapping = () => {
           </div>
         </GridElement>
         <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
-          <h4>Datapoints for {selectedDataSource?.ip ?? ''}</h4>
+          <h4>Datapoints for {selectedDataSource?.direction ?? ''}</h4>
         </GridElement>
         {datapoints &&
           datapoints?.map((dp) => (
@@ -292,7 +294,7 @@ const Mapping = () => {
       <AddDataPoint
         show={showModalDp}
         setShow={setShowModalDp}
-        saveDataPoint={SaveDataPoints}
+        saveDataPoint={SaveDataPoint}
         ds={selectedDataSource}
       />
 
