@@ -24,24 +24,27 @@ const composition = [
   "N2",
   "H2O",
 ];
-const initiallySelected = [
-  "C1",
-  "C2",
-  "C3",
-  "I-C4",
-  "C4",
-  "N-C5",
-  "I-C5",
-  "C5",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C10",
-  "CO2",
-  "N2",
-  "H2O",
-];
+
+const initiallySelected = {
+  C1: 85.4305,
+  C2: 8.5901,
+  C3: 2.7031,
+  IC4: 0.1882,
+  C4: 0.2777,
+  NC5: 0,
+  IC5: 0.0359,
+  C5: 0.0207,
+  C6: 0.0263,
+  C7: 0.0048,
+  C8: 0.0014,
+  C9: 0.0016,
+  C10: 0,
+  CO2: 0.08757,
+  N2: 2.1649,
+  H2O: 0,
+};
+
+console.log(initiallySelected);
 
 const emptyForm = {
   teaId: "",
@@ -58,7 +61,7 @@ const emptyForm = {
   transmitterSerial: "",
   latitude: "",
   longitude: "",
-  wind: 4,
+  wind: "",
   teaDiameter: "",
   defaultModel: "None",
 };
@@ -81,14 +84,14 @@ const AppConfiguration = () => {
   };
 
   const handleChange = (e) => {
-    var { name, value } = e.target;
+    const { name, value } = e.target;
 
     const parsed_value = parseFloat(value);
-    if (!isNaN(parsed_value)) value = parsed_value;
+    const newValue = isNaN(parsed_value) ? value : parsed_value;
 
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -257,7 +260,7 @@ const AppConfiguration = () => {
           <input
             type="text"
             name="wind Speed"
-            placeholder="  9.1"
+            placeholder="4"
             value={formData.wind}
             onChange={handleChange}
           />
