@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import DirectEmissionsModal from "./DirectEmissionsModal";
 
 const EmissionsOverview = () => {
-  const [, , , units, , teasList, coordinates, imageSrc, loading] =
+  const [, , , units, , teasList, coordinates, imageSrc, loading, setDates] =
     useOutletContext();
+
   const [totalCo2, setTotalCo2] = useState(0);
   const [totalEq, setTotalEq] = useState(0);
   const [directModal, setDirectModal] = useState(false);
@@ -20,7 +21,9 @@ const EmissionsOverview = () => {
   const [ts, setTs] = useState([]);
   const nav = useNavigate();
 
-  function setDate() { }
+  function setDate(date) {
+    setDates(date);
+  }
 
   function handleCloseModal() {
     setDirectModal(false);
@@ -40,9 +43,6 @@ const EmissionsOverview = () => {
     setTotalCo2(totalCo2);
     setTotalEq(totalEq);
     const ts = teasList.length ? teasList[0].timeSerie ?? [] : [];
-    console.log("Setting TS to ", ts)
-    console.log("Setting TS to ", ts.map(v=> v.emissions.anh.CO2e))
-
     setTs(ts);
   }, [teasList]);
 

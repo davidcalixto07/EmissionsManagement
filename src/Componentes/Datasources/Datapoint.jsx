@@ -16,7 +16,7 @@ const Datapoint = ({
         className="Datapoint"
       >
         <strong> Node/Tag: </strong>
-        <span> {datapoint.tag} </span>
+        <span> {datapoint.node_id} </span>
         <div>
           {deleting && (
             <div className="SidebarAsset-DeleteIcon-search ">
@@ -29,14 +29,15 @@ const Datapoint = ({
         <span>
           <select
             id="dropdown"
-            defaultValue={datapoint.flare ?? ""}
+            defaultValue={datapoint.flare ?? ''}
             onChange={(event) =>
               HandleMappingFlare(datapoint, event.target.value)
             }
           >
+            <option key={'default'} value={''}>{'None'}</option>
             {datasources.length > 0 &&
               teasList.map((tea) => (
-                <option value={tea.name}>{tea.name}</option>
+                <option key={tea.name} value={tea.name}>{tea.name}</option>
               ))}
           </select>
         </span>

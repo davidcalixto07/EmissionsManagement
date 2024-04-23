@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { TestData } from "./times";
 
-function useEmissionsV2() {
+function useEmissionsV2(dates) {
   const [imageSrc, setImageSrc] = useState(null);
   const [coordinates, setCoordinates] = useState({ start: "0,0", end: "0.0" });
   const [sidebarList, setSidebarList] = useState([]);
   const [teasList, setTeasList] = useState([]);
   const [loading, setLoading] = useState(false);
+  console.log("Use Emissions Dates", dates);
+
 
   useEffect(() => {
     setLoading(true);
@@ -35,31 +37,33 @@ function useEmissionsV2() {
         console.error("Error fetching image:", error);
       })
       .finally(() => { });
-  }, [sidebarList]);
+  }, [sidebarList, dates]);
 
   function GetTeasTs(teaslist) {
-    const currentDate = new Date();
-    currentDate.setDate(1);
-    const isoStartDate = currentDate.toISOString();
-    console.log("Getting Teas", teasList);
+    if (!dates.startDate || sidebarList.length == 0)
+      return;
+
+    const isoStartDate = dates.startDate.toISOString();
+    const isoEndDate = dates.endDate ? dates.endDate.toISOString() : new Date(2050, 1, 1).toISOString();
+
 
     const promises = teaslist.map(async (tea) => {
-      const url = `/api/emissionsapi2-colwest2/v1/ProcessTimeserie?assetId=${tea.assetId}&from=${isoStartDate}&model=both`;
+      const url = `/api/emissionsapi2-colwest2/v1/ProcessTimeserie?assetId=${tea.assetId}&from=${isoStartDate}&to=${isoEndDate}&model=both`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch data for assetId ${tea.assetId}`);
       }
       const json = await response.json();
-      console.log("Api response from ", tea,);
+      console.log("Api response from ", tea, json);
       tea.timeSerie = Array.isArray(json) ? json : [];
       var sum1 = 0, sum2 = 0;
 
-      json.forEach(point => {
+      tea.timeSerie.forEach(point => {
         sum1 += point.emissions.anh.C02 ?? 0;
         sum2 += point.emissions.anh.CO2e ?? 0;
       });
-      tea.avgEmissions = sum1 / json.length;
-      tea.avgEqEmissions = sum2 / json.length;
+      tea.avgEmissions = sum1 / tea.timeSerie.length;
+      tea.avgEqEmissions = sum2 / tea.timeSerie.length;
       console.log("Tea", tea);
       setLoading(false);
       return tea;

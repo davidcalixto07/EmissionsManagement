@@ -12,27 +12,21 @@ import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
-import {
-  CreateDatasource,
-  DeleteDatasource,
-  CreateDatapoint,
-  DeleteDatapoint,
-  GetDatasources,
-  PostDatamappings,
-} from "./apiHandler";
 import Datapoint from "../../Componentes/Datasources/Datapoint";
 import Alerts from "../../Componentes/Alerts/Alerts";
+import useEmissionsApi from "./useEmissionsApi";
 
 const Mapping = () => {
   const { CreateDatasource, DeleteDatasource, CreateDatapoint,
-    DeleteDatapoint, GetDatasources, PostDatamappings } = useEmissionsApi();
+    DeleteDatapoint, GetDatasources, PostDatamappings, GetMappings } = useEmissionsApi();
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
   const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
-  const [datapoints, setDataPoints] = useState([]);
+  const [dataMapings, setDataMapings] = useState([]);
+
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
@@ -40,12 +34,15 @@ const Mapping = () => {
   const [response, setResponse] = useState(200);
   const [, , , , , teasList, , ,] = useOutletContext();
 
-  async function getApiDatasources(dp_id) {
-    const res = await axios.get("/api/assets/GetMappings?ds_id=" + dp_id);
-    console.log("Mappings", res);
-    setDataPoints(res.data);
+
+  async function updateMappings(ds_direction) {
+    const res = await GetMappings(ds_direction)
+    setDataMapings(res);
+    console.log("Updating Mappings", res)
   }
 
+
+  console.log("Datamappppppppings", dataMapings);
   async function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
 
@@ -53,7 +50,7 @@ const Mapping = () => {
       console.log(datasource);
       setShowModalDeleteDs(true);
     } else {
-      getApiDatasources(datasource.ip);
+      updateMappings(datasource.direction)
     }
   }
 
@@ -90,17 +87,16 @@ const Mapping = () => {
   async function SaveDataPoint(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
-    const response1 = await CreateDatapoint(ds, dp);
-    console.log(response1);
-    if (response1 === "Created") {
-      getApiDatasources(ds.ip);
+    const createResponse = await CreateDatapoint(ds, dp);
+    console.log(createResponse);
+    if (createResponse === "Added") {
       setShowAlerts(true);
       setResponse(200);
     } else {
       setShowAlerts(true);
-      console.log("Not created");
-      setResponse(response1);
+      setResponse(createResponse);
     }
+    updateMappings(ds.direction);
   }
 
   async function confirmDelete(ds) {
@@ -111,11 +107,10 @@ const Mapping = () => {
   }
 
   async function confirmDeleteDp(dp) {
-    console.log("delete", dp);
-    setSelectedDataSource(selectedDataSource);
+    console.log("delete", selectedDataSource, dp);
     setShowModalDeleteDp(false);
     await DeleteDatapoint(selectedDataSource, dp);
-    getApiDatasources(selectedDataSource.ip);
+    updateMappings(selectedDataSource.direction);
   }
 
   const getApiData = async () => {
@@ -134,27 +129,28 @@ const Mapping = () => {
 
   function handleMappingFlare(dp, value) {
     console.log("Dp", dp, "Value", value);
-    const newDps = [...datapoints];
+    const newDps = [...dataMapings];
     const newDp = newDps.find((x) => x === dp);
     newDp.flare = value;
-    setDataPoints(newDps);
+    setDataMapings(newDps);
   }
 
   function handleMappingVar(dp, value) {
     console.log("Dp", dp, "Value", value);
-    const newDps = [...datapoints];
+    const newDps = [...dataMapings];
     const newDp = newDps.find((x) => x === dp);
     newDp.variable = value;
-    setDataPoints(newDps);
+    setDataMapings(newDps);
   }
 
   async function saveMappings() {
     const json = {
       dp_id: selectedDataSource.direction,
       dp_type: selectedDataSource.type,
-      datapoints: datapoints,
+      datapoints: dataMapings,
     };
-    if (await PostDatamappings(json)) getApiData();
+    if (await PostDatamappings(json))
+      updateMappings(selectedDataSource.direction)
     else console.log("Not created");
   }
 
@@ -171,13 +167,13 @@ const Mapping = () => {
       );
       if (ds != null) {
         setSelectedDataSource(ds);
-        getApiDatasources(ds.direction);
+        updateMappings(ds.direction);
         return;
       }
     }
     if (datasources[0]) {
       setSelectedDataSource(datasources[0]);
-      getApiDatasources(datasources[0].direction);
+      updateMappings(datasources[0].direction);
     }
   }, [datasources]);
 
@@ -189,12 +185,13 @@ const Mapping = () => {
             <h4>Datasources</h4>
           </GridElement>
           <div className="list">
-            {datasources.map((ds) => (
+            {datasources.map((ds, index) => (
               <Datasource
                 datasource={ds}
                 handleDataSourceClickDs={handleDataSourceClick}
                 selected={selectedDataSource}
                 deleting={isRemovingds}
+                key={index}
               />
             ))}
           </div>
@@ -247,7 +244,7 @@ const Mapping = () => {
             <GridElement cols={6} style={{ alignContent: "center" }}>
               <h3> DataPoints</h3>
             </GridElement>
-            {datapoints?.map((dp) => (
+            {dataMapings.map((dp, index) => (
               <Datapoint
                 datapoint={dp}
                 handleDataPointClick={handleDataPointClick}
@@ -256,6 +253,7 @@ const Mapping = () => {
                 deleting={isRemovingdp}
                 handleMappingVar={handleMappingVar}
                 HandleMappingFlare={handleMappingFlare}
+                key={index}
               />
             ))}
             <GridElement cols={6} ns>
@@ -292,10 +290,9 @@ const Mapping = () => {
             <GridElement cols={6} ns style={{ alignContent: "center" }}>
               <Button
                 variant="primary"
-                onClick={() => saveMappings}
-                href="/manage"
+                onClick={() => saveMappings()}
               >
-                Apply
+                Apply Mappings
               </Button>
             </GridElement>
           </>
@@ -358,9 +355,8 @@ const Mapping = () => {
                 <Button
                   variant="primary"
                   onClick={() => saveMappings}
-                  href="/manage"
                 >
-                  Apply
+                  Apply Mappings
                 </Button>
               </GridElement>
             </GridElement>

@@ -23,12 +23,16 @@ export const EmissionsAppV2Routes = (
   </>
 );
 
+
 const EmissionsAppV2 = () => {
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [assetList, setAssetList] = useState([]);
   const [units, setUnits] = useState(defaultUnits);
+  const [dates, setDates] = useState({});
+
   const { teasList, setSidebarList, coordinates, imageSrc, loading } =
-    useEmissionsV2();
+    useEmissionsV2(dates);
+
   const nav = useNavigate();
   const { assetId } = useParams();
 
@@ -85,6 +89,7 @@ const EmissionsAppV2 = () => {
           coordinates,
           imageSrc,
           loading,
+          setDates,
         ]}
       />
     </div>

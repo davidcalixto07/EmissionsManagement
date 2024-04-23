@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomGrid from "../Utils/CustomGrid";
 import GridUtil from "../Utils/GridUtil";
 import GridElement from "../Utils/GridElement";
@@ -46,34 +46,42 @@ const initiallySelected = {
 
 const emptyForm = {
   teaId: "",
+  height: 30,
+  teaDiameter: 9.1,
+  instalationYear: 2024,
+  transmitterSerial: "",
+  wind: 0,
+  longitude: 3.072371,
+  latitude: -75.29077,
+  HH: 0,
+
   teaType: "Tea Alta",
-  pressure: "",
-  tecnology: "",
-  height: "",
-  diameter: "",
+  tecnology: "Tea Combinada",
   segment: "Exploración",
-  instalationYear: "",
-  estimatedHours: "",
   measureMethod: "Balance",
   measureType: "Coriolis",
-  transmitterSerial: "",
-  latitude: "",
-  longitude: "",
-  wind: "",
-  teaDiameter: "",
-  defaultModel: "None",
-  HH: "",
-  H: "",
+  frecuency: "Continuous",
+  defaultModel: "anh",
+  estimatedHours: 0,
+  H: 0,
 };
 
-const AppConfiguration = () => {
+const AppConfiguration = ({ assetData }) => {
   const [formData, setFormData] = useState(emptyForm);
   const [statusText, setStatusText] = useState("");
+
+  //Component creation
   const [name, setName] = useState("");
   const [gwp, setGwp] = useState("");
   const [mw, setMw] = useState("");
   const [lhw, setlhw] = useState("");
   const [sc, setSc] = useState("");
+
+  useEffect(() => {
+    if (assetData?.data)
+      setFormData(assetData.data);
+  }, [assetData]);
+
   const [optionValues, setOptionValues] = useState(initiallySelected);
 
   const handleSelect = (selectedOptions) => {
@@ -83,28 +91,19 @@ const AppConfiguration = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const parsed_value = parseFloat(value);
-    const newValue = isNaN(parsed_value) ? value : parsed_value;
+    const newValue = e.target.type === 'number' ?
+      parseFloat(value) : value;
 
     setFormData((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-
-    const newAsset = {
-      name: formData.teaId,
-      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
-      location: {
-        longitude: formData.longitude,
-        latitude: formData.latitude,
-      },
-      typeId: "colwest2.TeaEmisionesFlowData",
-    };
-
+    console.log(optionValues);
     try {
       const response = await axios.post("/api/assets/CreateAsset", formData);
       console.log("Response:", response.data);
@@ -134,6 +133,7 @@ const AppConfiguration = () => {
             required
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Tea Type:</span>
           <select
@@ -145,6 +145,7 @@ const AppConfiguration = () => {
             <option value="Tea Baja">Tea Baja</option>
           </select>
         </GridElement>
+
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
@@ -154,10 +155,11 @@ const AppConfiguration = () => {
             initiallySelected={initiallySelected}
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA height(ft)</span>
           <input
-            type="text"
+            type="number"
             name="height"
             placeholder="  30"
             value={formData.height}
@@ -183,13 +185,14 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA diameter(ft)</span>
           <input
-            type="text"
-            name="diameter"
+            type="number"
+            name="teaDiameter"
             placeholder="  9.1"
-            value={formData.diameter}
+            value={formData.teaDiameter}
             onChange={handleChange}
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operation segment:</span>
           <select
@@ -206,7 +209,7 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Instalation Year</span>
           <input
-            type="text"
+            type="number"
             name="instalationYear"
             placeholder=" 2024"
             value={formData.instalationYear}
@@ -255,7 +258,7 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Wind Speed (m/s): </span>
           <input
-            type="text"
+            type="number"
             name="wind"
             placeholder="4"
             value={formData.wind}
@@ -265,8 +268,8 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operating frequency :</span>
           <select
-            name="Operating Frequency"
-            value={formData.OperatingFrequency}
+            name="frecuency"
+            value={formData.frecuency}
             onChange={handleChange}
           >
             <option value="Balance">Continuous</option>
@@ -284,9 +287,9 @@ const AppConfiguration = () => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Default calculus Model :</span>
+          <span>Default calculation Model:</span>
           <select
-            name="Default Calculus Model"
+            name="defaultModel"
             value={formData.defaultModel}
             onChange={handleChange}
           >
@@ -309,9 +312,9 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Estimated Operative Hours in one Year:</span>
           <input
-            type="text"
+            type="number"
             name="estimatedHours"
-            placeholder=" 3500"
+            placeholder=" 0"
             value={formData.estimatedHours}
             onChange={handleChange}
           />
@@ -339,7 +342,7 @@ const AppConfiguration = () => {
         <GridElement rows={4} cols={4}>
           <GridUtil rows={4} cols={4}>
             <GridElement rows={1} cols={4} ns>
-              <h5>Extra Components</h5>
+              <h5>Add Extra Components</h5>
             </GridElement>
             <GridElement
               className="grid-cell-white justified"
@@ -417,7 +420,7 @@ const AppConfiguration = () => {
               ns
               style={{ justifyContent: "center" }}
             >
-              <Button type="submit">Add</Button>
+              <Button type="submit"> Add </Button>
             </GridElement>
           </GridUtil>
         </GridElement>

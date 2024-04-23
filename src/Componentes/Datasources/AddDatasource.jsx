@@ -29,6 +29,15 @@ function AddDatasource({ show, setShow, saveDatasource }) {
             <option value="logix">Logix</option>
             <option value="opc_ua">OPC UA</option>
           </select>
+          Name:
+          <input value={name} onChange={(e) => setName(e.target.value)}></input>
+          Direction:<input value={direction} onChange={(e) => setDirection(e.target.value)}></input>
+          {
+            type === 'logix' &&
+            <>
+              Slot:<input value={slot} onChange={(e) => setSlot(e.target.value)}></input>
+            </>
+          }
         </div>
       </Modal.Body>
       <Modal.Footer>

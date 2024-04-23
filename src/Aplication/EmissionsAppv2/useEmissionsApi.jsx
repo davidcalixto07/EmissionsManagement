@@ -43,8 +43,8 @@ function useEmissionsApi() {
     async function DeleteDatapoint(ds, dp) {
         const params = {
             type: ds.type,
-            ip: ds.ip,
-            tag: dp.tag
+            direction: ds.direction,
+            datapoint: dp.node_id
         };
 
         try {
@@ -65,6 +65,16 @@ function useEmissionsApi() {
         }
     }
 
+    async function GetMappings(ds_dir) {
+        try {
+            const response = await axios.get('/api/assets/GetMappings?ds_id=' + ds_dir);
+            console.log("GetMappings Response", response);
+            return response.data;
+        } catch (error) {
+            throw new Error('Error fetching data:', error);
+        }
+    }
+
     async function PostDatamappings(json) {
         try {
             const response = await axios.post('/api/assets/SaveMappings', json)
@@ -75,7 +85,7 @@ function useEmissionsApi() {
     }
 
 
-    return { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources, PostDatamappings };
+    return { CreateDatasource, DeleteDatasource, CreateDatapoint, DeleteDatapoint, GetDatasources, PostDatamappings, GetMappings };
 }
 export default useEmissionsApi;
 
