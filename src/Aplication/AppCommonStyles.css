@@ -82,6 +82,10 @@
     border-top: 2px solid rgba(20, 20, 20, 0.1);
     padding: 10px;
 }
+.TeaView {
+    height: calc(100% - 4rem);
+    background-color: #efeef5;
+}
 
 .grid-cell {
     text-align: center;

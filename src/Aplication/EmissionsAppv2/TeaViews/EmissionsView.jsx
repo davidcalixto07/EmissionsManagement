@@ -5,7 +5,7 @@ import GridElement from "../../Utils/GridElement";
 import MetricView from "./MetricView";
 import { useEffect, useState } from "react";
 
-const gasesNames = ["CO2", "CH4", "CO2e", "N2"];
+const gasesNames = ["C02", "methane", "CO2e", "NOx"];
 const colors = ["#0f2d57", "#f03030", "#30f030", "#30f030"];
 // Mass balance- West
 // Mass balance - ANH
@@ -116,24 +116,24 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
     const avgCo2 =
       data.timeSerie.reduce(
         (accumulator, currentValue) =>
-          accumulator + currentValue.emissions[model.toLowerCase()][0],
+          accumulator + currentValue.emissions[model.toLowerCase()].C02,
         0
       ) / tsLength;
     const maxCo2 = Math.max(
-      ...data.timeSerie.map((o) => o.emissions[model.toLowerCase()][0])
+      ...data.timeSerie.map((o) => o.emissions[model.toLowerCase()].C02)
     );
-    const totalco2 = avgCo2 * hours;
+    const totalco2 = avgCo2 * hours * 10;
 
     const avgCo2eq =
       data.timeSerie.reduce(
         (accumulator, currentValue) =>
-          accumulator + currentValue.emissions[model.toLowerCase()][2],
+          accumulator + currentValue.emissions[model.toLowerCase()].CO2e,
         0
       ) / tsLength;
     const maxCo2eq = Math.max(
-      ...data.timeSerie.map((o) => o.emissions[model.toLowerCase()][2])
+      ...data.timeSerie.map((o) => o.emissions[model.toLowerCase()].CO2e)
     );
-    const totalco2eq = avgCo2eq * hours;
+    const totalco2eq = avgCo2eq * hours * 10;
     const res = {
       flow: {
         avg: avgFlow,
@@ -179,17 +179,18 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
       const tsList = gasesNames.map((g, i) => ({
         label: g,
         t: tsTime,
-        v: timeseries.map((v) => v.emissions[model.toLowerCase()][i]),
+        v: timeseries.map((v) => v.emissions[model.toLowerCase()][g]),
         color: colors[i],
         f: g === "C02e",
       }));
       if (timeseries.length > 0) {
         const ts = timeseries
-          .map((v) => v.emissions[model.toLowerCase()][2])
+          .map((v) => v.emissions[model.toLowerCase()].C02e)
           .slice(0, 20);
         console.log("Ts", ts);
         const times = generateFutureDates(timeseries[0]._time, 20);
         console.log("Timeeeeeees", times);
+
         const forecast = {
           label: "CO2e forecast",
           t: times,
@@ -206,7 +207,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
         {
           label: gas,
           t: tsTime,
-          v: timeseries.map((v) => v.emissions[model.toLowerCase()][index]),
+          v: timeseries.map((v) => v.emissions[model.toLowerCase()][gas]),
           color: colors[index],
           f: gas === "C02e",
         },
@@ -296,7 +297,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
           style={{ width: "6.5rem" }}
         >
           <option>All</option>
-          <option>CO2</option>
+          <option>C02</option>
           <option>CO2e</option>
           <option>CH4</option>
           <option>N2</option>

@@ -1,4 +1,10 @@
-const Datasource = ({ datasource, handleDataSourceClickDs, selected }) => {
+import DeleteIcon from "../AssetsSidebar/trash-can-icon.png";
+const Datasource = ({
+  datasource,
+  handleDataSourceClickDs,
+  selected,
+  deleting,
+}) => {
   return (
     <div
       onClick={() => handleDataSourceClickDs(datasource)}
@@ -14,7 +20,7 @@ const Datasource = ({ datasource, handleDataSourceClickDs, selected }) => {
       </div>
       <div>
         <strong>IP:</strong>
-        {datasource.ip}
+        {datasource.direction}
       </div>
       <div>
         <strong>{datasource.type == "Logix" ? "Tags:" : "Nodes:"} </strong>
@@ -28,6 +34,14 @@ const Datasource = ({ datasource, handleDataSourceClickDs, selected }) => {
           {datasource.status}
         </span>
       </div>
+      <br></br>
+      <span>
+        {deleting && (
+          <div className="SidebarAsset-DeleteIcon-search ">
+            <img height="90%" src={DeleteIcon} alt="-" />
+          </div>
+        )}
+      </span>
     </div>
   );
 };
