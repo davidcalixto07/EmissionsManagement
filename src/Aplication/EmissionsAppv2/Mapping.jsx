@@ -12,43 +12,45 @@ import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
-import {
-  CreateDatasource,
-  DeleteDatasource,
-  CreateDatapoint,
-  DeleteDatapoint,
-  GetDatasources,
-  PostDatamappings
-} from "./apiHandler";
+import Datapoint from "../../Componentes/Datasources/Datapoint";
+import Alerts from "../../Componentes/Alerts/Alerts";
+import useEmissionsApi from "./useEmissionsApi";
 
 const Mapping = () => {
+  const { CreateDatasource, DeleteDatasource, CreateDatapoint,
+    DeleteDatapoint, GetDatasources, PostDatamappings, GetMappings } = useEmissionsApi();
   const [showModalDs, setShowModalDs] = useState(false);
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
-  const [datapoints, setDataPoints] = useState([]);
+  const [dataMapings, setDataMapings] = useState([]);
+
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
+  const [response, setResponse] = useState(200);
   const [, , , , , teasList, , ,] = useOutletContext();
 
 
-  async function getApiDatasources(dp_id) {
-    const res = await axios.get('/api/assets/GetMappings?ds_id=' + dp_id);
-    console.log("Mappings", res)
-    setDataPoints(res.data)
+  async function updateMappings(ds_direction) {
+    const res = await GetMappings(ds_direction)
+    setDataMapings(res);
+    console.log("Updating Mappings", res)
   }
 
+
+  console.log("Datamappppppppings", dataMapings);
   async function handleDataSourceClick(datasource) {
     setSelectedDataSource(datasource);
 
     if (isRemovingds) {
-      console.log(datasource.ip);
+      console.log(datasource);
       setShowModalDeleteDs(true);
     } else {
-      getApiDatasources(datasource.ip)
+      updateMappings(datasource.direction)
     }
   }
 
@@ -59,7 +61,6 @@ const Mapping = () => {
       setShowModalDeleteDp(true);
     }
   }
-
 
   function HandleClickedRemoveDs() {
     setIsRemovingds(true);
@@ -77,19 +78,25 @@ const Mapping = () => {
 
   async function SaveDatasourceDs(ds) {
     setShowModalDs(false);
-    if (await CreateDatasource(ds)) getApiData();
-    else console.log("Not created");
-  }
-
-  async function SaveDataPoints(dp, ds) {
-    setShowModalDp(false);
-    console.log("SaveDp", dp, "Ds", ds);
-
-
-    if (await CreateDatapoint(ds, dp))
-      getApiDatasources(ds.ip)
+    if (await CreateDatasource(ds))
+      getApiData();
     else
       console.log("Not created");
+  }
+
+  async function SaveDataPoint(dp, ds) {
+    setShowModalDp(false);
+    console.log("SaveDp", dp, "Ds", ds);
+    const createResponse = await CreateDatapoint(ds, dp);
+    console.log(createResponse);
+    if (createResponse === "Added") {
+      setShowAlerts(true);
+      setResponse(200);
+    } else {
+      setShowAlerts(true);
+      setResponse(createResponse);
+    }
+    updateMappings(ds.direction);
   }
 
   async function confirmDelete(ds) {
@@ -100,10 +107,10 @@ const Mapping = () => {
   }
 
   async function confirmDeleteDp(dp) {
-    console.log("delete", dp);
+    console.log("delete", selectedDataSource, dp);
     setShowModalDeleteDp(false);
     await DeleteDatapoint(selectedDataSource, dp);
-    getApiDatasources(selectedDataSource);
+    updateMappings(selectedDataSource.direction);
   }
 
   const getApiData = async () => {
@@ -122,30 +129,29 @@ const Mapping = () => {
 
   function handleMappingFlare(dp, value) {
     console.log("Dp", dp, "Value", value);
-    const newDps = [...datapoints];
-    const newDp = newDps.find((x) => x === dp)
+    const newDps = [...dataMapings];
+    const newDp = newDps.find((x) => x === dp);
     newDp.flare = value;
-    setDataPoints(newDps)
+    setDataMapings(newDps);
   }
 
   function handleMappingVar(dp, value) {
     console.log("Dp", dp, "Value", value);
-    const newDps = [...datapoints];
-    const newDp = newDps.find((x) => x === dp)
+    const newDps = [...dataMapings];
+    const newDp = newDps.find((x) => x === dp);
     newDp.variable = value;
-    setDataPoints(newDps)
+    setDataMapings(newDps);
   }
 
   async function saveMappings() {
     const json = {
-      dp_id: selectedDataSource.ip,
+      dp_id: selectedDataSource.direction,
       dp_type: selectedDataSource.type,
-      datapoints: datapoints
-    }
+      datapoints: dataMapings,
+    };
     if (await PostDatamappings(json))
-      getApiData();
-    else
-      console.log("Not created");
+      updateMappings(selectedDataSource.direction)
+    else console.log("Not created");
   }
 
   useEffect(() => {
@@ -157,20 +163,18 @@ const Mapping = () => {
     if (selectedDataSource) {
       const ds = datasources.find(
         (x) =>
-          x.ip === selectedDataSource.ip && x.type === selectedDataSource.type
+          x.direction === selectedDataSource.direction && x.type === selectedDataSource.type
       );
       if (ds != null) {
         setSelectedDataSource(ds);
-        getApiDatasources(ds.ip);
+        updateMappings(ds.direction);
         return;
       }
-
     }
     if (datasources[0]) {
       setSelectedDataSource(datasources[0]);
-      getApiDatasources(datasources[0].ip);
+      updateMappings(datasources[0].direction);
     }
-
   }, [datasources]);
 
   return (
@@ -181,11 +185,13 @@ const Mapping = () => {
             <h4>Datasources</h4>
           </GridElement>
           <div className="list">
-            {datasources.map((ds) => (
+            {datasources.map((ds, index) => (
               <Datasource
                 datasource={ds}
                 handleDataSourceClickDs={handleDataSourceClick}
                 selected={selectedDataSource}
+                deleting={isRemovingds}
+                key={index}
               />
             ))}
           </div>
@@ -219,75 +225,143 @@ const Mapping = () => {
             </div>
           </div>
         </GridElement>
-        <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
-          <h4>Datapoints for {selectedDataSource?.ip ?? ''}</h4>
-        </GridElement>
-        {datapoints &&
-          datapoints?.map((dp) => (
-            <>
-              <GridElement cols={6} rows={1} style={{ alignItems: "center", justifyContent: 'center', display: 'flex' }}>
-                <div onClick={() => handleDataPointClick(dp)}>
-                  <strong> Node/Tag: </strong>
-                  <span> {dp.tag} </span>
-                  <strong style={{ marginLeft: '1rem' }}> Flare: </strong>
-                  <span>
-                    <select id="dropdown" defaultValue={dp.flare ?? ''} onChange={(event) => handleMappingFlare(dp, event.target.value)}>
-                      <option value=''>None</option>
-                      {datasources.length > 0 &&
-                        teasList.map((ds) => (
-                          <option value={ds.name}>{ds.name}</option>
-                        ))}
-                    </select>
-                  </span>
-                  <strong> Variable: </strong>
-                  <span>
-                    <select value={dp.variable ?? ''} onChange={(event) => handleMappingVar(dp, event.target.value)}>
-                      <option value=''>None</option>
-                      <option value='flow'> Gas Flow </option>
-                      <option value='pressure'> Gas Pressure </option>
-                      <option value='temperature'> Gas Temperature </option>
-                    </select>
-                  </span>
+        {!selectedDataSource ? (
+          <>
+            <GridElement
+              cols={6}
+              rows={12}
+              style={{ alignContent: "center", backgroundColor: "#efeef5" }}
+              ns
+            >
+              <h4 style={{ color: "grey" }}>
+                {" "}
+                There's no Data Source selected, please select one{" "}
+              </h4>
+            </GridElement>
+          </>
+        ) : selectedDataSource.datapoints.length > 0 ? (
+          <>
+            <GridElement cols={6} style={{ alignContent: "center" }}>
+              <h3> DataPoints</h3>
+            </GridElement>
+            {dataMapings.map((dp, index) => (
+              <Datapoint
+                datapoint={dp}
+                handleDataPointClick={handleDataPointClick}
+                teasList={teasList}
+                datasources={datasources}
+                deleting={isRemovingdp}
+                handleMappingVar={handleMappingVar}
+                HandleMappingFlare={handleMappingFlare}
+                key={index}
+              />
+            ))}
+            <GridElement cols={6} ns>
+              <div className="button-container">
+                <div className="ControlButtons">
+                  {isRemovingdp ? (
+                    <>
+                      <button
+                        onClick={() => HandleCancelDp()}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => HandleClickedRemoveDp()}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        <img src={DeleteIcon} alt="-" />
+                      </button>
+                      <button
+                        onClick={() => setShowModalDp(true)}
+                        className="SidebarAsset-DeleteIcon"
+                      >
+                        <img src={AddIcon} alt="-" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </GridElement>
+            <GridElement cols={6} ns style={{ alignContent: "center" }}>
+              <Button
+                variant="primary"
+                onClick={() => saveMappings()}
+              >
+                Apply Mappings
+              </Button>
+            </GridElement>
+          </>
+        ) : (
+          <>
+            <GridElement
+              cols={6}
+              rows={12}
+              style={{ alignContent: "center", backgroundColor: "#efeef5" }}
+              ns
+            >
+              <h4 style={{ color: "grey" }}>
+                {" "}
+                There's no data points in the data source, please select one
+                wich has nodes or tags or add a datapoint{" "}
+              </h4>
+              <GridElement
+                cols={6}
+                ns
+                style={{ backgroundColor: "transparent" }}
+              >
+                <div className="button-container">
+                  <div className="ControlButtons">
+                    {isRemovingdp ? (
+                      <>
+                        <button
+                          onClick={() => HandleCancelDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => HandleClickedRemoveDp()}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={DeleteIcon} alt="-" />
+                        </button>
+                        <button
+                          onClick={() => setShowModalDp(true)}
+                          className="SidebarAsset-DeleteIcon"
+                        >
+                          <img src={AddIcon} alt="-" />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </GridElement>
-            </>
-          ))}{" "}
-        <GridElement cols={6} ns>
-          <div className="button-container">
-            <div className="ControlButtons">
-              {isRemovingdp ? (
-                <>
-                  <button
-                    onClick={() => HandleCancelDp()}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => HandleClickedRemoveDp()}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    <img src={DeleteIcon} alt="-" />
-                  </button>
-                  <button
-                    onClick={() => setShowModalDp(true)}
-                    className="SidebarAsset-DeleteIcon"
-                  >
-                    <img src={AddIcon} alt="-" />
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </GridElement>
-        <GridElement cols={6} ns style={{ alignContent: "center" }}>
-          <Button variant="primary" onClick={() => saveMappings()}>
-            Save Mapings
-          </Button>
-        </GridElement>
+              <GridElement
+                cols={6}
+                ns
+                style={{
+                  alignContent: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Button
+                  variant="primary"
+                  onClick={() => saveMappings}
+                >
+                  Apply Mappings
+                </Button>
+              </GridElement>
+            </GridElement>
+          </>
+        )}
       </CustomGrid>
       <AddDatasource
         show={showModalDs}
@@ -297,7 +371,7 @@ const Mapping = () => {
       <AddDataPoint
         show={showModalDp}
         setShow={setShowModalDp}
-        saveDataPoint={SaveDataPoints}
+        saveDataPoint={SaveDataPoint}
         ds={selectedDataSource}
       />
 
@@ -315,6 +389,11 @@ const Mapping = () => {
         confirmDelete={confirmDeleteDp}
         noDelete={noDelete}
         dp={selectedDataPoint}
+      />
+      <Alerts
+        status={response}
+        show={showAlerts}
+        setShowAlert={setShowAlerts}
       />
     </>
   );

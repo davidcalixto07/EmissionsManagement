@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import DirectEmissionsModal from "./DirectEmissionsModal";
 
 const EmissionsOverview = () => {
-  const [, , , units, , teasList, coordinates, imageSrc, loading] =
+  const [, , , units, , teasList, coordinates, imageSrc, loading, setDates] =
     useOutletContext();
+
   const [totalCo2, setTotalCo2] = useState(0);
   const [totalEq, setTotalEq] = useState(0);
   const [directModal, setDirectModal] = useState(false);
@@ -20,7 +21,9 @@ const EmissionsOverview = () => {
   const [ts, setTs] = useState([]);
   const nav = useNavigate();
 
-  function setDate() { }
+  function setDate(date) {
+    setDates(date);
+  }
 
   function handleCloseModal() {
     setDirectModal(false);
@@ -39,7 +42,7 @@ const EmissionsOverview = () => {
     );
     setTotalCo2(totalCo2);
     setTotalEq(totalEq);
-    const ts = teasList.lengt1 ? teasList[0].timeSerie ?? [] : [];
+    const ts = teasList.length ? teasList[0].timeSerie ?? [] : [];
     setTs(ts);
   }, [teasList]);
 
@@ -133,7 +136,7 @@ const EmissionsOverview = () => {
             {
               label: "CO2",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.anh.CO2)),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh.C02)),
               color: "#0f2d57",
               Bcolor: "#0f2d5760",
               f: true,
@@ -141,7 +144,7 @@ const EmissionsOverview = () => {
             {
               label: "methane",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.anh[1])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh.methane)),
               color: "#6f2dA7",
               Bcolor: "#6f2dA760",
               f: true,
@@ -149,7 +152,7 @@ const EmissionsOverview = () => {
             {
               label: "CO2e",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.anh[2])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh.CO2e)),
               color: "#03D707",
               Bcolor: "#03D70760",
               f: true,
@@ -157,7 +160,7 @@ const EmissionsOverview = () => {
             {
               label: "NOx",
               t: ts.map((t) => t._time),
-              v: ts.map((t) => units.emissions.conv(t.emissions.anh[3])),
+              v: ts.map((t) => units.emissions.conv(t.emissions.anh.NOx)),
               color: "#6f2d07",
               Bcolor: "#6f2d0760",
               f: true,

@@ -10,23 +10,29 @@ import useEmissionsV2 from "./useEmissionsv2";
 import TeaCreation from "./TeaCreation";
 import "../AppCommonStyles.css";
 import Mapping from "./Mapping";
+import License from "./License";
 
 export const EmissionsAppV2Routes = (
   <>
     <Route path="configure" element={<AppConfiguration />} />
-    <Route path="manage" element={<Mapping />} />
+    <Route path="connection" element={<Mapping />} />
     <Route path="create" element={<TeaCreation />} />
+    <Route path="license" element={<License />} />
     <Route path=":assetId" element={<TeaView />} />
     <Route index element={<EmissionsOverview />} />
   </>
 );
 
+
 const EmissionsAppV2 = () => {
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [assetList, setAssetList] = useState([]);
   const [units, setUnits] = useState(defaultUnits);
+  const [dates, setDates] = useState({});
+
   const { teasList, setSidebarList, coordinates, imageSrc, loading } =
-    useEmissionsV2();
+    useEmissionsV2(dates);
+
   const nav = useNavigate();
   const { assetId } = useParams();
 
@@ -67,7 +73,8 @@ const EmissionsAppV2 = () => {
           <span onClick={() => nav("/configure")}>
             Application Configuration
           </span>
-          <span onClick={() => nav("/manage")}>Connection Mananger</span>
+          <span onClick={() => nav("/connection")}>Connection Mananger</span>
+          <span onClick={() => nav("/license")}>License Manager</span>
         </div>
       </AssetSidebar>
 
@@ -82,6 +89,7 @@ const EmissionsAppV2 = () => {
           coordinates,
           imageSrc,
           loading,
+          setDates,
         ]}
       />
     </div>

@@ -11,13 +11,9 @@ const HeatMapper = ({ imgsrc, teas, coordinates }) => {
 
     const [lat1, lon1] = coordinates.start.split(',').map(parseFloat);
     const [lat2, lon2] = coordinates.end.split(',').map(parseFloat);
-
-    const calc = (lat - lat1) / (lat2 - lat1);
+    const calculatedY = (lat - lat1) / (lat2 - lat1);
     const calc2 = (lon1 - lon) / (lon1 - lon2);
-
-    const pos = { x: Math.round(width * calc2), y: Math.round(height * calc) };
-    console.log("Result", calc, calc2, "Pos", pos);
-
+    const pos = { x: Math.round(width * calc2), y: Math.round(height * calculatedY) };
     return pos
   }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomGrid from "../Utils/CustomGrid";
 import GridUtil from "../Utils/GridUtil";
 import GridElement from "../Utils/GridElement";
@@ -24,100 +24,98 @@ const composition = [
   "N2",
   "H2O",
 ];
-const initiallySelected = [
-  "C1",
-  "C2",
-  "C3",
-  "I-C4",
-  "C4",
-  "N-C5",
-  "I-C5",
-  "C5",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C10",
-  "CO2",
-  "N2",
-  "H2O",
-];
+
+const initiallySelected = {
+  C1: 85.4305,
+  C2: 8.5901,
+  C3: 2.7031,
+  IC4: 0.1882,
+  C4: 0.2777,
+  NC5: 0,
+  IC5: 0.0359,
+  C5: 0.0207,
+  C6: 0.0263,
+  C7: 0.0048,
+  C8: 0.0014,
+  C9: 0.0016,
+  C10: 0,
+  CO2: 0.08757,
+  N2: 2.1649,
+  H2O: 0,
+};
 
 const emptyForm = {
   teaId: "",
+  height: 30,
+  teaDiameter: 9.1,
+  instalationYear: 2024,
+  transmitterSerial: "",
+  wind: 0,
+  longitude: 3.072371,
+  latitude: -75.29077,
+  HH: 0,
+
   teaType: "Tea Alta",
-  pressure: "",
-  tecnology: "",
-  height: "",
-  diameter: "",
+  tecnology: "Tea Combinada",
   segment: "Exploración",
-  instalationYear: "",
-  estimatedHours: "",
   measureMethod: "Balance",
   measureType: "Coriolis",
-  transmitterSerial: "",
-  latitude: 3.072371,
-  longitude: -75.290777,
-  wind: 4,
-  teaDiameter: 8.1,
+  frecuency: "Continuous",
+  defaultModel: "anh",
+  estimatedHours: 0,
+  H: 0,
 };
 
-const AppConfiguration = () => {
+const AppConfiguration = ({ assetData }) => {
   const [formData, setFormData] = useState(emptyForm);
   const [statusText, setStatusText] = useState("");
-  const [aditional1, setAditional1] = useState("");
-  const [aditional2, setAditional2] = useState("");
-  const [aditional3, setAditional3] = useState("");
-  const [model, setModel] = useState("West");
 
-  const [wind, setWind] = useState(4);
-  const [diameter, setDiameter] = useState(8.1);
+  //Component creation
+  const [name, setName] = useState("");
+  const [gwp, setGwp] = useState("");
+  const [mw, setMw] = useState("");
+  const [lhw, setlhw] = useState("");
+  const [sc, setSc] = useState("");
+
+  useEffect(() => {
+    if (assetData?.data)
+      setFormData(assetData.data);
+  }, [assetData]);
+
+  const [optionValues, setOptionValues] = useState(initiallySelected);
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
   };
 
   const handleChange = (e) => {
-    var { name, value } = e.target;
+    const { name, value } = e.target;
 
-    const parsed_value = parseFloat(value)
-    if (!isNaN(parsed_value))
-      value = parsed_value
+    const newValue = e.target.type === 'number' ?
+      parseFloat(value) : value;
 
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-
-    const newAsset = {
-      name: formData.teaId,
-      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
-      location: {
-        longitude: formData.longitude,
-        latitude: formData.latitude,
-      },
-      typeId: "colwest2.TeaEmisionesFlowData",
-    };
-
+    console.log(optionValues);
     try {
-      const response = await axios.post(
-        "/api/assets/CreateAsset",
-        formData
-      );
+      const response = await axios.post("/api/assets/CreateAsset", formData);
       console.log("Response:", response.data);
       setStatusText("Created");
+      window.location.href = "/";
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="fullSize">
+    <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
         cols={5}
         rows={12}
@@ -132,8 +130,10 @@ const AppConfiguration = () => {
             placeholder="Tea001"
             value={formData.teaId}
             onChange={handleChange}
+            required
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Tea Type:</span>
           <select
@@ -145,18 +145,21 @@ const AppConfiguration = () => {
             <option value="Tea Baja">Tea Baja</option>
           </select>
         </GridElement>
+
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
-            options={composition}
+            optionValues={optionValues}
+            setOptionValues={setOptionValues}
             onSelect={handleSelect}
             initiallySelected={initiallySelected}
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA height(ft)</span>
           <input
-            type="text"
+            type="number"
             name="height"
             placeholder="  30"
             value={formData.height}
@@ -182,13 +185,14 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA diameter(ft)</span>
           <input
-            type="text"
-            name="diameter"
+            type="number"
+            name="teaDiameter"
             placeholder="  9.1"
-            value={formData.diameter}
+            value={formData.teaDiameter}
             onChange={handleChange}
           />
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operation segment:</span>
           <select
@@ -205,7 +209,7 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Instalation Year</span>
           <input
-            type="text"
+            type="number"
             name="instalationYear"
             placeholder=" 2024"
             value={formData.instalationYear}
@@ -240,23 +244,21 @@ const AppConfiguration = () => {
             value={formData.measureType}
             onChange={handleChange}
           >
-            <option value="Balance">Coriolis</option>
+            <option value="Coriolis">Coriolis</option>
             <option value="Ultrasonico">Ultrasonico</option>
-            <option value="Balance">Daniel's</option>
-            <option value="Ultrasonico">Thermal dispersion</option>
-            <option value="Balance">Orifice plate</option>
-            <option value="Ultrasonico">Vortex</option>
-            <option value="Ultrasonico">
-              Single Point Insertion Flowmeter
-            </option>
+            <option value="Daniel's">Daniel's</option>
+            <option value="Thermal dispersion">Thermal dispersion</option>
+            <option value="Orifice plate">Orifice plate</option>
+            <option value="Vortex">Vortex</option>
+            <option value="SPIF">Single Point Insertion Flowmeter</option>
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Wind Speed (m/s): </span>
           <input
-            type="text"
-            name="WindSpeed"
-            placeholder=" 4"
+            type="number"
+            name="wind"
+            placeholder="4"
             value={formData.wind}
             onChange={handleChange}
           />
@@ -264,8 +266,8 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operating frequency :</span>
           <select
-            name="Operating Frequency"
-            value={formData.OperatingFrequency}
+            name="frecuency"
+            value={formData.frecuency}
             onChange={handleChange}
           >
             <option value="Balance">Continuous</option>
@@ -273,31 +275,34 @@ const AppConfiguration = () => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea Diameter (ft):</span>
-          <input
-            type="text"
-            name="TeaDiameter"
-            placeholder=" 8.1"
-            value={formData.wind}
-            onChange={handleChange}
-          />
-        </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Longitude:</span>
           <input
             type="text"
             name="longitude"
-            placeholder=""
+            placeholder="-75.290777"
             value={formData.longitude}
             onChange={handleChange}
           />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Default calculation Model:</span>
+          <select
+            name="defaultModel"
+            value={formData.defaultModel}
+            onChange={handleChange}
+          >
+            <option value="anh">ANH Model</option>
+            <option value="west">West Model</option>
+            <option value="em_factor">Emissions Factor Model</option>
+            <option value="cu_factor">Cu Factor Model</option>
+          </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Latitude:</span>
           <input
             type="text"
             name="latitude"
-            placeholder=""
+            placeholder="3.072371"
             value={formData.latitude}
             onChange={handleChange}
           />
@@ -305,17 +310,37 @@ const AppConfiguration = () => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Estimated Operative Hours in one Year:</span>
           <input
-            type="text"
+            type="number"
             name="estimatedHours"
-            placeholder=" 3500"
+            placeholder=" 0"
             value={formData.estimatedHours}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>High-High Alrm:</span>
+          <input
+            type="text"
+            name="HH"
+            placeholder=""
+            value={formData.HH}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>High Alrm:</span>
+          <input
+            type="text"
+            name="H"
+            placeholder=""
+            value={formData.H}
             onChange={handleChange}
           />
         </GridElement>
         <GridElement rows={4} cols={4}>
           <GridUtil rows={4} cols={4}>
             <GridElement rows={1} cols={4} ns>
-              <h5>Extra Components</h5>
+              <h5>Add Extra Components</h5>
             </GridElement>
             <GridElement
               className="grid-cell-white justified"
@@ -323,10 +348,10 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 1 name:</span>
+              <span>chemical symbol:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
                 name="AC1"
                 placeholder="component name"
               />
@@ -339,10 +364,10 @@ const AppConfiguration = () => {
             >
               <span>Gwp:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={gwp}
+                onChange={(event) => setGwp(event.target.value)}
                 name="AC1"
-                placeholder="gwp value"
+                placeholder="GWP value"
               />
             </GridElement>
             <GridElement
@@ -351,12 +376,12 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 2 name:</span>
+              <span>MW Value:</span>
               <input
-                value={aditional2}
-                onChange={(event) => setAditional2(event.target.value)}
-                name="AC1"
-                placeholder="component name"
+                value={mw}
+                onChange={(event) => setMw(event.target.value)}
+                name="MW"
+                placeholder="Molecular weight"
               />
             </GridElement>
             <GridElement
@@ -365,12 +390,12 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Gwp:</span>
+              <span>LHW Value:</span>
               <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
+                value={lhw}
+                onChange={(event) => setlhw(event.target.value)}
                 name="AC1"
-                placeholder="gwp value"
+                placeholder="Lower Heating weight value"
               />
             </GridElement>
             <GridElement
@@ -379,33 +404,27 @@ const AppConfiguration = () => {
               cols={2}
               style={{ border: "none" }}
             >
-              <span>Component 3 name:</span>
+              <span>SC Value:</span>
               <input
-                value={aditional3}
-                onChange={(event) => setAditional3(event.target.value)}
+                value={sc}
+                onChange={(event) => setSc(event.target.value)}
                 name="AC1"
-                placeholder="component name"
+                placeholder="Stoichiometric coefficient"
               />
             </GridElement>
             <GridElement
-              className="grid-cell-white justified"
               rows={1}
               cols={2}
-              style={{ border: "none" }}
+              ns
+              style={{ justifyContent: "center" }}
             >
-              <span>Gwp:</span>
-              <input
-                value={aditional1}
-                onChange={(event) => setAditional1(event.target.value)}
-                name="AC1"
-                placeholder="gwp value"
-              />
+              <Button type="submit"> Add </Button>
             </GridElement>
           </GridUtil>
         </GridElement>
         <GridElement
           className="grid-cell-white justified"
-          rows={2}
+          rows={3}
           cols={1}
           style={{ justifyContent: "center" }}
         >

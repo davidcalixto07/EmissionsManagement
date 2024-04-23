@@ -32,12 +32,11 @@ const DatePicker = ({ setDate, placement = "bottom", disabled, defaultDate = def
     const newState = {
       startDate: addDays(state[0].startDate, -dayDifference),
       endDate: addDays(state[0].endDate, -dayDifference),
-      key: "selection",
+      key: "default",
     }
     setState([newState]);
     if (setDate) {
       setDate(newState);
-      console.log("Setting date to ", state[0]);
     }
   }
 
@@ -46,12 +45,11 @@ const DatePicker = ({ setDate, placement = "bottom", disabled, defaultDate = def
     const newState = {
       startDate: addDays(state[0].startDate, dayDifference),
       endDate: addDays(state[0].endDate, dayDifference),
-      key: "selection",
+      key: "default",
     }
     setState([newState]);
     if (setDate) {
       setDate(newState);
-      console.log("Setting date to ", state[0]);
     }
   }
 
@@ -59,7 +57,6 @@ const DatePicker = ({ setDate, placement = "bottom", disabled, defaultDate = def
     setShow(false);
     if (show && setDate) {
       setDate(state[0]);
-      console.log("Setting date to ", state[0]);
     }
   }
 
@@ -73,7 +70,7 @@ const DatePicker = ({ setDate, placement = "bottom", disabled, defaultDate = def
             <Popover.Body className="DateTimeContainer">
               <DateRangePicker
                 showDateDisplay={false}
-                onChange={(item) => setState([item.selection])}
+                onChange={(item) => { console.warn("OnChange", item); setState([item.default]) }}
                 showSelectionPreview={true}
                 moveRangeOnFirstSelection={false}
                 months={2}

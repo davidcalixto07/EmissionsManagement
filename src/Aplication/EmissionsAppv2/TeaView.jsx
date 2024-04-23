@@ -19,6 +19,7 @@ const TeaView = () => {
     coordinates,
     imageSrc,
     loading,
+    setDates
   ] = useOutletContext();
   const [assetData, setAssetData] = useState({ timeSerie: [] });
   const [results, setResults] = useState({});
@@ -28,10 +29,13 @@ const TeaView = () => {
 
     const tea = teasList.find((x) => x.assetId == selectedAsset.assetId);
     console.log("Finded ", tea);
-    if (tea && tea.timeSerie && tea.timeSerie.length) setAssetData(tea);
+    if (tea)
+      setAssetData(tea);
   }, [selectedAsset, teasList]);
 
-  function HandleDateChange() {}
+  function HandleDateChange(dates) {
+    setDates(dates);
+  }
 
   function handleChange(a) {
     setViewDate(a === "Emissions View");
@@ -58,7 +62,9 @@ const TeaView = () => {
       </AppTab>
 
       <AppTab label="Tea Config">
-        <TeaCreation />
+        <div style={{ height: "calc(100% - 4em)" }}>
+          <TeaCreation assetData={assetData} />
+        </div>
       </AppTab>
     </TabbedAppLayout>
   );
