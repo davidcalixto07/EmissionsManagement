@@ -241,15 +241,13 @@ const AppConfiguration = () => {
             value={formData.measureType}
             onChange={handleChange}
           >
-            <option value="Balance">Coriolis</option>
+            <option value="Coriolis">Coriolis</option>
             <option value="Ultrasonico">Ultrasonico</option>
-            <option value="Balance">Daniel's</option>
-            <option value="Ultrasonico">Thermal dispersion</option>
-            <option value="Balance">Orifice plate</option>
-            <option value="Ultrasonico">Vortex</option>
-            <option value="Ultrasonico">
-              Single Point Insertion Flowmeter
-            </option>
+            <option value="Daniel's">Daniel's</option>
+            <option value="Thermal dispersion">Thermal dispersion</option>
+            <option value="Orifice plate">Orifice plate</option>
+            <option value="Vortex">Vortex</option>
+            <option value="SPIF">Single Point Insertion Flowmeter</option>
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
