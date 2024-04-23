@@ -51,8 +51,8 @@ const emptyForm = {
   instalationYear: 2024,
   transmitterSerial: "",
   wind: 0,
-  longitude: 3.072371,
-  latitude: -75.29077,
+  longitude: -75.29077,
+  latitude: 3.072371,
   HH: 0,
 
   teaType: "Tea Alta",
@@ -277,7 +277,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Longitude:</span>
           <input
-            type="text"
+            type="number"
             name="longitude"
             placeholder="-75.290777"
             value={formData.longitude}
@@ -300,7 +300,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Latitude:</span>
           <input
-            type="text"
+            type="number"
             name="latitude"
             placeholder="3.072371"
             value={formData.latitude}
@@ -320,7 +320,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>High-High Alrm:</span>
           <input
-            type="text"
+            type="number"
             name="HH"
             placeholder=""
             value={formData.HH}
@@ -330,7 +330,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>High Alrm:</span>
           <input
-            type="text"
+            type="number"
             name="H"
             placeholder=""
             value={formData.H}
