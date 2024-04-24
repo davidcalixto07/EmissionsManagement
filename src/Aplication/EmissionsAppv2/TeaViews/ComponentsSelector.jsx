@@ -48,33 +48,39 @@ export const ComponentSelector = ({
             alignContent: "start",
             alignItems: "center",
             marginBottom: "0.1rem",
+            justifyContent: 'space-around',
+            display: 'flex',
+            flexWrap: 'nowrap'
           }}
         >
-          <label>
+          <span style={{ width: '4rem', textAlign: 'end' }}>
             {option}
-            <input
-              type="checkbox"
-              value={option}
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-            />
+          </span>
+          <div>
             <input
               type="text"
               name={option}
               style={{
                 width: "5em",
                 paddingLeft: "0.4rem",
-                marginRight: "1rem",
                 border: "none",
                 backgroundColor: "transparent",
                 borderBottom: "1px dotted rgb(0, 0, 0, 0.5)",
+                textAlign: 'end'
               }}
               value={optionValues[option]}
               placeholder={initiallySelected[option]}
               onChange={handleChange}
             />
             %
-          </label>
+          </div>
+          <input
+            type="checkbox"
+            value={option}
+            checked={selectedOptions.includes(option)}
+            onChange={() => toggleOption(option)}
+            style={{ width: '2rem' }}
+          />
         </div>
       ))}
     </div>
