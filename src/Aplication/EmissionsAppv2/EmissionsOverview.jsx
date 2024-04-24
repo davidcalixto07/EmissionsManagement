@@ -201,7 +201,7 @@ const EmissionsOverview = () => {
       </GridElement>
 
       <GridElement cols={3} rows={1} className="grid-cell-white center">
-        <button className="ReportButton" onClick={() => setDirectModal(true)}>
+        <button className="ReportButton" onClick={() => setDirectModal(false)}>
           Direct Emissions Data
         </button>
       </GridElement>

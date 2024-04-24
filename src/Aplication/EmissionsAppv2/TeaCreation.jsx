@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CustomGrid from "../Utils/CustomGrid";
-import GridUtil from "../Utils/GridUtil";
+import AddComponent from "../../Componentes/Datasources/AddComponent";
 import GridElement from "../Utils/GridElement";
 import { ComponentSelector } from "./TeaViews/ComponentsSelector";
 import { Button } from "react-bootstrap";
@@ -46,42 +46,31 @@ const initiallySelected = {
 
 const emptyForm = {
   teaId: "",
-  height: 30,
-  teaDiameter: 9.1,
-  instalationYear: 2024,
-  transmitterSerial: "",
-  wind: 0,
-  longitude: -75.29077,
-  latitude: 3.072371,
-  HH: 0,
-
   teaType: "Tea Alta",
-  tecnology: "Tea Combinada",
+  pressure: "",
+  tecnology: "",
+  height: "",
+  diameter: "",
   segment: "Exploración",
+  instalationYear: "",
+  estimatedHours: "",
   measureMethod: "Balance",
   measureType: "Coriolis",
-  frecuency: "Continuous",
-  defaultModel: "anh",
-  estimatedHours: 0,
-  H: 0,
+  transmitterSerial: "",
+  latitude: "",
+  longitude: "",
+  wind: "",
+  teaDiameter: "",
+  defaultModel: "None",
+  HH: "",
+  H: "",
 };
 
-const AppConfiguration = ({ assetData }) => {
+const AppConfiguration = () => {
   const [formData, setFormData] = useState(emptyForm);
   const [statusText, setStatusText] = useState("");
-
-  //Component creation
-  const [name, setName] = useState("");
-  const [gwp, setGwp] = useState("");
-  const [mw, setMw] = useState("");
-  const [lhw, setlhw] = useState("");
-  const [sc, setSc] = useState("");
-
-  useEffect(() => {
-    if (assetData?.data)
-      setFormData(assetData.data);
-  }, [assetData]);
-
+  const [extraComponent, setExtraComponent] = useState([]);
+  const [showModalExtraComponent, setShowModalExtraComponent] = useState(false);
   const [optionValues, setOptionValues] = useState(initiallySelected);
 
   const handleSelect = (selectedOptions) => {
@@ -91,19 +80,28 @@ const AppConfiguration = ({ assetData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const newValue = e.target.type === 'number' ?
-      parseFloat(value) : value;
+    const parsed_value = parseFloat(value);
+    const newValue = isNaN(parsed_value) ? value : parsed_value;
 
     setFormData((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    console.log(optionValues);
+
+    const newAsset = {
+      name: formData.teaId,
+      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
+      location: {
+        longitude: formData.longitude,
+        latitude: formData.latitude,
+      },
+      typeId: "colwest2.TeaEmisionesFlowData",
+    };
+
     try {
       const response = await axios.post("/api/assets/CreateAsset", formData);
       console.log("Response:", response.data);
@@ -114,11 +112,21 @@ const AppConfiguration = ({ assetData }) => {
     }
   };
 
+  function saveComponent(data) {
+    setExtraComponent(data);
+    setShowModalExtraComponent(false);
+  }
+
+  function saveComponent(data) {
+    setExtraComponent(data);
+    setShowModalExtraComponent(false);
+  }
+  console.log(extraComponent);
   return (
     <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
         cols={5}
-        rows={12}
+        rows={10}
         className={"Overview-100"}
         style={{ justifyContent: "space-between" }}
       >
@@ -133,7 +141,6 @@ const AppConfiguration = ({ assetData }) => {
             required
           />
         </GridElement>
-
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Tea Type:</span>
           <select
@@ -145,7 +152,6 @@ const AppConfiguration = ({ assetData }) => {
             <option value="Tea Baja">Tea Baja</option>
           </select>
         </GridElement>
-
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
           <h4 style={{ margin: "10px" }}>Tea Components</h4>
           <ComponentSelector
@@ -154,12 +160,15 @@ const AppConfiguration = ({ assetData }) => {
             onSelect={handleSelect}
             initiallySelected={initiallySelected}
           />
+          <Button onClick={() => setShowModalExtraComponent(true)}>
+            {" "}
+            Add Component{" "}
+          </Button>
         </GridElement>
-
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA height(ft)</span>
           <input
-            type="number"
+            type="text"
             name="height"
             placeholder="  30"
             value={formData.height}
@@ -185,14 +194,13 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA diameter(ft)</span>
           <input
-            type="number"
-            name="teaDiameter"
+            type="text"
+            name="diameter"
             placeholder="  9.1"
-            value={formData.teaDiameter}
+            value={formData.diameter}
             onChange={handleChange}
           />
         </GridElement>
-
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operation segment:</span>
           <select
@@ -209,7 +217,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Instalation Year</span>
           <input
-            type="number"
+            type="text"
             name="instalationYear"
             placeholder=" 2024"
             value={formData.instalationYear}
@@ -256,7 +264,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Wind Speed (m/s): </span>
           <input
-            type="number"
+            type="text"
             name="wind"
             placeholder="4"
             value={formData.wind}
@@ -266,8 +274,8 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Operating frequency :</span>
           <select
-            name="frecuency"
-            value={formData.frecuency}
+            name="Operating Frequency"
+            value={formData.OperatingFrequency}
             onChange={handleChange}
           >
             <option value="Balance">Continuous</option>
@@ -277,7 +285,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Longitude:</span>
           <input
-            type="number"
+            type="text"
             name="longitude"
             placeholder="-75.290777"
             value={formData.longitude}
@@ -285,9 +293,9 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Default calculation Model:</span>
+          <span>Default calculus Model :</span>
           <select
-            name="defaultModel"
+            name="Default Calculus Model"
             value={formData.defaultModel}
             onChange={handleChange}
           >
@@ -300,7 +308,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Position: Latitude:</span>
           <input
-            type="number"
+            type="text"
             name="latitude"
             placeholder="3.072371"
             value={formData.latitude}
@@ -310,9 +318,9 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Estimated Operative Hours in one Year:</span>
           <input
-            type="number"
+            type="text"
             name="estimatedHours"
-            placeholder=" 0"
+            placeholder=" 3500"
             value={formData.estimatedHours}
             onChange={handleChange}
           />
@@ -320,7 +328,7 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>High-High Alrm:</span>
           <input
-            type="number"
+            type="text"
             name="HH"
             placeholder=""
             value={formData.HH}
@@ -330,108 +338,28 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>High Alrm:</span>
           <input
-            type="number"
+            type="text"
             name="H"
             placeholder=""
             value={formData.H}
             onChange={handleChange}
           />
         </GridElement>
-        <GridElement rows={4} cols={4}>
-          <GridUtil rows={4} cols={4}>
-            <GridElement rows={1} cols={4} ns>
-              <h5>Add Extra Components</h5>
-            </GridElement>
-            <GridElement
-              className="grid-cell-white justified"
-              rows={1}
-              cols={2}
-              style={{ border: "none" }}
-            >
-              <span>chemical symbol:</span>
-              <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                name="AC1"
-                placeholder="component name"
-              />
-            </GridElement>
-            <GridElement
-              className="grid-cell-white justified"
-              rows={1}
-              cols={2}
-              style={{ border: "none" }}
-            >
-              <span>Gwp:</span>
-              <input
-                value={gwp}
-                onChange={(event) => setGwp(event.target.value)}
-                name="AC1"
-                placeholder="GWP value"
-              />
-            </GridElement>
-            <GridElement
-              className="grid-cell-white justified"
-              rows={1}
-              cols={2}
-              style={{ border: "none" }}
-            >
-              <span>MW Value:</span>
-              <input
-                value={mw}
-                onChange={(event) => setMw(event.target.value)}
-                name="MW"
-                placeholder="Molecular weight"
-              />
-            </GridElement>
-            <GridElement
-              className="grid-cell-white justified"
-              rows={1}
-              cols={2}
-              style={{ border: "none" }}
-            >
-              <span>LHW Value:</span>
-              <input
-                value={lhw}
-                onChange={(event) => setlhw(event.target.value)}
-                name="AC1"
-                placeholder="Lower Heating weight value"
-              />
-            </GridElement>
-            <GridElement
-              className="grid-cell-white justified"
-              rows={1}
-              cols={2}
-              style={{ border: "none" }}
-            >
-              <span>SC Value:</span>
-              <input
-                value={sc}
-                onChange={(event) => setSc(event.target.value)}
-                name="AC1"
-                placeholder="Stoichiometric coefficient"
-              />
-            </GridElement>
-            <GridElement
-              rows={1}
-              cols={2}
-              ns
-              style={{ justifyContent: "center" }}
-            >
-              <Button type="submit"> Add </Button>
-            </GridElement>
-          </GridUtil>
-        </GridElement>
         <GridElement
           className="grid-cell-white justified"
-          rows={3}
-          cols={1}
+          rows={1}
+          cols={4}
           style={{ justifyContent: "center" }}
         >
           <Button type="submit">Submit</Button>
         </GridElement>
         <h5>{statusText}</h5>
       </CustomGrid>
+      <AddComponent
+        show={showModalExtraComponent}
+        setShow={setShowModalExtraComponent}
+        saveComponent={saveComponent}
+      />
     </form>
   );
 };
