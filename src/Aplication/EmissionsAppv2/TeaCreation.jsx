@@ -129,7 +129,7 @@ const AppConfiguration = () => {
         style={{ justifyContent: "space-between" }}
       >
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea ID:</span>
+          <span>Tea ID: * </span>
           <input
             type="text"
             name="teaId"
@@ -174,13 +174,14 @@ const AppConfiguration = () => {
           </div>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>TEA height(ft)</span>
+          <span>Wind Speed (m/s): * </span>
           <input
             type="text"
-            name="height"
-            placeholder="  30"
-            value={formData.height}
+            name="wind"
+            placeholder="4"
+            value={formData.wind}
             onChange={handleChange}
+            required
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
@@ -198,7 +199,52 @@ const AppConfiguration = () => {
             <option value="Tea móvil- Temporal">Tea móvil- Temporal</option>
           </select>
         </GridElement>
-
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Position: Longitude: *</span>
+          <input
+            type="text"
+            name="longitude"
+            placeholder="-75.290777"
+            value={formData.longitude}
+            onChange={handleChange}
+            required
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Operating frequency :</span>
+          <select
+            name="Operating Frequency"
+            value={formData.OperatingFrequency}
+            onChange={handleChange}
+          >
+            <option value="Balance">Continuous</option>
+            <option value="Medidor">Intermittent</option>
+          </select>
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Position: Latitude: *</span>
+          <input
+            type="text"
+            name="latitude"
+            placeholder="3.072371"
+            value={formData.latitude}
+            onChange={handleChange}
+            required
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Default calculus Model :</span>
+          <select
+            name="Default Calculus Model"
+            value={formData.defaultModel}
+            onChange={handleChange}
+          >
+            <option value="anh">ANH Model</option>
+            <option value="west">West Model</option>
+            <option value="em_factor">Emissions Factor Model</option>
+            <option value="cu_factor">Cu Factor Model</option>
+          </select>
+        </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA diameter(ft)</span>
           <input
@@ -269,60 +315,18 @@ const AppConfiguration = () => {
             <option value="SPIF">Single Point Insertion Flowmeter</option>
           </select>
         </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Wind Speed (m/s): </span>
+          <span>TEA height(ft)</span>
           <input
             type="text"
-            name="wind"
-            placeholder="4"
-            value={formData.wind}
+            name="height"
+            placeholder="  30"
+            value={formData.height}
             onChange={handleChange}
           />
         </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Operating frequency :</span>
-          <select
-            name="Operating Frequency"
-            value={formData.OperatingFrequency}
-            onChange={handleChange}
-          >
-            <option value="Balance">Continuous</option>
-            <option value="Medidor">Intermittent</option>
-          </select>
-        </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Position: Longitude:</span>
-          <input
-            type="text"
-            name="longitude"
-            placeholder="-75.290777"
-            value={formData.longitude}
-            onChange={handleChange}
-          />
-        </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Default calculus Model :</span>
-          <select
-            name="Default Calculus Model"
-            value={formData.defaultModel}
-            onChange={handleChange}
-          >
-            <option value="anh">ANH Model</option>
-            <option value="west">West Model</option>
-            <option value="em_factor">Emissions Factor Model</option>
-            <option value="cu_factor">Cu Factor Model</option>
-          </select>
-        </GridElement>
-        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Position: Latitude:</span>
-          <input
-            type="text"
-            name="latitude"
-            placeholder="3.072371"
-            value={formData.latitude}
-            onChange={handleChange}
-          />
-        </GridElement>
+
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Estimated Operative Hours in one Year:</span>
           <input
