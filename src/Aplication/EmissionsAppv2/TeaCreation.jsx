@@ -6,25 +6,6 @@ import { ComponentSelector } from "./TeaViews/ComponentsSelector";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-const composition = [
-  "C1",
-  "C2",
-  "C3",
-  "I-C4",
-  "C4",
-  "N-C5",
-  "I-C5",
-  "C5",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C10",
-  "CO2",
-  "N2",
-  "H2O",
-];
-
 const initiallySelected = {
   C1: 85.4305,
   C2: 8.5901,
