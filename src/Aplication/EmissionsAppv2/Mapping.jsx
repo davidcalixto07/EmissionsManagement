@@ -153,9 +153,11 @@ const Mapping = () => {
       dp_type: selectedDataSource.type,
       datapoints: dataMapings,
     };
-    if (await PostDatamappings(json))
+    if (await PostDatamappings(json)) {
       updateMappings(selectedDataSource.direction);
-    else console.log("Not created");
+    } else {
+      console.log("Not created");
+    }
   }
 
   useEffect(() => {

@@ -389,6 +389,32 @@ span.unit {
     margin: 0.5rem;
 }
 
-
-
+.tooltip-container {
+    position: relative;
+    display: inline-block; /* Para que el contenedor se ajuste al contenido */
+  }
+  
+  .tooltip-content {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0d6efd;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 12em;
+  }
+  
+  .tooltip-container:hover .tooltip-content {
+    display: block;
+  }
+  
+  .content {
+    /* Estilos para el contenido del div */
+    border-radius: 5px;
+  }
+  
   

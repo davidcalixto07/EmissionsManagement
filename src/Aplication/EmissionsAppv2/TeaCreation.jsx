@@ -129,7 +129,7 @@ const AppConfiguration = () => {
         style={{ justifyContent: "space-between" }}
       >
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea ID: * </span>
+          <span title="Campo Obligatorio"> Tea ID: * </span>
           <input
             type="text"
             name="teaId"
@@ -171,6 +171,20 @@ const AppConfiguration = () => {
               (total, current) => total + current,
               0
             )}
+            <br></br>
+            <div className="tooltip-container">
+              <div
+                className="tooltip-content"
+                data-tooltip="Información de ayuda"
+              >
+                The total composition should be 100%, but if it's not, you
+                should keep the diference lower than 1.5%
+              </div>
+              <div className="content">
+                {" "}
+                <img src="./info.png" width={35} />
+              </div>
+            </div>
           </div>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
