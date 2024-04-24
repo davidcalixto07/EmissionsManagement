@@ -155,8 +155,13 @@ const Mapping = () => {
     };
     if (await PostDatamappings(json)) {
       updateMappings(selectedDataSource.direction);
+      setShowAlerts(true);
+      setResponse(200);
     } else {
       console.log("Not created");
+      setShowAlerts(true);
+      console.log(response);
+      setResponse(response);
     }
   }
 
@@ -319,7 +324,7 @@ const Mapping = () => {
             backgroundColor: "transparent",
           }}
         >
-          <Button variant="primary" onClick={() => saveMappings}>
+          <Button variant="primary" onClick={() => saveMappings()}>
             Apply Mappings
           </Button>
         </GridElement>
