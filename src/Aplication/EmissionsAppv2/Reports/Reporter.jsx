@@ -63,6 +63,46 @@ const jsonData = {
       EN20: "20",
       ECO2e: "200",
     },
+    {
+      id: "",
+      altura: "",
+      diametro: "",
+      Ainstalacion: "",
+      Ffun: "",
+      Hfun: "2",
+      Segmento: "A",
+      medicion: "manual",
+      medidor: "manual",
+      serial: "xzer21",
+      vgqocp: "20",
+      vgqpi: "15",
+      vgnqpe: "15",
+      vgqgp: "12",
+      vgqpp: "10",
+      vgqev: "8",
+      gvirc: "3",
+      qpenp: "2",
+      fe: "0.5",
+      Tr: "0.3",
+      FF: "3",
+      vgqenp: "2",
+      qppp: "3",
+      KPCA: "200",
+      CE: "20",
+      DRE: "30",
+      C1: "20",
+      C2: "20",
+      C3: "20",
+      C4: "20",
+      C5: "20",
+      "C6+": "20",
+      H2: "20",
+      C02: "20",
+      ECO2: "20",
+      ECH4: "20",
+      EN20: "20",
+      ECO2e: "200",
+    }
   ],
 };
 
@@ -149,7 +189,7 @@ const Reporter = () => {
         <Document>
           <Page
             orientation="landscape"
-            size={{ width: 780, height: 1480 }}
+            size={{ width: 780, height: 1980 }}
             style={styles.page}
           >
             <View style={styles.section}>
@@ -306,91 +346,56 @@ const Reporter = () => {
                   </View>
                 </View>
                 {/*Contenido 1*/}
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].id} </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}> </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].altura}</Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>
-                      {jsonData.TEAS[0].diametro}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>
-                      {jsonData.TEAS[0].Ainstalacion}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].Ffun}</Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].Hfun}</Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>
-                      {jsonData.TEAS[0].Segmento}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>
-                      {jsonData.TEAS[0].medicion}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].medidor}</Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text style={styles.text1}>{jsonData.TEAS[0].serial}</Text>
-                  </View>
-                </View>
-                {/*Contenido 1-1*/}
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCell}>
-                    <Text> </Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                  <View style={styles.tableCell}>
-                    <Text></Text>
-                  </View>
-                </View>
+                {
+                  jsonData.TEAS.map((tea) =>
+                    <View style={styles.tableRow}>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.id} </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}> </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}></Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.altura}</Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>
+                          {tea.diametro}
+                        </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>
+                          {tea.Ainstalacion}
+                        </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.Ffun}</Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.Hfun}</Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>
+                          {tea.Segmento}
+                        </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>
+                          {tea.medicion}
+                        </Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.medidor}</Text>
+                      </View>
+                      <View style={styles.tableCell}>
+                        <Text style={styles.text1}>{tea.serial}</Text>
+                      </View>
+                    </View>
+                  )
+                }
                 {/*Contenido 1-2*/}
                 <View style={styles.tableRow}>
                   <View style={styles.tableCell}>

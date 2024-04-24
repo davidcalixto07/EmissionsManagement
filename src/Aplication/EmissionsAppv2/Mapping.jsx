@@ -33,7 +33,7 @@ const Mapping = () => {
   const [selectedDataPoint, setSelectedDataPoint] = useState(null);
   const [response, setResponse] = useState(200);
   const [, , , , , teasList, , ,] = useOutletContext();
-
+  console.warn("TEASlIST", teasList);
 
   async function updateMappings(ds_direction) {
     const res = await GetMappings(ds_direction)

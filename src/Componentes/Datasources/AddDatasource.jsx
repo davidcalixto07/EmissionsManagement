@@ -51,7 +51,7 @@ function AddDatasource({ show, setShow, saveDatasource }) {
               name: name,
               direction: direction,
               type: type,
-              status: "Disconnected",
+              slot: slot,
             })
           }
         >

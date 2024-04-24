@@ -29,7 +29,7 @@ const Datapoint = ({
         <span>
           <select
             id="dropdown"
-            defaultValue={datapoint.flare ?? ''}
+            value={datapoint.flare ?? ''}
             onChange={(event) =>
               HandleMappingFlare(datapoint, event.target.value)
             }
