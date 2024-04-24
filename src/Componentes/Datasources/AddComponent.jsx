@@ -114,7 +114,9 @@ function AddComponent({ show, setShow, saveComponent }) {
         </Button>
         <Button
           variant="primary"
-          onClick={() => saveComponent([name, lhw, gwp, mw, sc])}
+          onClick={() =>
+            saveComponent([{ [name]: { lhw: lhw, gwp: gwp, mw: mw, sc: sc } }])
+          }
         >
           Save
         </Button>

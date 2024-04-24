@@ -6,6 +6,25 @@ import { ComponentSelector } from "./TeaViews/ComponentsSelector";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
+const composition = [
+  "C1",
+  "C2",
+  "C3",
+  "I-C4",
+  "C4",
+  "N-C5",
+  "I-C5",
+  "C5",
+  "C6",
+  "C7",
+  "C8",
+  "C9",
+  "C10",
+  "CO2",
+  "N2",
+  "H2O",
+];
+
 const initiallySelected = {
   C1: 85.4305,
   C2: 8.5901,
@@ -92,7 +111,6 @@ const AppConfiguration = () => {
       console.error("Error:", error);
     }
   };
-
   function saveComponent(data) {
     setExtraComponent(data);
     setShowModalExtraComponent(false);
@@ -102,7 +120,6 @@ const AppConfiguration = () => {
     setExtraComponent(data);
     setShowModalExtraComponent(false);
   }
-  console.log(extraComponent);
   return (
     <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
@@ -134,17 +151,27 @@ const AppConfiguration = () => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
-          <h4 style={{ margin: "10px" }}>Tea Components</h4>
+          <h4 style={{ margin: "10px" }}>Tea Components Composition</h4>
           <ComponentSelector
             optionValues={optionValues}
             setOptionValues={setOptionValues}
             onSelect={handleSelect}
             initiallySelected={initiallySelected}
           />
-          <Button onClick={() => setShowModalExtraComponent(true)}>
-            {" "}
-            Add Component{" "}
-          </Button>
+          <div>
+            <br></br>
+            <Button onClick={() => setShowModalExtraComponent(true)}>
+              {" "}
+              Add Component{" "}
+            </Button>
+            <br></br>
+
+            <span> Total Composition: </span>
+            {Object.values(optionValues).reduce(
+              (total, current) => total + current,
+              0
+            )}
+          </div>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>TEA height(ft)</span>
