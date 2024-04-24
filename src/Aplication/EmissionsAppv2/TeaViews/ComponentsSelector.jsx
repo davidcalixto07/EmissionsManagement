@@ -59,13 +59,15 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues }) =
         gridTemplateColumns: "repeat(1, 1fr)",
         paddingRight: "1rem",
         width: "Auto",
+        overflowY: 'Auto',
+        height: '70%'
       }}
     >
       {Object.keys(allComponents).map((option) => (
         <div
           key={option}
           style={{
-            width: "auto",
+            width: "100%",
             alignContent: "start",
             alignItems: "center",
             marginBottom: "0.1rem",
@@ -82,7 +84,7 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues }) =
               type="text"
               name={option}
               style={{
-                width: "5em",
+                width: "4rem",
                 paddingLeft: "0.4rem",
                 border: "none",
                 backgroundColor: "transparent",
