@@ -6,44 +6,6 @@ import { ComponentSelector } from "./TeaViews/ComponentsSelector";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-const composition = [
-  "C1",
-  "C2",
-  "C3",
-  "I-C4",
-  "C4",
-  "N-C5",
-  "I-C5",
-  "C5",
-  "C6",
-  "C7",
-  "C8",
-  "C9",
-  "C10",
-  "CO2",
-  "N2",
-  "H2O",
-];
-
-const initiallySelected = {
-  C1: 85.4305,
-  C2: 8.5901,
-  C3: 2.7031,
-  IC4: 0.1882,
-  C4: 0.2777,
-  NC5: 0,
-  IC5: 0.0359,
-  C5: 0.0207,
-  C6: 0.0263,
-  C7: 0.0048,
-  C8: 0.0014,
-  C9: 0.0016,
-  C10: 0,
-  CO2: 0.08757,
-  N2: 2.1649,
-  H2O: 0,
-};
-
 const emptyForm = {
   teaId: "",
   teaType: "Tea Alta",
@@ -71,10 +33,13 @@ const AppConfiguration = () => {
   const [statusText, setStatusText] = useState("");
   const [extraComponent, setExtraComponent] = useState([]);
   const [showModalExtraComponent, setShowModalExtraComponent] = useState(false);
-  const [optionValues, setOptionValues] = useState(initiallySelected);
+  const [optionValues, setOptionValues] = useState([]);
+  const [selectedComponents, setSelectedComponents] = useState([]);
 
+  console.log(optionValues);
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
+    setSelectedComponents(selectedOptions);
   };
 
   const handleChange = (e) => {
@@ -88,19 +53,12 @@ const AppConfiguration = () => {
       [name]: newValue,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
 
-    const newAsset = {
-      name: formData.teaId,
-      parentId: "fd95e6ff81fb47c4b7ce46b9d2b885c1",
-      location: {
-        longitude: formData.longitude,
-        latitude: formData.latitude,
-      },
-      typeId: "colwest2.TeaEmisionesFlowData",
-    };
+    formData.composition = optionValues;
 
     try {
       const response = await axios.post("/api/assets/CreateAsset", formData);
@@ -156,7 +114,6 @@ const AppConfiguration = () => {
             optionValues={optionValues}
             setOptionValues={setOptionValues}
             onSelect={handleSelect}
-            initiallySelected={initiallySelected}
           />
           <div>
             <br></br>

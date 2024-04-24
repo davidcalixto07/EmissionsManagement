@@ -29,6 +29,8 @@ const TeaView = () => {
 
     const tea = teasList.find((x) => x.assetId == selectedAsset.assetId);
     console.log("Finded ", tea);
+    tea.status = { anh: [], west: ['presssure', 'temperature'] }
+    
     if (tea)
       setAssetData(tea);
   }, [selectedAsset, teasList]);
