@@ -29,15 +29,19 @@ const Datapoint = ({
         <span>
           <select
             id="dropdown"
-            value={datapoint.flare ?? ''}
+            value={datapoint.flare ?? ""}
             onChange={(event) =>
               HandleMappingFlare(datapoint, event.target.value)
             }
           >
-            <option key={'default'} value={''}>{'None'}</option>
+            <option key={"default"} value={""}>
+              {"None"}
+            </option>
             {datasources.length > 0 &&
               teasList.map((tea) => (
-                <option key={tea.name} value={tea.name}>{tea.name}</option>
+                <option key={tea.name} value={tea.name}>
+                  {tea.name}
+                </option>
               ))}
           </select>
         </span>
@@ -53,6 +57,22 @@ const Datapoint = ({
             <option value="flow"> Gas Flow </option>
             <option value="pressure"> Gas Pressure </option>
             <option value="temperature"> Gas Temperature </option>
+            <option value="C1">C1</option>
+            <option value="C2"> C2</option>
+            <option value="C3"> C3 </option>
+            <option value="C4">C4</option>
+            <option value="IC-4"> IC-4 </option>
+            <option value="C5"> C5 </option>
+            <option value="NC5"> NC5 </option>
+            <option value="IC-5">IC-5</option>
+            <option value="C6"> C6 </option>
+            <option value="C7"> C7 </option>
+            <option value="C8"> C8 </option>
+            <option value="C9"> C9 </option>
+            <option value="C10"> C10 </option>
+            <option value="CO2"> CO2 </option>
+            <option value="N2"> N2 </option>
+            <option value="H2O"> H2O </option>
           </select>
         </span>
       </div>

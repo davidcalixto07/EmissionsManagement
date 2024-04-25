@@ -23,7 +23,7 @@ const emptyForm = {
   longitude: "",
   wind: "",
   teaDiameter: "",
-  defaultModel: "None",
+  defaultModel: "",
   HH: "",
   H: "",
 };

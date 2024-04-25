@@ -11,6 +11,7 @@ import TeaCreation from "./TeaCreation";
 import "../AppCommonStyles.css";
 import Mapping from "./Mapping";
 import License from "./License";
+import Westbot from "../../Componentes/Westbot/Westbot";
 
 export const EmissionsAppV2Routes = (
   <>
@@ -22,7 +23,6 @@ export const EmissionsAppV2Routes = (
     <Route index element={<EmissionsOverview />} />
   </>
 );
-
 
 const EmissionsAppV2 = () => {
   const [selectedAsset, setSelectedAsset] = useState(null);
@@ -76,6 +76,7 @@ const EmissionsAppV2 = () => {
           <span onClick={() => nav("/connection")}>Connection Mananger</span>
           <span onClick={() => nav("/license")}>License Manager</span>
         </div>
+        <Westbot />
       </AssetSidebar>
 
       <Outlet
