@@ -1,6 +1,6 @@
 import { Alert } from "react-bootstrap";
 
-const Alerts = ({ status, show, setShowAlert }) => {
+const Alerts = ({ status, message, show, setShowAlert }) => {
   return (
     <>
       {status == 200 ? (
@@ -11,7 +11,7 @@ const Alerts = ({ status, show, setShowAlert }) => {
           onClose={() => setShowAlert(false)}
           dismissible
         >
-          The Datapoint was <strong> created successfully </strong>
+          {message}
         </Alert>
       ) : (
         <Alert
