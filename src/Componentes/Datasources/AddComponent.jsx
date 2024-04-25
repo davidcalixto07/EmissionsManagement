@@ -119,7 +119,7 @@ function AddComponent({ show, setShow, saveComponent }) {
           }
         >
           Save
-        </Button>
+        </Button>   
       </Modal.Footer>
     </Modal>
   );

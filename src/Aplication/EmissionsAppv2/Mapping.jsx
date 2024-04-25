@@ -160,8 +160,6 @@ const Mapping = () => {
     } else {
       console.log("Not created");
       setShowAlerts(true);
-      console.log(response);
-      setResponse(response);
     }
   }
 
