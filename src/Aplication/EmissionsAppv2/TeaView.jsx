@@ -25,14 +25,15 @@ const TeaView = () => {
   const [results, setResults] = useState({});
 
   useEffect(() => {
-    if (!selectedAsset) return;
+    if (!selectedAsset)
+      return;
 
     const tea = teasList.find((x) => x.assetId == selectedAsset.assetId);
-    console.log("Finded ", tea);
-    tea.status = { anh: [], west: ['presssure', 'temperature'] }
-    
-    if (tea)
+    if (tea) {
+      console.log("Finded ", tea);
+      tea.status = { anh: [], west: ['presssure', 'temperature'] }
       setAssetData(tea);
+    }
   }, [selectedAsset, teasList]);
 
   function HandleDateChange(dates) {

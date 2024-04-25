@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomGrid from "../Utils/CustomGrid";
 import AddComponent from "../../Componentes/Datasources/AddComponent";
 import GridElement from "../Utils/GridElement";
@@ -28,7 +28,7 @@ const emptyForm = {
   H: "",
 };
 
-const AppConfiguration = () => {
+const AppConfiguration = ({ assetData }) => {
   const [formData, setFormData] = useState(emptyForm);
   const [statusText, setStatusText] = useState("");
   const [extraComponent, setExtraComponent] = useState([]);
@@ -36,7 +36,10 @@ const AppConfiguration = () => {
   const [optionValues, setOptionValues] = useState([]);
   const [selectedComponents, setSelectedComponents] = useState([]);
 
+  useEffect(() => { setFormData(assetData?.data ?? emptyForm) }, [assetData])
+
   console.log(optionValues);
+
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
     setSelectedComponents(selectedOptions);
@@ -56,9 +59,9 @@ const AppConfiguration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     formData.composition = optionValues;
+    console.log(formData);
 
     try {
       const response = await axios.post("/api/assets/CreateAsset", formData);
