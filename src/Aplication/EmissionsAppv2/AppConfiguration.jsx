@@ -66,7 +66,7 @@ const AppConfiguration = () => {
   }
 
   return (
-    <CustomGrid cols={1} rows={4} className={"Overview-100"}>
+    <CustomGrid cols={1} rows={3} className={"Overview-100"}>
       <GridElement className="grid-cell-white vert">
         <h4
           style={{ textAlign: "start", paddingLeft: "2rem", margin: "0.3rem" }}

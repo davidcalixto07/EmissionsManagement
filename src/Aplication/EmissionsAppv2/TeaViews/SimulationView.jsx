@@ -159,11 +159,13 @@ const SimulationView = ({ averages }) => {
       {/* <span style={{ color: 'red' }}>{errorMessage}</span> */}
       <GridElement rows={4} cols={4} className="grid-cell-white trans ns">
         <GridUtil rows={4} cols={2}>
-          <GridElement cols={2} ns className="grid-cell-white vert">
+          <GridElement
+            cols={2}
+            ns
+            className="grid-cell-white vert"
+            style={{ alignItems: "center" }}
+          >
             <h5>Gas Composition</h5>
-            <h6>
-              Molar composition -<span> sum: {sum.toFixed(3)}</span>
-            </h6>
           </GridElement>
           <GridElement rows={3} cols={2} ns className="grid-cell-white">
             <GridUtil rows={4} cols={3} ns>
@@ -222,13 +224,17 @@ const SimulationView = ({ averages }) => {
                 />
               </div>
               <div className="CompParameter">
-                <span>C10:</span>
+                <span>C6+:</span>
                 <input
                   value={comp[12]}
                   onChange={handleChangeComp}
                   name="C10"
                   type="number"
                 />
+              </div>
+              <div className="CompParameter">
+                <span>Molar composition:</span>
+                {sum.toFixed(3)}
               </div>
             </GridUtil>
           </GridElement>
@@ -258,7 +264,7 @@ const SimulationView = ({ averages }) => {
                 type="number"
                 value={pressure}
               />
-              <span className="unit">PSIG</span>
+              <span className="unit">psi</span>
             </div>
           </GridElement>
           <GridElement ns className="grid-cell-white">

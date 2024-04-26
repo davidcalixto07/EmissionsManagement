@@ -24,8 +24,10 @@ const emptyForm = {
   wind: "",
   teaDiameter: "",
   defaultModel: "",
-  HH: "",
-  H: "",
+  MaxEfficiency: "",
+  MinEfficiency: "",
+  CombustionEfficiency: "",
+  DestructionEfficiency: "",
 };
 
 const AppConfiguration = ({ assetData }) => {
@@ -96,12 +98,12 @@ const AppConfiguration = ({ assetData }) => {
     <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
         cols={5}
-        rows={10}
+        rows={11}
         className={"Overview-100"}
         style={{ justifyContent: "space-between" }}
       >
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span title="Campo Obligatorio"> Tea ID: * </span>
+          <span title="Campo Obligatorio"> Flear ID: * </span>
           <input
             type="text"
             name="teaId"
@@ -112,7 +114,7 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea Type:</span>
+          <span>Flear Type:</span>
           <select
             name="teaType"
             value={formData.teaType}
@@ -123,7 +125,7 @@ const AppConfiguration = ({ assetData }) => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
-          <h4 style={{ margin: "10px" }}>Tea Components Composition</h4>
+          <h4 style={{ margin: "10px" }}>Flear Components Composition</h4>
           <ComponentSelector
             optionValues={optionValues}
             setOptionValues={setOptionValues}
@@ -167,7 +169,7 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Tea Technology:</span>
+          <span>Flear Technology:</span>
           <select
             name="tecnology"
             value={formData.tecnology}
@@ -217,18 +219,19 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Default calculus Model :</span>
           <select
-            name="Default Calculus Model"
+            name="defaultModel"
             value={formData.defaultModel}
             onChange={handleChange}
           >
-            <option value="anh">ANH Model</option>
-            <option value="west">West Model</option>
-            <option value="em_factor">Emissions Factor Model</option>
-            <option value="cu_factor">Cu Factor Model</option>
+            <option value="anh">ANH</option>
+            <option value="west">West</option>
+            <option value="em_factor">Emissions Factor</option>
+            <option value="cu_factor">Custom User Factor</option>
+            <option value="Direct">Direct</option>
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>TEA diameter(ft)</span>
+          <span>Flear diameter(ft)</span>
           <input
             type="text"
             name="diameter"
@@ -299,7 +302,7 @@ const AppConfiguration = ({ assetData }) => {
         </GridElement>
 
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>TEA height(ft)</span>
+          <span>Flear height(ft)</span>
           <input
             type="text"
             name="height"
@@ -320,29 +323,49 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>High-High Alrm:</span>
+          <span>Max Flow Emissions</span>
           <input
             type="text"
-            name="HH"
+            name="MaximumEfficiency"
             placeholder=""
-            value={formData.HH}
+            value={formData.MaxEfficiency}
             onChange={handleChange}
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>High Alrm:</span>
+          <span>Minimum efficiency per Flare:</span>
           <input
             type="text"
-            name="H"
+            name="MinimumEfficiency"
             placeholder=""
-            value={formData.H}
+            value={formData.MinEfficiency}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Combustion Emissions</span>
+          <input
+            type="text"
+            name="CombustionEfficiency"
+            placeholder=""
+            value={formData.CombustionEfficiency}
+            onChange={handleChange}
+          />
+        </GridElement>
+        <GridElement className="grid-cell-white justified" rows={1} cols={2}>
+          <span>Destruction efficiency:</span>
+          <input
+            type="text"
+            name="DestructionEfficiency"
+            placeholder=""
+            value={formData.DestructionEfficiency}
             onChange={handleChange}
           />
         </GridElement>
         <GridElement
           className="grid-cell-white justified"
-          rows={1}
-          cols={4}
+          rows={2}
+          cols={6}
           style={{ justifyContent: "center" }}
         >
           <Button type="submit">Submit</Button>
