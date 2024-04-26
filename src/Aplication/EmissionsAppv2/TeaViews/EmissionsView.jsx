@@ -19,7 +19,7 @@ const colors = ["#0f2d57", "#f03030", "#30f030", "#30f030"];
 const EmissionsView = ({ data, units, loading, setCalcs }) => {
   const [timeseries, setTimeseries] = useState([]);
   const [tsTime, setTsTime] = useState([]);
-  const [model, setModel] = useState("West");
+  const [model, setModel] = useState("west");
   const [gas, setGas] = useState("All");
   const [gasesTs, setGasesTs] = useState([]);
 
@@ -58,14 +58,14 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
     if (!data || !data.timeSerie || !data.timeSerie.length) return;
 
     async function fetchData() {
-      const url = `/api/iottimeseries/v3/timeseries/${data.assetId
-        }/GasComposition?from=${data.timeSerie[data.timeSerie.length - 1]._time
-        }&sort=desc`;
+      const url = `/api/iottimeseries/v3/timeseries/${
+        data.assetId
+      }/GasComposition?from=${
+        data.timeSerie[data.timeSerie.length - 1]._time
+      }&sort=desc`;
       const response = await fetch(url);
       if (!response.ok) {
-        console.warn(
-          Error(`Failed to fetch data for assetId ${data.assetId}`)
-        );
+        console.warn(Error(`Failed to fetch data for assetId ${data.assetId}`));
         return;
       }
 
@@ -286,8 +286,8 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
           className="emissionsSelector"
           style={{ width: "7.5rem" }}
         >
-          <option>West</option>
-          <option>ANH</option>
+          <option value={"west"}>West </option>
+          <option value={"anh"}>ANH</option>
         </select>
         Gas:
         <select
@@ -304,12 +304,36 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
         </select>
       </GridElement>
 
-      <GridElement rows={6} cols={4} className="grid-cell-white">
-        <MultiTimeseries
-          title={`Emissions timeserie (${units.emissions.name})`}
-          values={gasesTs}
-          freeRatio
-        ></MultiTimeseries>
+      <GridElement
+        rows={6}
+        cols={4}
+        className="grid-cell-white"
+        style={{ justifyContent: "center" }}
+      >
+        {data.status?.[model].length < 1 ? (
+          <MultiTimeseries
+            title={`Emissions timeserie (${units.emissions.name})`}
+            values={gasesTs}
+            freeRatio
+          ></MultiTimeseries>
+        ) : (
+          <div className="tooltip-container">
+            <div
+              className="tooltip-content"
+              data-tooltip="Información de ayuda"
+            >
+              You're missing some variables to calculate this model, please
+              check those:
+              {data.status?.[model].map((ds) => (
+                <div> {ds}</div>
+              ))}
+            </div>
+            <div className="content">
+              {" "}
+              <img src="./info.png" width={35} />
+            </div>
+          </div>
+        )}
       </GridElement>
 
       <GridElement rows={2} cols={3} className="grid-cell-white metricView">

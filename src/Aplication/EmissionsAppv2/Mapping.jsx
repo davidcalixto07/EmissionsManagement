@@ -33,7 +33,7 @@ const Mapping = () => {
   const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [dataMapings, setDataMapings] = useState([]);
-
+  const [message, setMessage] = useState("");
   const [isRemovingds, setIsRemovingds] = useState(false);
   const [isRemovingdp, setIsRemovingdp] = useState(false);
   const [selectedDataSource, setSelectedDataSource] = useState(null);
@@ -96,6 +96,7 @@ const Mapping = () => {
     if (createResponse === "Added") {
       setShowAlerts(true);
       setResponse(200);
+      setMessage("The datapoint was create successfully");
     } else {
       setShowAlerts(true);
       setResponse(createResponse);
@@ -157,11 +158,10 @@ const Mapping = () => {
       updateMappings(selectedDataSource.direction);
       setShowAlerts(true);
       setResponse(200);
+      setMessage("The datamapping ended succesfully");
     } else {
       console.log("Not created");
       setShowAlerts(true);
-      console.log(response);
-      setResponse(response);
     }
   }
 
@@ -358,6 +358,7 @@ const Mapping = () => {
       />
       <Alerts
         status={response}
+        message={message}
         show={showAlerts}
         setShowAlert={setShowAlerts}
       />

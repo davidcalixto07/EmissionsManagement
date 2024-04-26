@@ -125,7 +125,7 @@ function AddComponent({ show, setShow, saveComponent }) {
           onClick={() => handleSave()}
         >
           Save
-        </Button>
+        </Button>   
       </Modal.Footer>
     </Modal>
   );

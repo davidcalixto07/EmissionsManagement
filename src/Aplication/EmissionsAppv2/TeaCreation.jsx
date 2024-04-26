@@ -23,7 +23,7 @@ const emptyForm = {
   longitude: "",
   wind: "",
   teaDiameter: "",
-  defaultModel: "None",
+  defaultModel: "",
   HH: "",
   H: "",
 };
@@ -38,7 +38,20 @@ const AppConfiguration = ({ assetData }) => {
 
   console.log(assetData);
 
-  useEffect(() => { setFormData(assetData?.data ?? emptyForm) }, [assetData])
+  useEffect(() => {
+    setFormData(assetData?.data ?? emptyForm);
+  }, [assetData]);
+
+  const totalComposition = selectedComponents.reduce((total, key) => {
+    if (
+      optionValues[key] != null &&
+      optionValues[key] !== "" &&
+      !isNaN(optionValues[key])
+    ) {
+      return total + parseFloat(optionValues[key]);
+    }
+    return total;
+  }, 0);
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
@@ -145,10 +158,7 @@ const AppConfiguration = ({ assetData }) => {
             <br></br>
 
             <span> Total Composition: </span>
-            {Object.values(optionValues).reduce(
-              (total, current) => total + current,
-              0
-            )}
+            {totalComposition.toFixed(2)}
             <br></br>
             <div className="tooltip-container">
               <div

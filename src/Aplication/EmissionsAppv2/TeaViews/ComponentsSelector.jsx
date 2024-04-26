@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-
 const allComponents = {
   C1: 85.4305,
   C2: 8.5901,
@@ -48,7 +47,9 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
     }
   };
 
-  useEffect(() => { onSelect(selectedOptions) }, [selectedOptions])
+  useEffect(() => {
+    onSelect(selectedOptions);
+  }, [selectedOptions]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +62,6 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
     }));
   };
 
-
   return (
     <div
       style={{
@@ -69,8 +69,8 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
         gridTemplateColumns: "repeat(1, 1fr)",
         paddingRight: "1rem",
         width: "Auto",
-        overflowY: 'Auto',
-        height: '70%'
+        overflowY: "Auto",
+        height: "60%",
       }}
     >
       {Object.keys(allComponents).map((option) => (
@@ -81,14 +81,12 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
             alignContent: "start",
             alignItems: "center",
             marginBottom: "0.1rem",
-            justifyContent: 'space-around',
-            display: 'flex',
-            flexWrap: 'nowrap'
+            justifyContent: "space-around",
+            display: "flex",
+            flexWrap: "nowrap",
           }}
         >
-          <span style={{ width: '4rem', textAlign: 'end' }}>
-            {option}
-          </span>
+          <span style={{ width: "4rem", textAlign: "end" }}>{option}</span>
           <div>
             <input
               type="text"
@@ -99,7 +97,7 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
                 border: "none",
                 backgroundColor: "transparent",
                 borderBottom: "1px dotted rgb(0, 0, 0, 0.5)",
-                textAlign: 'end'
+                textAlign: "end",
               }}
               value={optionValues[option]}
               placeholder={allComponents[option]}
@@ -112,7 +110,7 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
             value={option}
             checked={selectedOptions.includes(option)}
             onChange={() => toggleOption(option)}
-            style={{ width: '2rem' }}
+            style={{ width: "2rem" }}
           />
         </div>
       ))}
