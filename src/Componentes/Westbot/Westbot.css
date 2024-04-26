@@ -361,14 +361,6 @@ nav {
   margin: 2.5vh;
 } */
 
-form {
-  display: flex;
-  width: 70%;
-  padding-left: 8%;
-  align-items: center;
-  justify-content: space-evenly;
-  color: #ccc;
-}
 
 .opt {
   padding: 5px 20px;
