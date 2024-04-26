@@ -103,7 +103,7 @@ const AppConfiguration = ({ assetData }) => {
         style={{ justifyContent: "space-between" }}
       >
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span title="Campo Obligatorio"> Flear ID: * </span>
+          <span title="Campo Obligatorio"> Flare ID: * </span>
           <input
             type="text"
             name="teaId"
@@ -114,7 +114,7 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Flear Type:</span>
+          <span>Flare Type:</span>
           <select
             name="teaType"
             value={formData.teaType}
@@ -125,7 +125,7 @@ const AppConfiguration = ({ assetData }) => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
-          <h4 style={{ margin: "10px" }}>Flear Components Composition</h4>
+          <h4 style={{ margin: "10px" }}>Flare Components Composition</h4>
           <ComponentSelector
             optionValues={optionValues}
             setOptionValues={setOptionValues}
@@ -169,7 +169,7 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Flear Technology:</span>
+          <span>Flare Technology:</span>
           <select
             name="tecnology"
             value={formData.tecnology}
@@ -231,7 +231,7 @@ const AppConfiguration = ({ assetData }) => {
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Flear diameter(ft)</span>
+          <span>Flare diameter(ft)</span>
           <input
             type="text"
             name="diameter"
@@ -302,7 +302,7 @@ const AppConfiguration = ({ assetData }) => {
         </GridElement>
 
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Flear height(ft)</span>
+          <span>Flare height(ft)</span>
           <input
             type="text"
             name="height"
