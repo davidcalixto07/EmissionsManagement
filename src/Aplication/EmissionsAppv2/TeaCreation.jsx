@@ -33,12 +33,12 @@ const AppConfiguration = ({ assetData }) => {
   const [statusText, setStatusText] = useState("");
   const [extraComponent, setExtraComponent] = useState([]);
   const [showModalExtraComponent, setShowModalExtraComponent] = useState(false);
-  const [optionValues, setOptionValues] = useState([]);
+  const [optionValues, setOptionValues] = useState(assetData?.composition ?? []);
   const [selectedComponents, setSelectedComponents] = useState([]);
 
-  useEffect(() => { setFormData(assetData?.data ?? emptyForm) }, [assetData])
+  console.log(assetData);
 
-  console.log(optionValues);
+  useEffect(() => { setFormData(assetData?.data ?? emptyForm) }, [assetData])
 
   const handleSelect = (selectedOptions) => {
     console.log("Selected options:", selectedOptions);
@@ -57,10 +57,22 @@ const AppConfiguration = ({ assetData }) => {
     }));
   };
 
+  console.log(optionValues);
+  console.log(selectedComponents);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    formData.composition = optionValues;
+    const filteredData = Object.keys(optionValues)
+      .filter(key => selectedComponents.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = optionValues[key];
+        return obj;
+      }, {});
+    console.log(filteredData);
+
+    formData.composition = filteredData;
     console.log(formData);
 
     try {
@@ -72,15 +84,20 @@ const AppConfiguration = ({ assetData }) => {
       console.error("Error:", error);
     }
   };
-  function saveComponent(data) {
-    setExtraComponent(data);
+
+  async function saveComponent(data) {
+    console.log("Save Component", data);
     setShowModalExtraComponent(false);
+    try {
+      const response = await axios.post("/api/emissionsapi2-colwest2/v1/AddComponent", data);
+      console.log("Response:", response.data);
+      setStatusText("Created");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
-  function saveComponent(data) {
-    setExtraComponent(data);
-    setShowModalExtraComponent(false);
-  }
+
   return (
     <form onSubmit={handleSubmit} href="/" className="fullSize">
       <CustomGrid
@@ -117,6 +134,7 @@ const AppConfiguration = ({ assetData }) => {
             optionValues={optionValues}
             setOptionValues={setOptionValues}
             onSelect={handleSelect}
+            teaValues={assetData}
           />
           <div>
             <br></br>

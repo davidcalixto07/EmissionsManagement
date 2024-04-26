@@ -20,13 +20,23 @@ const allComponents = {
   H2O: 0,
 };
 
-export const ComponentSelector = ({ optionValues, onSelect, setOptionValues }) => {
-  const [selectedOptions, setSelectedOptions] = useState(
-    Object.keys(allComponents) || []
-  );
+export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, teaValues }) => {
+  console.log(optionValues)
+  console.log(teaValues)
+
+  const [selectedOptions, setSelectedOptions] = useState(Object.keys(allComponents));
 
   useEffect(() => {
-    setOptionValues(allComponents)
+    if (teaValues?.composition?.length === 0)
+      setOptionValues(allComponents)
+    else
+      setOptionValues(teaValues?.composition ?? [])
+
+  }, [teaValues]);
+
+  useEffect(() => {
+    if (optionValues.length === 0)
+      setOptionValues(allComponents)
   }, []);
 
   const toggleOption = (option) => {
