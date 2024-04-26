@@ -70,7 +70,7 @@ export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, tea
         paddingRight: "1rem",
         width: "Auto",
         overflowY: "Auto",
-        height: "60%",
+        height: "52%",
       }}
     >
       {Object.keys(allComponents).map((option) => (

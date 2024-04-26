@@ -7,6 +7,7 @@ const ImageLoader = ({ onChange }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [startCoord, setStartCoord] = useState("");
   const [endCoord, setEndCord] = useState("");
+  const [maxEmissions, setMaxEmissions] = useState("");
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -78,50 +79,69 @@ const ImageLoader = ({ onChange }) => {
   };
 
   return (
-    <div
-      style={{ display: "flex", gap: "1rem", height: "calc(100% - 2.1rem)" }}
-    >
-      <img
-        src={imageSrc}
-        alt="No Image"
-        style={{ paddingLeft: "1rem", height: "100%", objectFit: "cover" }}
-      />
-      <div style={{ display: "grid", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <input type="file" onChange={handleFileChange} />
+    <>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          justifyContent: "space-between",
+          height: "60%",
+          marginLeft: "2em",
+        }}
+      >
+        <div>
+          <img
+            src={imageSrc}
+            alt="No Image"
+            style={{
+              display: "block",
+              paddingLeft: "1rem",
+              objectFit: "cover",
+            }}
+          />
+          <div style={{ justifyContent: "space-between" }}>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <input type="file" onChange={handleFileChange} />
+            </div>
+          </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "nowrap",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-            margin: "0.4rem",
-          }}
-        >
-          Start Coordinates:
-          <input
-            placeholder="Ej: 5.44246842,-72.4519091"
-            value={startCoord}
-            onChange={(e) => setStartCoord(e.target.value)}
-            style={{ marginRight: "1rem" }}
-          ></input>
-          End Coordinates:
-          <input
-            placeholder="Ej: 5.44246842,-72.4519091"
-            value={endCoord}
-            onChange={(e) => setEndCord(e.target.value)}
-            style={{ marginRight: "1rem" }}
-          ></input>
+
+        <div style={{ display: "grid", marginRight: "4em" }}>
+          <Button onClick={SaveChanges} variant="success">
+            Save Changes
+          </Button>
+          <span style={{ font: "small-caption" }}>{statusText}</span>
         </div>
       </div>
-      <div style={{ marginLeft: "1rem", display: "grid" }}>
-        <Button onClick={SaveChanges} variant="success">
-          Save Changes
-        </Button>
-        <span style={{ font: "small-caption" }}>{statusText}</span>
+      <div
+        style={{
+          display: "inline-flex",
+          flexWrap: "nowrap",
+        }}
+      >
+        Start Coordinates:
+        <input
+          placeholder="Ej: 5.44246842,-72.4519091"
+          value={startCoord}
+          onChange={(e) => setStartCoord(e.target.value)}
+          style={{ marginRight: "1rem", height: "min-content" }}
+        ></input>
+        End Coordinates:
+        <input
+          placeholder="Ej: 5.44246842,-72.4519091"
+          value={endCoord}
+          onChange={(e) => setEndCord(e.target.value)}
+          style={{ marginRight: "1rem", height: "min-content" }}
+        ></input>
+        Max emissions:
+        <input
+          placeholder="Ej: 0"
+          value={maxEmissions}
+          onChange={(e) => setMaxEmissions(e.target.value)}
+          style={{ marginRight: "1rem", height: "min-content" }}
+        ></input>
       </div>
-    </div>
+    </>
   );
 };
 

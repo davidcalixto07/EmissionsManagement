@@ -9,6 +9,7 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
 :root {
   --main-color: #fff;
 }
@@ -140,7 +141,8 @@ header h2 {
 }
 
 .optionsContainer {
-  padding: 10px 0 10px 40px; /* margen: arriba derecha abajo izquierda */
+  padding: 10px 0 10px 40px;
+  /* margen: arriba derecha abajo izquierda */
 }
 
 .chatbox .incoming span {
@@ -329,7 +331,7 @@ nav {
   display: none;
 }
 
-#btn-nav:checked ~ nav {
+#btn-nav:checked~nav {
   transform: translateX(0);
 }
 
@@ -348,6 +350,7 @@ nav {
 .btn-nav:hover {
   background: rgba(0, 0, 0, 0.3);
 }
+
 /* body {
   height: 100vh;
   background-color: #1f263e;
@@ -361,7 +364,7 @@ nav {
   margin: 2.5vh;
 } */
 
-form {
+.westbot-form {
   display: flex;
   width: 70%;
   padding-left: 8%;

@@ -17,7 +17,7 @@ function useEmissionsV2(dates) {
       return;
     }
     const url = `/api/assetmanagement/v3/assets?filter={"assetId": {"in": {"value": [${sidebarList.map(
-      (tea) => `"${tea.assetId}"`
+      (flare) => `"${flare.assetId}"`
     )}]}}}`;
     fetch(url)
       .then((response) => {
@@ -47,26 +47,26 @@ function useEmissionsV2(dates) {
     const isoEndDate = dates.endDate ? dates.endDate.toISOString() : new Date(2050, 1, 1).toISOString();
 
 
-    const promises = teaslist.map(async (tea) => {
-      const url = `/api/emissionsapi2-colwest2/v1/ProcessTimeserie?assetId=${tea.assetId}&from=${isoStartDate}&to=${isoEndDate}&model=both`;
+    const promises = teaslist.map(async (flare) => {
+      const url = `/api/emissionsapi2-colwest2/v1/ProcessTimeserie?assetId=${flare.assetId}&from=${isoStartDate}&to=${isoEndDate}&model=both`;
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`Failed to fetch data for assetId ${tea.assetId}`);
+        throw new Error(`Failed to fetch data for assetId ${flare.assetId}`);
       }
       const json = await response.json();
-      console.log("Api response from ", tea, json);
-      tea.timeSerie = Array.isArray(json) ? json : [];
+      console.log("Api response from ", flare, json);
+      flare.timeSerie = Array.isArray(json) ? json : [];
       var sum1 = 0, sum2 = 0;
 
-      tea.timeSerie.forEach(point => {
+      flare.timeSerie.forEach(point => {
         sum1 += point.emissions.anh.C02 ?? 0;
         sum2 += point.emissions.anh.CO2e ?? 0;
       });
-      tea.avgEmissions = sum1 / tea.timeSerie.length;
-      tea.avgEqEmissions = sum2 / tea.timeSerie.length;
-      console.log("Tea", tea);
+      flare.avgEmissions = sum1 / flare.timeSerie.length;
+      flare.avgEqEmissions = sum2 / flare.timeSerie.length;
+      console.log("Flare", flare);
       setLoading(false);
-      return tea;
+      return flare;
     });
 
     Promise.all(promises)
