@@ -347,10 +347,10 @@ const Reporter = () => {
                 </View>
                 {/*Contenido 1*/}
                 {
-                  jsonData.TEAS.map((tea) =>
+                  jsonData.TEAS.map((flare) =>
                     <View style={styles.tableRow}>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.id} </Text>
+                        <Text style={styles.text1}>{flare.id} </Text>
                       </View>
                       <View style={styles.tableCell}>
                         <Text style={styles.text1}> </Text>
@@ -359,39 +359,39 @@ const Reporter = () => {
                         <Text style={styles.text1}></Text>
                       </View>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.altura}</Text>
+                        <Text style={styles.text1}>{flare.altura}</Text>
                       </View>
                       <View style={styles.tableCell}>
                         <Text style={styles.text1}>
-                          {tea.diametro}
+                          {flare.diametro}
                         </Text>
                       </View>
                       <View style={styles.tableCell}>
                         <Text style={styles.text1}>
-                          {tea.Ainstalacion}
+                          {flare.Ainstalacion}
                         </Text>
                       </View>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.Ffun}</Text>
+                        <Text style={styles.text1}>{flare.Ffun}</Text>
                       </View>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.Hfun}</Text>
+                        <Text style={styles.text1}>{flare.Hfun}</Text>
                       </View>
                       <View style={styles.tableCell}>
                         <Text style={styles.text1}>
-                          {tea.Segmento}
+                          {flare.Segmento}
                         </Text>
                       </View>
                       <View style={styles.tableCell}>
                         <Text style={styles.text1}>
-                          {tea.medicion}
+                          {flare.medicion}
                         </Text>
                       </View>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.medidor}</Text>
+                        <Text style={styles.text1}>{flare.medidor}</Text>
                       </View>
                       <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{tea.serial}</Text>
+                        <Text style={styles.text1}>{flare.serial}</Text>
                       </View>
                     </View>
                   )

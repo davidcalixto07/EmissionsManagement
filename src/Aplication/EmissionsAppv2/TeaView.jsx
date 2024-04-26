@@ -28,11 +28,11 @@ const TeaView = () => {
     if (!selectedAsset)
       return;
 
-    const tea = teasList.find((x) => x.assetId == selectedAsset.assetId);
-    if (tea) {
-      console.log("Finded ", tea);
-      tea.status = { anh: [], west: ['presssure', 'temperature'] }
-      setAssetData(tea);
+    const flare = teasList.find((x) => x.assetId == selectedAsset.assetId);
+    if (flare) {
+      console.log("Finded ", flare);
+      flare.status = { anh: [], west: ['presssure', 'temperature'] }
+      setAssetData(flare);
     }
   }, [selectedAsset, teasList]);
 
@@ -64,7 +64,7 @@ const TeaView = () => {
         <SimulationView averages={results} />
       </AppTab>
 
-      <AppTab label="Tea Config">
+      <AppTab label="Flare Config">
         <div style={{ height: "calc(100% - 4em)" }}>
           <TeaCreation assetData={assetData} />
         </div>

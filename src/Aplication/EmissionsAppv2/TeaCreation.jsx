@@ -7,8 +7,8 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 
 const emptyForm = {
-  teaId: "",
-  teaType: "Tea Alta",
+  flareId: "",
+  flareType: "Flare Alta",
   pressure: "",
   tecnology: "",
   height: "",
@@ -22,7 +22,7 @@ const emptyForm = {
   latitude: "",
   longitude: "",
   wind: "",
-  teaDiameter: "",
+  flareDiameter: "",
   defaultModel: "",
   MaxEfficiency: "",
   MinEfficiency: "",
@@ -106,9 +106,9 @@ const AppConfiguration = ({ assetData }) => {
           <span title="Campo Obligatorio"> Flare ID: * </span>
           <input
             type="text"
-            name="teaId"
+            name="flareId"
             placeholder="Tea001"
-            value={formData.teaId}
+            value={formData.flareId}
             onChange={handleChange}
             required
           />
@@ -116,12 +116,12 @@ const AppConfiguration = ({ assetData }) => {
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Flare Type:</span>
           <select
-            name="teaType"
-            value={formData.teaType}
+            name="flareType"
+            value={formData.flareType}
             onChange={handleChange}
           >
-            <option value="Tea Alta">Tea Alta</option>
-            <option value="Tea Baja">Tea Baja</option>
+            <option value="Flare Alta">Flare Alta</option>
+            <option value="Flare Baja">Flare Baja</option>
           </select>
         </GridElement>
         <GridElement className="grid-cell-white vert" cols={1} rows={10}>
@@ -175,12 +175,12 @@ const AppConfiguration = ({ assetData }) => {
             value={formData.tecnology}
             onChange={handleChange}
           >
-            <option value="Tea Combinada">Tea Combinada</option>
-            <option value="Tea Asistida por aire">Tea Asistida por aire</option>
-            <option value="Tea Asistida por vapor">
-              Tea Asistida por vapor
+            <option value="Flare Combinada">Flare Combinada</option>
+            <option value="Flare Asistida por aire">Flare Asistida por aire</option>
+            <option value="Flare Asistida por vapor">
+              Flare Asistida por vapor
             </option>
-            <option value="Tea móvil- Temporal">Tea móvil- Temporal</option>
+            <option value="Flare móvil- Temporal">Flare móvil- Temporal</option>
           </select>
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>

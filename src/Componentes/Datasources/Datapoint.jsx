@@ -38,9 +38,9 @@ const Datapoint = ({
               {"None"}
             </option>
             {datasources.length > 0 &&
-              teasList.map((tea) => (
-                <option key={tea.name} value={tea.name}>
-                  {tea.name}
+              teasList.map((flare) => (
+                <option key={flare.name} value={flare.name}>
+                  {flare.name}
                 </option>
               ))}
           </select>
