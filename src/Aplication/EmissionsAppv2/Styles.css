@@ -107,6 +107,8 @@
 .ReportButton {
     background-color: var(--west-blue);
     color: whitesmoke;
+    width: 48%;
+    height: 3em;
     padding: 0.2rem;
     border: 0;
     border-radius: 4px;

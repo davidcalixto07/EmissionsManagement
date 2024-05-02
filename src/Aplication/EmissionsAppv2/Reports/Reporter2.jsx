@@ -143,7 +143,7 @@ const Reporter2 = () => {
   const nav = useNavigate();
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Button onClick={() => nav("/")}>Back to overview</Button>
       <PDFViewer style={{ width: "100%", height: "calc(100vh - 48px)" }}>
         <Document>

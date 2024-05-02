@@ -215,18 +215,11 @@ const EmissionsOverview = () => {
       >
         Reports:
         <button
-          onClick={() => nav("/EmissionsReport/anh", { state: { data: {} } })}
+          onClick={() => nav("/EmissionsReport", { state: { data: {} } })}
           className="ReportButton"
+          style={{ width: "60%" }}
         >
-          ANH
-        </button>
-        <button
-          onClick={() =>
-            nav("/EmissionsReport/inventory", { state: { data: {} } })
-          }
-          className="ReportButton"
-        >
-          Inventory
+          Generate Reports
         </button>
       </GridElement>
       <DirectEmissionsModal

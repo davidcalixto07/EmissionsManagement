@@ -102,7 +102,7 @@ const jsonData = {
       ECH4: "20",
       EN20: "20",
       ECO2e: "200",
-    }
+    },
   ],
 };
 
@@ -183,9 +183,9 @@ const Reporter = () => {
   const nav = useNavigate();
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Button onClick={() => nav("/")}>Back to overview</Button>
-      <PDFViewer style={{ width: "100%", height: "calc(100vh - 48px)" }}>
+      <PDFViewer style={{ width: "100%", height: "100%" }}>
         <Document>
           <Page
             orientation="landscape"
@@ -346,56 +346,46 @@ const Reporter = () => {
                   </View>
                 </View>
                 {/*Contenido 1*/}
-                {
-                  jsonData.TEAS.map((flare) =>
-                    <View style={styles.tableRow}>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.id} </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}> </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}></Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.altura}</Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>
-                          {flare.diametro}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>
-                          {flare.Ainstalacion}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.Ffun}</Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.Hfun}</Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>
-                          {flare.Segmento}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>
-                          {flare.medicion}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.medidor}</Text>
-                      </View>
-                      <View style={styles.tableCell}>
-                        <Text style={styles.text1}>{flare.serial}</Text>
-                      </View>
+                {jsonData.TEAS.map((flare) => (
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.id} </Text>
                     </View>
-                  )
-                }
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}> </Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}></Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.altura}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.diametro}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.Ainstalacion}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.Ffun}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.Hfun}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.Segmento}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.medicion}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.medidor}</Text>
+                    </View>
+                    <View style={styles.tableCell}>
+                      <Text style={styles.text1}>{flare.serial}</Text>
+                    </View>
+                  </View>
+                ))}
                 {/*Contenido 1-2*/}
                 <View style={styles.tableRow}>
                   <View style={styles.tableCell}>
