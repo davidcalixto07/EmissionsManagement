@@ -3,15 +3,12 @@ import Modal from "react-bootstrap/Modal";
 import React from "react";
 import { useState } from "react";
 
-
 function ParseNodeName(ds) {
-  if (ds?.type === 'logix')
-    return 'Tag'
-  else
-    return 'NodeId'
+  if (ds?.type === "logix") return "Tag";
+  else return "NodeId";
 }
 
-function AddDatasource({ show, setShow, saveDataPoint, ds }) {
+function AddDataPoint({ show, setShow, saveDataPoint, ds }) {
   const [tag, setTag] = useState("");
 
   return (
@@ -29,10 +26,8 @@ function AddDatasource({ show, setShow, saveDataPoint, ds }) {
         <input
           value={tag}
           onChange={(e) => setTag(e.target.value)}
-          style={{ paddingLeft: '0.2rem', width: 'calc(100% - 4rem)' }}
-        >
-
-        </input>
+          style={{ paddingLeft: "0.2rem", width: "calc(100% - 4rem)" }}
+        ></input>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => setShow(false)}>
@@ -46,4 +41,4 @@ function AddDatasource({ show, setShow, saveDataPoint, ds }) {
   );
 }
 
-export default AddDatasource;
+export default AddDataPoint;

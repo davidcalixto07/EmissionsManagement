@@ -9,6 +9,7 @@ import AddIcon from "../../Componentes/AssetsSidebar/add_icon.png";
 import DeleteIcon from "../../Componentes/AssetsSidebar/trash-can-icon.png";
 import AddDatasource from "../../Componentes/Datasources/AddDatasource";
 import AddDataPoint from "../../Componentes/Datasources/AddDataPoint";
+import MapComponent from "../../Componentes/Datasources/MapComponent";
 import PopupDeleteDs from "../../Componentes/Utlities/PopupDeleteDs";
 import PopupDeleteDp from "../../Componentes/Utlities/PopupDeleteDp";
 import { useOutletContext } from "react-router-dom";
@@ -30,6 +31,8 @@ const Mapping = () => {
   const [showModalDp, setShowModalDp] = useState(false);
   const [showModalDeleteDs, setShowModalDeleteDs] = useState(false);
   const [showModalDeleteDp, setShowModalDeleteDp] = useState(false);
+  const [dataMappingComponents, setDataMapingComponents] = useState([]);
+  const [showModalMapComponents, setShowModalMapComponents] = useState(false);
   const [showAlerts, setShowAlerts] = useState(false);
   const [datasources, setDatasources] = useState([]);
   const [dataMapings, setDataMapings] = useState([]);
@@ -87,7 +90,6 @@ const Mapping = () => {
     if (await CreateDatasource(ds)) getApiData();
     else console.log("Not created");
   }
-
   async function SaveDataPoint(dp, ds) {
     setShowModalDp(false);
     console.log("SaveDp", dp, "Ds", ds);
@@ -189,6 +191,8 @@ const Mapping = () => {
     }
   }, [datasources]);
 
+  console.log(dataMappingComponents);
+
   return (
     <>
       <CustomGrid rows={8} cols={8} className={"Overview-100"}>
@@ -265,6 +269,10 @@ const Mapping = () => {
                 deleting={isRemovingdp}
                 handleMappingVar={handleMappingVar}
                 HandleMappingFlare={handleMappingFlare}
+                dataMappingComponents={dataMappingComponents}
+                setDataMapingComponents={setDataMapingComponents}
+                showModalMapComponents={showModalMapComponents}
+                setShowModalMapComponents={setShowModalMapComponents}
                 key={index}
               />
             ))}

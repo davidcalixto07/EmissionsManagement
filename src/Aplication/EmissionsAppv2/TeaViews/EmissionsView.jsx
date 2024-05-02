@@ -176,16 +176,16 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
   function UpdateTimeseries() {
     console.warn("Called To update", data);
     if (gas === "All") {
-      const tsList = gasesNames.map((g, i) => ({
+      const tsList = gasesNames?.map((g, i) => ({
         label: g,
         t: tsTime,
-        v: timeseries.map((v) => v.emissions[model.toLowerCase()][g]),
+        v: timeseries?.map((v) => v?.emissions[model?.toLowerCase()][g]),
         color: colors[i],
         f: g === "C02e",
       }));
       if (timeseries.length > 0) {
         const ts = timeseries
-          .map((v) => v.emissions[model.toLowerCase()].C02e)
+          ?.map((v) => v?.emissions[model?.toLowerCase()].C02e)
           .slice(0, 20);
         console.log("Ts", ts);
         const times = generateFutureDates(timeseries[0]._time, 20);
@@ -288,11 +288,14 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
         >
           <option value={"west"}>West </option>
           <option value={"anh"}>ANH</option>
+          <option value={"em_factor"}>Emissions Factor </option>
+          <option value={"cu_factor"}>Custom User Factor</option>
+          <option value={"Direct_Emissions"}>Direct Emissions</option>
         </select>
         Gas:
         <select
           value={gas}
-          onChange={(e) => setGas(e.target.value)}
+          onChange={(e) => setGas(e.target?.value)}
           className="emissionsSelector"
           style={{ width: "6.5rem" }}
         >
@@ -310,7 +313,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
         className="grid-cell-white"
         style={{ justifyContent: "center" }}
       >
-        {data.status?.[model].length < 1 ? (
+        {data.status?.[model]?.length < 1 ? (
           <MultiTimeseries
             title={`Emissions timeserie (${units.emissions.name})`}
             values={gasesTs}
@@ -324,7 +327,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
             >
               You're missing some variables to calculate this model, please
               check those:
-              {data.status?.[model].map((ds) => (
+              {data.status?.[model]?.map((ds) => (
                 <div> {ds}</div>
               ))}
             </div>
@@ -395,7 +398,7 @@ const EmissionsView = ({ data, units, loading, setCalcs }) => {
         <MetricView
           title={"Efficiencies "}
           metrics={[
-            { name: "Combustion efficiency", value: 5.3, units: "m/s" },
+            { name: "Combustion efficiency", value: 5.3, units: "%" },
             { name: "Destruction efficiency", value: 98.6, units: "%" },
           ]}
         />

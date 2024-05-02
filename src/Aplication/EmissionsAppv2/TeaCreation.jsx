@@ -36,12 +36,13 @@ const AppConfiguration = ({ assetData }) => {
   const [extraComponent, setExtraComponent] = useState([]);
   const [showModalExtraComponent, setShowModalExtraComponent] = useState(false);
   const [optionValues, setOptionValues] = useState([]);
-  const [selectedComponents, setSelectedComponents] = useState([]);
+  const [selectedComponents, setSelectedComponents] = useState([0]);
+  const [mappedComponents, setMappedComponents] = useState();
 
   useEffect(() => {
     setFormData(assetData?.data ?? emptyForm);
+    setMappedComponents(assetData?.data?.composition);
   }, [assetData]);
-
   const totalComposition = selectedComponents.reduce((total, key) => {
     if (
       optionValues[key] != null &&
@@ -69,10 +70,8 @@ const AppConfiguration = ({ assetData }) => {
       [name]: newValue,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     formData.composition = optionValues;
     console.log(formData);
 
@@ -124,38 +123,53 @@ const AppConfiguration = ({ assetData }) => {
             <option value="Flare Baja">Flare Baja</option>
           </select>
         </GridElement>
-        <GridElement className="grid-cell-white vert" cols={1} rows={10}>
-          <h4 style={{ margin: "10px" }}>Flare Components Composition</h4>
-          <ComponentSelector
-            optionValues={optionValues}
-            setOptionValues={setOptionValues}
-            onSelect={handleSelect}
-          />
-          <div>
-            <br></br>
-            <Button onClick={() => setShowModalExtraComponent(true)}>
-              {" "}
-              Add Component{" "}
-            </Button>
-            <br></br>
 
-            <span> Total Composition: </span>
-            {totalComposition.toFixed(2)}
-            <br></br>
-            <div className="tooltip-container">
-              <div
-                className="tooltip-content"
-                data-tooltip="Información de ayuda"
-              >
-                The total composition should be 100%, but if it's not, you
-                should keep the diference lower than 1.5%
+        <GridElement className="grid-cell-white vert" cols={1} rows={10}>
+          <GridElement cols={1} rows={2} ns>
+            <h4 style={{ margin: "10px" }}>Flare Components Composition</h4>
+          </GridElement>
+          {!mappedComponents ? (
+            <>
+              <ComponentSelector
+                optionValues={optionValues}
+                setOptionValues={setOptionValues}
+                onSelect={handleSelect}
+              />
+              <div>
+                <br></br>
+                <Button onClick={() => setShowModalExtraComponent(true)}>
+                  {" "}
+                  Add Component{" "}
+                </Button>
+                <br></br>
+
+                <span> Total Composition: </span>
+                {totalComposition.toFixed(2)}
+                <br></br>
+                <div className="tooltip-container">
+                  <div
+                    className="tooltip-content"
+                    data-tooltip="Información de ayuda"
+                  >
+                    The total composition should be 100%, but if it's not, you
+                    should keep the diference lower than 1.5%
+                  </div>
+                  <div className="content">
+                    {" "}
+                    <img src="./info.png" width={35} />
+                  </div>
+                </div>
               </div>
-              <div className="content">
+            </>
+          ) : (
+            <GridElement cols={1} rows={8} ns>
+              <h6>
                 {" "}
-                <img src="./info.png" width={35} />
-              </div>
-            </div>
-          </div>
+                You already have the Flear Components Composition data from the
+                connection mananger{" "}
+              </h6>
+            </GridElement>
+          )}
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
           <span>Wind Speed (m/s): * </span>
@@ -176,7 +190,9 @@ const AppConfiguration = ({ assetData }) => {
             onChange={handleChange}
           >
             <option value="Flare Combinada">Flare Combinada</option>
-            <option value="Flare Asistida por aire">Flare Asistida por aire</option>
+            <option value="Flare Asistida por aire">
+              Flare Asistida por aire
+            </option>
             <option value="Flare Asistida por vapor">
               Flare Asistida por vapor
             </option>
@@ -343,7 +359,7 @@ const AppConfiguration = ({ assetData }) => {
           />
         </GridElement>
         <GridElement className="grid-cell-white justified" rows={1} cols={2}>
-          <span>Combustion Emissions</span>
+          <span>Combustion Efficiency</span>
           <input
             type="text"
             name="CombustionEfficiency"

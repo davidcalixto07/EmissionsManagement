@@ -24,9 +24,7 @@ export const ComponentSelector = ({
   onSelect,
   setOptionValues,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState(
-    Object.keys(allComponents) || []
-  );
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
     setOptionValues(allComponents);
