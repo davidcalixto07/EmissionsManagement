@@ -20,8 +20,6 @@ const allComponents = {
 };
 
 export const ComponentSelector = ({ optionValues, onSelect, setOptionValues, teaValues }) => {
-  console.log(optionValues)
-  console.log(teaValues)
 
   const [selectedOptions, setSelectedOptions] = useState(Object.keys(allComponents));
 
