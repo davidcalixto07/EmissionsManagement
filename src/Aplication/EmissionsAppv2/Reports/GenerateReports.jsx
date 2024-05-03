@@ -1,13 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import CustomGrid from "../../Utils/CustomGrid";
 import GridElement from "../../Utils/GridElement";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { Route } from "react-router-dom";
 import Reporter from "./Reporter";
 import GridUtil from "../../Utils/GridUtil";
+import context from "react-bootstrap/esm/AccordionContext";
 
 const ReporterGenerator = () => {
   const nav = useNavigate();
+  const { setData } = useOutletContext();
   const emptyInfoReport = {
     reportNumber: "",
     batteryFacility: "",
@@ -93,17 +96,6 @@ const ReporterGenerator = () => {
           required
         />
       </GridElement>
-      <GridElement className="grid-cell-white justified" rows={1} cols={1}>
-        <span> Contracts Name: </span>
-        <input
-          type="text"
-          name="contractName"
-          placeholder="001"
-          value={InfoReport.contractName}
-          onChange={handleChange}
-          required
-        />
-      </GridElement>
       <GridElement className="grid-cell-white justified" rows={1} cols={1} ns>
         <span> Annexes </span>
         <input
@@ -182,7 +174,10 @@ const ReporterGenerator = () => {
         <div style={{ height: "60%" }}>Reports:</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <button
-            onClick={() => nav("/EmissionsReport/anh", { state: { data: {} } })}
+            onClick={() => {
+              setData(InfoReport);
+              nav("/EmissionsReport/anh");
+            }}
             className="ReportButton"
           >
             ANH

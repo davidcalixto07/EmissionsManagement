@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Document,
   Page,
@@ -182,9 +182,10 @@ const styles = StyleSheet.create({
 
 const Reporter = () => {
   const nav = useNavigate();
-  const [, , , , , teasList, , ,] = useOutletContext();
+  const { data, teasList } = useOutletContext();
 
   console.log(teasList);
+  console.log(data);
   return (
     <div style={{ width: "100%" }}>
       <Button onClick={() => nav("/")}>Back to overview</Button>

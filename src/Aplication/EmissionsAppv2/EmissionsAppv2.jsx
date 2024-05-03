@@ -12,6 +12,7 @@ import "../AppCommonStyles.css";
 import Mapping from "./Mapping";
 import License from "./License";
 import Westbot from "../../Componentes/Westbot/Westbot";
+import ReporterMananger from "./Reports/ReporterMananger";
 import Reporter from "./Reports/Reporter";
 import Reporter2 from "./Reports/Reporter2";
 import GenerateReports from "./Reports/GenerateReports";
@@ -24,9 +25,11 @@ export const EmissionsAppV2Routes = (
     <Route path="license" element={<License />} />
     <Route path=":assetId" element={<TeaView />} />
     <Route index element={<EmissionsOverview />} />
-    <Route path="EmissionsReport" element={<GenerateReports />} />
-    <Route path="/EmissionsReport/anh" element={<Reporter />} />
-    <Route path="/EmissionsReport/inventory" element={<Reporter2 />} />
+    <Route path="EmissionsReport" element={<ReporterMananger />}>
+      <Route path="" element={<GenerateReports />} />
+      <Route path="anh" element={<Reporter />} />
+      <Route path="inventory" element={<Reporter2 />} />
+    </Route>
   </>
 );
 
