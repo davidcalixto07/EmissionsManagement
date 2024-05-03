@@ -10,6 +10,7 @@ import {
 } from "@react-pdf/renderer";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const jsonData = {
   Generales: {
@@ -181,7 +182,9 @@ const styles = StyleSheet.create({
 
 const Reporter = () => {
   const nav = useNavigate();
+  const [, , , , , teasList, , ,] = useOutletContext();
 
+  console.log(teasList);
   return (
     <div style={{ width: "100%" }}>
       <Button onClick={() => nav("/")}>Back to overview</Button>
