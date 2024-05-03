@@ -109,7 +109,7 @@ const ReporterGenerator = () => {
         <input
           type="text"
           name="annexes"
-          placeholder="1038"
+          placeholder="Annexes"
           value={InfoReport.annexes}
           onChange={handleChange}
           required
@@ -121,7 +121,7 @@ const ReporterGenerator = () => {
         <input
           type="text"
           name="technicalManagerOperator"
-          placeholder="1038"
+          placeholder="Juan Florez"
           value={InfoReport.technicalManagerOperator}
           onChange={handleChange}
           required
@@ -133,7 +133,7 @@ const ReporterGenerator = () => {
         <input
           type="text"
           name="professionalCardNumber"
-          placeholder="1038"
+          placeholder="101010101"
           value={InfoReport.professionalCardNumber}
           onChange={handleChange}
           required
@@ -143,8 +143,8 @@ const ReporterGenerator = () => {
         <span> Field A Name</span>
         <input
           type="text"
-          name="batteryFacility"
-          placeholder="1038"
+          name="fieldName1"
+          placeholder="Campo1"
           value={InfoReport.fieldNames.fieldName1}
           onChange={handleChange}
           required
@@ -154,8 +154,8 @@ const ReporterGenerator = () => {
         <span> Field B Name </span>
         <input
           type="text"
-          name="batteryFacility"
-          placeholder="1038"
+          name="fieldName2"
+          placeholder="Campo2"
           value={InfoReport.fieldNames.fieldName2}
           onChange={handleChange}
           required
@@ -165,8 +165,8 @@ const ReporterGenerator = () => {
         <span> Field C Name </span>
         <input
           type="text"
-          name="batteryFacility"
-          placeholder="1038"
+          name="fieldName3"
+          placeholder="Campo3"
           value={InfoReport.fieldNames.fieldName3}
           onChange={handleChange}
           required
