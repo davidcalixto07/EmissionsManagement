@@ -9,7 +9,6 @@ import axios from "axios";
 const emptyForm = {
   flareId: "",
   flareType: "Flare Alta",
-  pressure: "",
   tecnology: "",
   height: "",
   diameter: "",
@@ -19,8 +18,8 @@ const emptyForm = {
   measureMethod: "Balance",
   measureType: "Coriolis",
   transmitterSerial: "",
-  latitude: "",
-  longitude: "",
+  latitude: "-75.290777",
+  longitude: "3.072371",
   wind: "",
   flareDiameter: "",
   defaultModel: "",
@@ -62,19 +61,25 @@ const AppConfiguration = ({ assetData }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    const parsed_value = parseFloat(value);
-    const newValue = isNaN(parsed_value) ? value : parsed_value;
-
     setFormData((prevState) => ({
       ...prevState,
-      [name]: newValue,
+      [name]: value,
     }));
   };
 
   console.log(optionValues);
   console.log(selectedComponents);
 
+
+  function ParseForm(obj) {
+    for (const key in obj) {
+      const floatValue = parseFloat(obj[key]);
+      if (!isNaN(floatValue)) {
+        obj[key] = floatValue;
+      }
+    }
+    return obj;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,9 +94,10 @@ const AppConfiguration = ({ assetData }) => {
 
     formData.composition = filteredData;
     console.log(formData);
+    const parsedData = ParseForm(formData);
 
     try {
-      const response = await axios.post("/api/assets/CreateAsset", formData);
+      const response = await axios.post("/api/assets/CreateAsset", parsedData);
       console.log("Response:", response.data);
       setStatusText("Created");
       window.location.href = "/";
