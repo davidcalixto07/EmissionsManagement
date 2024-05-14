@@ -10,7 +10,7 @@ import useEmissionsV2 from "./useEmissionsv2";
 import TeaCreation from "./TeaCreation";
 import "../AppCommonStyles.css";
 import Mapping from "./Mapping";
-import License from "./License";
+import License from "./Licence_manager/License";
 import Westbot from "../../Componentes/Westbot/Westbot";
 
 export const EmissionsAppV2Routes = (
