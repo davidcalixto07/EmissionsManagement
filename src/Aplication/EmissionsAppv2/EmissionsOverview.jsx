@@ -12,6 +12,7 @@ import DirectEmissionsModal from "./DirectEmissionsModal";
 import { type } from "@testing-library/user-event/dist/type";
 import { addTs, agregateTs } from "./Agregates";
 import EmissionsPlot from "../../Componentes/Charts/EmissionsPlot";
+import { Tspan } from "@react-pdf/renderer";
 
 const EmissionsOverview = () => {
   const [, , , units, , teasList, coordinates, imageSrc, loading, setDates, alarms] =
@@ -21,6 +22,7 @@ const EmissionsOverview = () => {
   const [totalEq, setTotalEq] = useState(0);
   const [directModal, setDirectModal] = useState(false);
   const [ts, setTs] = useState([]);
+  const [data, setData] = useState(null);
   const nav = useNavigate();
 
   function setDate(date) {
@@ -30,24 +32,19 @@ const EmissionsOverview = () => {
   function handleCloseModal() {
     setDirectModal(false);
   }
-
+  console.log(teasList)
   useEffect(() => {
     const totalCo2 = teasList.reduce(
       (accumulator, currentValue) =>
-        accumulator + (currentValue.calculations?.emissions.anh.CO2.total ?? 0), 0
+        accumulator + (currentValue.calculations?.emissions?.anh.CO2.total ?? 0), 0
     );
     const totalEq = teasList.reduce(
       (accumulator, currentValue) =>
-        accumulator + (currentValue.calculations?.emissions.anh.CO2e.total ?? 0),
+        accumulator + (currentValue.calculations?.emissions?.anh.CO2e.total ?? 0),
       0
     );
     setTotalCo2(totalCo2);
     setTotalEq(totalEq);
-    console.log(teasList)
-    const flare_ts = teasList[0]?.timeSerie ?? [];
-    console.log(flare_ts);
-    setTs(flare_ts);
-
     // const agregated_flares = teasList.map(flare => agregateTs(flare.timeSerie ?? []))
     // console.log(agregated_flares)
     // // const calcTs = { _times: agregated_flares.map((t) => t._time), values: ts.map((t) => t.calculations?.emissions.anh.CO2e.total ?? 0) };
@@ -59,6 +56,113 @@ const EmissionsOverview = () => {
     //   addTs(agregated_flares);
     // }
   }, [teasList]);
+
+  const data3 =  {
+    timestamps: ['2023-07-25T00:00:00', '2023-07-25T00:01:00', '2023-07-25T00:02:00', '2023-07-25T00:03:00',
+      '2023-07-25T00:04:00'],
+    flow: [
+      2404.960498886012,
+      251.14899606274332,
+      11571.569100503744,
+      9909.845685240552],
+    pressure: [
+        0.9652388380800424,
+        0.16272785461937145,
+        0.6459670223664963,
+        0.6022008331548929],
+    temperature: [
+        99.09279062778148,
+        98.3225061641685,
+        101.23887755342164,
+        101.50501475986172] ,
+    emissions: {
+      west: {
+          CO2: [1202.480249443006,
+            125.57449803137166,
+            5785.784550251872,
+            4954.922842620276],
+          CO2error: [
+                24.04960498886012,
+                2.5114899606274332,
+                115.71569100503744,
+                99.09845685240553],
+          CO2eq: [
+                2164.4644489974107,
+                226.034096456469,
+                10414.41219045337,
+                8918.861116716498],
+          CO2eqerror: [
+                48.09920997772024,
+                5.0229799212548665,
+                231.43138201007488,
+                198.19691370481107],
+          CH4: [
+                240.4960498886012,
+                25.114899606274335,
+                1157.1569100503746,
+                990.9845685240552],
+          CH4error: [
+                24.04960498886012,
+                2.5114899606274332,
+                115.71569100503744,
+                99.09845685240553],
+          NO2: [
+                1202.480249443006,
+                125.57449803137166,
+                5785.784550251872,
+                4954.922842620276],
+          NO2error: [
+                  48.09920997772024,
+                  5.0229799212548665,
+                  231.43138201007488,
+                  198.19691370481107]
+  },
+  west: {
+          CO2: [1202.480249443006,
+            125.57449803137166,
+            5785.784550251872,
+            4954.922842620276],
+          CO2error: [
+                24.04960498886012,
+                2.5114899606274332,
+                115.71569100503744,
+                99.09845685240553],
+          CO2eq: [
+                2164.4644489974107,
+                226.034096456469,
+                10414.41219045337,
+                8918.861116716498],
+          CO2eqerror: [
+                48.09920997772024,
+                5.0229799212548665,
+                231.43138201007488,
+                198.19691370481107],
+          CH4: [
+                240.4960498886012,
+                25.114899606274335,
+                1157.1569100503746,
+                990.9845685240552],
+          CH4error: [
+                24.04960498886012,
+                2.5114899606274332,
+                115.71569100503744,
+                99.09845685240553],
+          NO2: [
+                1202.480249443006,
+                125.57449803137166,
+                5785.784550251872,
+                4954.922842620276],
+          NO2error: [
+                  48.09920997772024,
+                  5.0229799212548665,
+                  231.43138201007488,
+                  198.19691370481107]
+  }
+  
+    }
+  }
+  console.log(data3.emissions)
+
   return (
     <CustomGrid
       className={"Overview-100"}
@@ -131,7 +235,7 @@ const EmissionsOverview = () => {
           data={[
             {
               label: `Total (${units.emissions.name})`,
-              data: teasList.map((flare) => units.emissions.conv((flare.calculations?.emissions.anh.CO2e.total ?? 0) / totalEq)),
+              data: teasList.map((flare) => units.emissions.conv((flare.calculations?.emissions?.anh.CO2e.total ?? 0) / totalEq)),
             },
           ]}
           barWidth={32}
@@ -147,8 +251,8 @@ const EmissionsOverview = () => {
         com="Time serie"
       >
         <EmissionsPlot
-          timestamps={ts.map((t) => t._time)}
-          modelsData={ts.map((t) => t.emissions.anh)}
+          timestamps={data3.timestamps}
+          modelsData={data3.emissions}
           units={'TCO2e'}
           timeserie={ts}
         />

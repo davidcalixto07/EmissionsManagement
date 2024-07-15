@@ -36,7 +36,7 @@ const TeaView = () => {
       setLastTs(flare.timeSerie[flare.timeSerie.length - 1]._time)
     }
   }, [selectedAsset, teasList]);
-
+  
   function HandleDateChange(dates) {
     setDates(dates);
   }

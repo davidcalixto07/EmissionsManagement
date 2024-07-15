@@ -30,13 +30,16 @@ const EmissionsPlot = ({ timestamps, modelsData, maintainRatio, units, maxTicks 
             ...prevState,
             [datasetLabel]: !prevState[datasetLabel],
         }));
-    };
+    };  
 
     const datasets = useMemo(() => {
         const subKeys = ['value', 'upper', 'lower']
+        const keys = Object.keys(modelsData)
+        console.log(keys)
         const temp_datasets = [];
-        if (modelsData.length > 0) {
-            const gases = Object.keys(modelsData[0]);
+        if (keys.length > 0) {
+            console.log(modelsData.keys)
+            const gases = Object.keys(modelsData[keys]);
             temp_datasets.push(
                 {
                     label: 'efficiency',
@@ -50,7 +53,7 @@ const EmissionsPlot = ({ timestamps, modelsData, maintainRatio, units, maxTicks 
                 }
             )
             gases.forEach((gas) => {
-                if (gas != 'efficiency')
+                if (gas != 'efficiency'  && !gas.endsWith('error'))
                     subKeys.forEach((key) =>
                         temp_datasets.push(
                             {
@@ -67,19 +70,25 @@ const EmissionsPlot = ({ timestamps, modelsData, maintainRatio, units, maxTicks 
                         )
                     )
             })
-            modelsData.forEach((point) => {
-                var index = 0;
+            Object.entries(modelsData).forEach(([key, point]) => {
                 gases.forEach((gas) => {
-                    if (gas === 'efficiency') {
-                        temp_datasets[0].data.push(point[gas]);
+                    if (gas !== 'efficiency' && !gas.endsWith('error')) {
+                        const value = point[gas];
+                        const error = point[gas + 'error'];
+                        if (Array.isArray(value) && Array.isArray(error) && value.length === error.length) {
+                            value.forEach((val, index) => {
+                                const err = error[index];
+                                temp_datasets.find(ds => ds.label === gas).data.push(val);
+                                temp_datasets.find(ds => ds.label === '_' + gas + 'upper').data.push(val + err);
+                                temp_datasets.find(ds => ds.label === '_' + gas + 'lower').data.push(val - err);
+                            });
+                        } else {
+                            console.log(`Property ${gas} or ${gas}_error does not exist or lengths do not match on ${key}`);
+                        }
                     }
-                    else
-                        subKeys.forEach((key) => {
-                            index++;
-                            temp_datasets[index].data.push(point[gas][key]);
-                        })
-                })
-            })
+                    
+                });
+            });
         }
         return temp_datasets;
     }, [modelsData, hiddenDatasets])

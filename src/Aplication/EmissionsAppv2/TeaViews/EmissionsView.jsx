@@ -27,7 +27,6 @@ const EmissionsView = ({ data, lastTs, units, loading, setCalcs }) => {
   const [calculations, setCalculations] = useState({ emissions: {} });
   const [gases, setGases] = useState([])
 
-
   useEffect(() => { console.log(lastTs) }, [lastTs])
   useEffect(() => {
     console.log("Useeffect ", data)
@@ -40,10 +39,12 @@ const EmissionsView = ({ data, lastTs, units, loading, setCalcs }) => {
     setCompositionData({ comps: top5Keys.map((e) => e[0]), values: top5Keys.map((e) => e[1]) })
 
     // Calculations
-    setCalculations(data.calculations ?? {})
-    setGases(Object.keys(data.calculations.emissions[model] ?? {}))
+    setCalculations(calculations ?? {})
+    console.log(calculations)
+    setGases(Object.keys(calculations?.emissions[model] ?? {}))
 
     setTimeseries(data.timeSerie)
+    console.log(data.timeSerie)
     console.log("New data", data)
   }, [data, lastTs]);
 
@@ -112,8 +113,8 @@ const EmissionsView = ({ data, lastTs, units, loading, setCalcs }) => {
           values={[
             {
               label: `flow (${units.flow.name})`,
-              t: data.timeSerie.map((t) => t._time) ?? [],
-              v: data.timeSerie.map((t) => units.flow.conv(t.flow)) ?? [],
+              t: data.timeSerie.map((t) => t?._time) ?? [],
+              v: data.timeSerie.map((t) => units.flow.conv(t?.flow)) ?? [],
               color: "#0f2d57",
               f: false,
               pointRadius: 0,
@@ -208,8 +209,8 @@ const EmissionsView = ({ data, lastTs, units, loading, setCalcs }) => {
       >
         {(data.data?.status?.[model] ?? []).length < 1 ? (
           <EmissionsPlot
-            timestamps={timeseries.map((t) => t._time)}
-            modelsData={timeseries.map((t) => t.emissions[model])}
+            timestamps={timeseries.map((t) => t._time)} //data.data.variable.timestamp
+            modelsData={timeseries.map((t) => t.emissions[model])} //data.data.variable.emissions.[model]
             units={'TCO2e'}
           />
         ) : (
