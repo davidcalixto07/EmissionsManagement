@@ -29,13 +29,7 @@ var data = {
       "variables influyen en las emisiones de la tea",
       "variables influyen en la eficiencia de la tea",
       "variables utiliza el modelo de emisiones",
-      "mas",
     ],
-    activateSendButton: false,
-  },
-  OptionQue_variable: {
-    message: ["A continuación escoge la variable en cuestión: "],
-    options: ["combobox", "variable1", "variable2", "variable3"],
     activateSendButton: true,
   },
   OptionPorQue: {
@@ -45,51 +39,36 @@ var data = {
       "disminuyeron las emisiones",
       "la tea esta generando humo negro",
     ],
-    activateSendButton: false,
-  },
-  OptionPorQue_aumentaronEmisones: {
-    message: [""],
-    options: ["combobox", "variable1", "variable2", "variable3"],
-    activateSendButton: true,
-  },
-  OptionPorQue_disminuyeronEmisiones: {
-    message: [""],
-    options: ["combobox", "variable1", "variable2", "variable3"],
-    activateSendButton: true,
-  },
-  OptionPorQue_teaGeneraHumoNegro: {
-    message: [""],
-    options: ["combobox", "variable1", "variable2", "variable3"],
     activateSendButton: true,
   },
   OptionCual: {
     message: [""],
     options: [
-      "es el límite de emisiones ",
+      "es el límite de emisiones",
       "es la emisión promedio",
-      "es la emisión máxima ",
-      "es el flujo de purga y de pilotos",
+      "es la emisión máxima",
+      // "es el flujo de purga y de pilotos",
     ],
     activateSendButton: false,
   },
   OptionCual_esLimiteEmisiones: {
     message: [""],
     options: ["de hoy", "de esta semana", "de este mes", "de este año"],
-    activateSendButton: true,
+    activateSendButton: false,
   },
   OptionCual_emisionPromedio: {
     message: [""],
     options: ["de hoy", "de esta semana", "de este mes", "de este año"],
-    activateSendButton: true,
+    activateSendButton: false,
   },
   OptionCual_emisionMaxima: {
     message: [""],
     options: ["de hoy", "de esta semana", "de este mes", "de este año"],
-    activateSendButton: true,
+    activateSendButton: false,
   },
   OptionCual_flujoDePurgaPilotos: {
     message: [""],
-    options: ["no options"],
+    options: ["de hoy", "de esta semana", "de este mes", "de este año"],
     activateSendButton: true,
   },
 
@@ -99,6 +78,7 @@ var data = {
     activateSendButton: false,
   },
 };
+
 const Westbot = () => {
   // State variables for DOM element references and chat data
   const [chatbotToggler, setChatbotToggler] = useState(null);
@@ -143,7 +123,66 @@ const Westbot = () => {
 
   const generateResponse = (chatElement, userMessage) => {
     const messageElement = chatElement.querySelector("p");
-    messageElement.textContent = "respuesta del modelo";
+    if (userMessage == "Qué variables influyen en las emisiones de la tea?"){
+      messageElement.textContent = "Las variables que influyen en las emisiones de la tea son el flujo de gas a la tea y la eficiencia de combustión de esta. A medida que el flujo de gas aumente, aumentarán las emisiones de dióxido de carbono, y metano. Si la eficiencia de la tea disminuye, más masa del gas se emitirá como productos sin reaccionar completamente, es decir, monóxido de carbono o los mismos hidrocarburos como metano, propano y butano, los cuales tienen mayor impacto ambiental. Si la eficiencia de la tea aumenta, más componentes se transformarán a CO2 el cual tiene menor impacto ambiental."
+    }
+    if (userMessage == "Qué variables influyen en la eficiencia de la tea?"){
+      messageElement.textContent = "Las variables que influyen en las emisiones de la tea son el flujo de gas a la tea y la eficiencia de combustión de esta. A medida que el flujo de gas aumente, aumentarán las emisiones de dióxido de carbono, y metano. Si la eficiencia de la tea disminuye, más masa del gas se emitirá como productos sin reaccionar completamente, es decir, monóxido de carbono o los mismos hidrocarburos como metano, propano y butano, los cuales tienen mayor impacto ambiental. Si la eficiencia de la tea aumenta, más componentes se transformarán a CO2 el cual tiene menor impacto ambiental."
+    }
+    if (userMessage == "Qué variables utiliza el modelo de emisiones?"){
+      messageElement.textContent = "las variables que utiliza el modelo de emisiones son: Flujo de gas a tea, Temperatura de gas a tea, Presión de gas a tea, Composición del gas a tea, Velocidad del viento, Diámetro de la tea"
+    }
+// 
+    if (userMessage == "Por qué aumentaron las emisiones?"){
+      messageElement.textContent = "Las emisiones aumentaron potencialmente por un cambio en el flujo de gas a la tea o la composición de gas. Se recomienda hacer revisión de PSV activadas , de PCV activadas con descarga directa a la tea o si el nivel del KO drum paso los límites definidos "
+    }
+    if (userMessage == "Por qué disminuyeron las emisiones?"){
+      messageElement.textContent = "Las emisiones aumentaron potencialmente por un cambio en el flujo de gas a la tea o la composición de gas."
+    }
+    if (userMessage == "Por qué la tea esta generando humo negro?"){
+      messageElement.textContent = "La generación de humo negro en la tea puede deberse a una disminución en la eficiencia de la tea o la presencia de líquidos en el flujo de gas. Se recomienda revisar la composición del gas a tea para identificar la potencial presencia de hidrocarburos pesados (C4+) o de altas concentraciones de inertes (CO2, N2). Adicionalmente, se recomienda revisar el nivel del KO drum para asegurar que no ha habido paso de líquido o si la tea está recibiendo líquido desde alguna descarga de otra parte diferente del proceso. "
+    }
+// 
+  if (userMessage.includes("límite de emisiones")) {
+    if (userMessage.includes("hoy")) {
+      messageElement.textContent = "El límite de emisiones de CO2 diario es 500 kilos";
+    } else if (userMessage.includes("esta semana")) {
+      messageElement.textContent = "El límite de emisiones de CO2 semanal es 3500 kilos.";
+    } else if (userMessage.includes("este mes")) {
+      messageElement.textContent = "El límite de emisiones de CO2 mensual es 15000 kilos.";
+    } else if (userMessage.includes("este ao")) {
+      messageElement.textContent = "El límite de emisiones de CO2 anual es 180000 kilos.";
+    }
+  }
+
+  if (userMessage.includes("emisión promedio")) {
+    if (userMessage.includes("hoy")) {
+      messageElement.textContent = "El promedio de emisiones de CO2 diario es 450 kilos.";
+    } else if (userMessage.includes("esta semana")) {
+      messageElement.textContent = "El promedio de emisiones de CO2 semanal es 3200 kilos.";
+    } else if (userMessage.includes("este mes")) {
+      messageElement.textContent = "El promedio de emisiones de CO2 mensual es 14000 kilos.";
+    } else if (userMessage.includes("este ao")) {
+      messageElement.textContent = "El promedio de emisiones de CO2 anual es 170000 kilos.";
+    }
+  }
+
+  if (userMessage.includes("emisión máxima")) {
+    if (userMessage.includes("hoy")) {
+      messageElement.textContent = "La emisión de CO2 máxima diaria es 600 kilos.";
+    } else if (userMessage.includes("esta semana")) {
+      messageElement.textContent = "La emisión de CO2 máxima semanal es 4000 kilos.";
+    } else if (userMessage.includes("este mes")) {
+      messageElement.textContent = "La emisión de CO2 máxima mensual es 18000 kilos.";
+    } else if (userMessage.includes("este ao")) {
+      messageElement.textContent = "La emisión de CO2 máxima anual es 200000 kilos.";
+    }
+  }
+
+  if (userMessage.includes("flujo de purga y de pilotos")) {
+    messageElement.textContent = "El flujo de purga y de pilotos es 20 SCFH";
+  }
+
   };
   /**
    * Handle user input and initiate chat interactions.
@@ -172,7 +211,7 @@ const Westbot = () => {
       const incomingChatLi = createChatLi("Buscando respuesta...", "incoming");
       chatbox.appendChild(incomingChatLi);
       chatbox.scrollTo(0, chatbox.scrollHeight);
-      generateResponse(incomingChatLi);
+      generateResponse(incomingChatLi, userMessage);
 
       // Continue with the chat
       setTimeout(() => {
